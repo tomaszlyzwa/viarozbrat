@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Via Rozbrat — kalkulator i przepisy</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#FBFBF8;
+  --card:#FFFFFF;
+  --ink:#1C1C1A;
+  --muted:#71716A;
+  --faint:#A3A39B;
+  --line:#E9E7E0;
+  --accent:#37503D;
+  --accent-ink:#2B4031;
+  --accent-soft:#EEF3EE;
+  --sand:#F5F2EA;
+  --radius:20px;
+  --font-d:"Schibsted Grotesk",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  --font-b:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--ink);font-family:var(--font-b);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
+button{font-family:inherit;cursor:pointer}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:6px}
+
+/* ---------- nav ---------- */
+nav{position:sticky;top:0;z-index:50;background:rgba(251,251,248,.82);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border-bottom:1px solid var(--line)}
+.nav-in{max-width:1060px;margin:0 auto;padding:0 24px;height:56px;display:flex;align-items:center;justify-content:space-between}
+.brand{font-family:var(--font-d);font-weight:600;font-size:16px;letter-spacing:-.01em;display:flex;align-items:center;gap:9px}
+.brand-dot{width:9px;height:9px;border-radius:50%;background:var(--accent)}
+.tabs{display:flex;gap:4px;background:var(--sand);padding:4px;border-radius:99px}
+.tab{border:none;background:transparent;padding:7px 20px;border-radius:99px;font-size:14px;font-weight:500;color:var(--muted);transition:color .25s,background .25s}
+.tab[aria-selected="true"]{background:var(--ink);color:#fff}
+.tab:not([aria-selected="true"]):hover{color:var(--ink)}
+
+main{max-width:1060px;margin:0 auto;padding:0 24px 120px}
+.panel{display:none}
+.panel.active{display:block;animation:fadeUp .5s cubic-bezier(.2,.7,.2,1)}
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+/* ---------- hero ---------- */
+.hero{padding:84px 0 56px;text-align:center}
+.hero h1{font-family:var(--font-d);font-weight:600;font-size:clamp(34px,5.4vw,58px);letter-spacing:-.03em;line-height:1.06}
+.hero h1 em{font-style:italic;font-weight:400;color:var(--accent)}
+.hero p{margin:18px auto 0;max-width:520px;color:var(--muted);font-size:17px}
+
+.eyebrow{font-size:12px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--faint);margin-bottom:10px}
+h2.section-t{font-family:var(--font-d);font-weight:600;font-size:clamp(24px,3vw,32px);letter-spacing:-.02em;margin-bottom:6px}
+.section-sub{color:var(--muted);max-width:560px}
+section{margin-top:72px}
+
+/* ---------- style selector ---------- */
+.styles{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:36px}
+.style-btn{border:1px solid var(--line);background:var(--card);border-radius:99px;padding:10px 22px;font-size:14px;font-weight:500;color:var(--muted);transition:all .25s}
+.style-btn:hover{border-color:#CFCDC4;color:var(--ink)}
+.style-btn[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:#fff}
+.style-spec{text-align:center;margin-top:16px;font-size:13.5px;color:var(--faint)}
+.style-spec b{color:var(--muted);font-weight:500}
+
+/* ---------- pizza cards ---------- */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px;margin-top:32px}
+.pcard{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:26px;display:flex;flex-direction:column;gap:14px;transition:border-color .25s,box-shadow .25s,transform .25s}
+.pcard:hover{border-color:#D8D6CD;box-shadow:0 12px 32px rgba(28,28,26,.05)}
+.pcard.sel{border-color:var(--accent);box-shadow:0 12px 32px rgba(55,80,61,.10)}
+.pcard h3{font-family:var(--font-d);font-weight:600;font-size:19px;letter-spacing:-.01em}
+.pcard .kind{font-size:11.5px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--faint)}
+.pcard .desc{font-size:13.5px;color:var(--muted);line-height:1.55;flex:1}
+.stepper{display:flex;align-items:center;justify-content:space-between;border-top:1px solid var(--line);padding-top:16px}
+.stepper .lbl{font-size:13px;color:var(--muted)}
+.step-ctl{display:flex;align-items:center;gap:14px}
+.step-btn{width:32px;height:32px;border-radius:50%;border:1px solid var(--line);background:var(--card);font-size:17px;line-height:1;color:var(--ink);display:grid;place-items:center;transition:background .2s,border-color .2s}
+.step-btn:hover{background:var(--sand)}
+.step-btn:active{transform:scale(.94)}
+.count{font-family:var(--font-d);font-weight:600;font-size:19px;min-width:22px;text-align:center;font-variant-numeric:tabular-nums}
+
+/* ---------- dough summary (signature) ---------- */
+.dough{margin-top:40px;background:var(--ink);color:#F4F3EE;border-radius:26px;padding:44px 40px;position:relative;overflow:hidden}
+.dough .eyebrow{color:#8E8E85}
+.dough-top{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:20px}
+.dough h2{font-family:var(--font-d);font-weight:600;font-size:clamp(22px,3vw,30px);letter-spacing:-.02em}
+.balls{display:flex;gap:8px;flex-wrap:wrap;max-width:340px}
+.ball{width:26px;height:26px;border-radius:50%;background:#EFE9DA;box-shadow:inset -3px -4px 0 rgba(0,0,0,.08);animation:pop .35s cubic-bezier(.3,1.4,.5,1)}
+@keyframes pop{from{transform:scale(.3);opacity:0}to{transform:scale(1);opacity:1}}
+.dough-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;margin-top:34px}
+.dq{border-top:1px solid #3A3A37;padding-top:16px}
+.dq .v{font-family:var(--font-d);font-weight:500;font-size:clamp(28px,3.6vw,40px);letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.dq .v small{font-size:.5em;color:#8E8E85;font-weight:400;margin-left:2px}
+.dq .k{font-size:13px;color:#8E8E85;margin-top:2px}
+.dough-note{margin-top:26px;font-size:13px;color:#8E8E85;max-width:560px}
+.dough-empty{margin-top:30px;color:#8E8E85;font-size:15px}
+
+/* ---------- shopping list ---------- */
+.shop{margin-top:16px;background:var(--card);border:1px solid var(--line);border-radius:26px;padding:40px}
+.shop-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:0 40px;margin-top:24px}
+.srow{display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding:11px 0;border-bottom:1px solid var(--line);font-size:14.5px}
+.srow .n{color:var(--ink)}
+.srow .a{font-weight:500;font-variant-numeric:tabular-nums;white-space:nowrap;color:var(--accent-ink)}
+.shop-empty{color:var(--faint);margin-top:20px;font-size:15px}
+
+/* ---------- recipes tab ---------- */
+.when{margin-top:40px;background:var(--accent-soft);border-radius:26px;padding:44px 40px;text-align:center}
+.when h2{font-family:var(--font-d);font-weight:600;font-size:clamp(22px,3vw,30px);letter-spacing:-.02em;color:var(--accent-ink)}
+.when p{color:var(--muted);margin-top:8px;font-size:15px}
+.when-input{margin-top:24px;display:inline-flex;align-items:center;gap:12px;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:10px 18px}
+.when-input input{border:none;background:transparent;font-family:var(--font-b);font-size:16px;color:var(--ink);padding:6px 2px}
+.when-input input:focus{outline:none}
+.plan-badge{margin-top:22px;display:inline-block;font-size:13px;font-weight:500;padding:7px 16px;border-radius:99px;background:var(--card);border:1px solid var(--line);color:var(--muted)}
+.plan-badge.warn{background:#FBF0E9;border-color:#EED8C8;color:#8A5A33}
+
+.timeline{margin-top:44px;max-width:640px;margin-left:auto;margin-right:auto}
+.day-h{font-family:var(--font-d);font-weight:600;font-size:18px;letter-spacing:-.01em;margin:34px 0 6px;padding-left:2px}
+.trow{display:grid;grid-template-columns:86px 22px 1fr;gap:0 14px;position:relative}
+.trow .tm{font-weight:500;font-size:14.5px;color:var(--accent-ink);padding-top:19px;text-align:right;font-variant-numeric:tabular-nums}
+.trow .rail{position:relative}
+.trow .rail::before{content:"";position:absolute;left:50%;top:0;bottom:0;width:1px;background:var(--line);transform:translateX(-50%)}
+.trow.first .rail::before{top:26px}
+.trow.last .rail::before{bottom:auto;height:26px}
+.day-h + .trow .rail::before{top:26px}
+.trow .dot{position:absolute;left:50%;top:26px;width:9px;height:9px;border-radius:50%;background:var(--accent);transform:translate(-50%,-50%)}
+.trow .body{padding:14px 0 22px}
+.trow .tt{font-weight:500;font-size:15.5px}
+.trow .td{font-size:13.5px;color:var(--muted);margin-top:3px;line-height:1.55}
+
+/* ---------- recipe steps ---------- */
+.rec{margin-top:80px}
+.steps{margin-top:30px;counter-reset:st}
+.step{display:grid;grid-template-columns:56px 1fr;gap:22px;padding:26px 0;border-top:1px solid var(--line)}
+.step .no{counter-increment:st;font-family:var(--font-d);font-weight:400;font-size:30px;color:var(--faint);letter-spacing:-.02em}
+.step .no::before{content:"0" counter(st)}
+.step:nth-child(n+10) .no::before{content:counter(st)}
+.step h3{font-family:var(--font-d);font-weight:600;font-size:17px;letter-spacing:-.01em}
+.step p{font-size:14.5px;color:var(--muted);margin-top:5px;max-width:620px}
+
+.two{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:32px}
+@media(max-width:760px){.two{grid-template-columns:1fr}.trow{grid-template-columns:64px 18px 1fr}.dough,.shop,.when{padding:32px 24px}}
+.mini{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:30px}
+.mini h3{font-family:var(--font-d);font-weight:600;font-size:17px;letter-spacing:-.01em;margin-bottom:12px}
+.mini ul{list-style:none}
+.mini li{font-size:14px;color:var(--muted);padding:8px 0 8px 20px;position:relative;border-bottom:1px solid var(--line)}
+.mini li:last-child{border:none}
+.mini li::before{content:"";position:absolute;left:2px;top:16px;width:5px;height:5px;border-radius:50%;background:var(--accent)}
+
+/* ---------- gallery ---------- */
+.gallery-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px;margin-top:32px}
+.gcard{position:relative;border-radius:var(--radius);overflow:hidden;background:var(--sand);border:1px solid var(--line);aspect-ratio:4/3;cursor:zoom-in;transition:transform .3s,box-shadow .3s}
+.gcard:hover{transform:translateY(-2px);box-shadow:0 14px 34px rgba(28,28,26,.08)}
+.gcard img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .5s cubic-bezier(.2,.7,.2,1)}
+.gcard:hover img{transform:scale(1.04)}
+.gcard figcaption{position:absolute;left:0;right:0;bottom:0;padding:26px 16px 12px;font-size:13px;color:#fff;background:linear-gradient(transparent,rgba(0,0,0,.55));opacity:0;transition:opacity .3s}
+.gcard:hover figcaption{opacity:1}
+.gallery-empty{margin-top:40px;text-align:center;padding:56px 24px;border:1px dashed var(--line);border-radius:26px;background:var(--card)}
+.gallery-empty h3{font-family:var(--font-d);font-weight:600;font-size:19px;letter-spacing:-.01em}
+.gallery-empty p{color:var(--muted);margin-top:8px;max-width:460px;margin-left:auto;margin-right:auto;font-size:14.5px}
+code{font-family:var(--font-b);font-size:.88em;background:var(--sand);padding:2px 7px;border-radius:6px;color:var(--accent-ink)}
+.lightbox{position:fixed;inset:0;z-index:100;background:rgba(20,20,18,.9);display:none;align-items:center;justify-content:center;padding:24px;cursor:zoom-out;backdrop-filter:blur(6px)}
+.lightbox.open{display:flex;animation:fadeUp .3s ease}
+.lightbox img{max-width:92vw;max-height:86vh;border-radius:12px;box-shadow:0 20px 60px rgba(0,0,0,.4)}
+.lightbox .cap{position:absolute;bottom:24px;left:0;right:0;text-align:center;color:#EDEBE4;font-size:14px}
+.lightbox .close{position:absolute;top:20px;right:24px;width:40px;height:40px;border-radius:50%;border:none;background:rgba(255,255,255,.12);color:#fff;font-size:20px;cursor:pointer;display:grid;place-items:center}
+
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-in">
+    <div class="brand"><span class="brand-dot"></span>Via Rozbrat</div>
+    <div class="tabs" role="tablist" aria-label="Sekcje">
+      <button class="tab" role="tab" id="tab-pizze" aria-selected="true" aria-controls="panel-pizze" onclick="switchTab('pizze')">Pizza</button>
+      <button class="tab" role="tab" id="tab-przepisy" aria-selected="false" aria-controls="panel-przepisy" onclick="switchTab('przepisy')">Przepis</button>
+      <button class="tab" role="tab" id="tab-galeria" aria-selected="false" aria-controls="panel-galeria" onclick="switchTab('galeria')">Galeria</button>
+    </div>
+  </div>
+</nav>
+
+<main>
+
+<!-- ============ TAB: PIZZE ============ -->
+<div class="panel active" id="panel-pizze" role="tabpanel" aria-labelledby="tab-pizze">
+
+  <div class="hero">
+    <h1>90 sekund<br>do <em>Neapolu.</em></h1>
+    <p>Wybierz styl ciasta i pizze na wieczór, a składniki i lista zakupów przeliczą się same — co do grama.</p>
+    <div class="styles" id="styleRow" role="group" aria-label="Styl pizzy"></div>
+    <p class="style-spec" id="styleSpec"></p>
+  </div>
+
+  <section>
+    <div class="eyebrow">Menu</div>
+    <h2 class="section-t">Wybierz pizze</h2>
+    <p class="section-sub">Każda kulka ciasta to placek ok. 30 cm. Ilości dodatków podane dla jednej pizzy.</p>
+    <div class="grid" id="pizzaGrid"></div>
+  </section>
+
+  <section class="dough" aria-live="polite">
+    <div class="eyebrow">Ciasto</div>
+    <div class="dough-top">
+      <h2 id="doughTitle">Twoje ciasto</h2>
+      <div class="balls" id="balls" aria-hidden="true"></div>
+    </div>
+    <div id="doughBody"></div>
+    <p class="dough-note" id="doughNote"></p>
+  </section>
+
+  <section class="shop" aria-live="polite">
+    <div class="eyebrow">Zakupy</div>
+    <h2 class="section-t">Lista zakupów</h2>
+    <div id="shopBody"></div>
+  </section>
+
+</div>
+
+<!-- ============ TAB: PRZEPISY ============ -->
+<div class="panel" id="panel-przepisy" role="tabpanel" aria-labelledby="tab-przepisy">
+
+  <div class="hero">
+    <h1>Plan liczony <em>od pieca wstecz.</em></h1>
+    <p>Wybierz styl ciasta, datę i źródło ciepła — przepis i harmonogram fermentacji ułożą się same.</p>
+    <div class="styles" id="recStyleRow" role="group" aria-label="Styl ciasta"></div>
+    <p class="style-spec" id="recStyleSpec"></p>
+  </div>
+
+  <section class="when">
+    <h2>Kiedy pieczesz?</h2>
+    <p>Wybierz dzień i godzinę, o której pierwsza pizza ma trafić do pieca, oraz źródło ciepła.</p>
+    <label class="when-input">
+      <span style="font-size:13px;color:var(--muted)">Data i godzina</span>
+      <input type="datetime-local" id="bakeAt" onchange="renderSchedule()">
+    </label>
+    <div class="styles" id="heatRow" role="group" aria-label="Źródło ciepła" style="margin-top:20px"></div>
+    <div><span class="plan-badge" id="planBadge"></span></div>
+  </section>
+
+  <div class="timeline" id="timeline" aria-live="polite"></div>
+
+  <section class="rec">
+    <div class="eyebrow" id="recEyebrow">Przepis</div>
+    <h2 class="section-t" id="recTitle"></h2>
+    <p class="section-sub" id="recSub"></p>
+    <div class="steps" id="recSteps"></div>
+    <div class="two" id="recExtras"></div>
+  </section>
+
+</div>
+
+<!-- ============ TAB: GALERIA ============ -->
+<div class="panel" id="panel-galeria" role="tabpanel" aria-labelledby="tab-galeria">
+
+  <div class="hero">
+    <h1>Z pieca <em>prosto tutaj.</em></h1>
+    <p>Twoje wypieki z Alfa Forni. Zdjęcia dodajesz, wgrywając pliki do folderu <code>gallery/</code> w repozytorium.</p>
+  </div>
+
+  <section>
+    <div id="galleryGrid" class="gallery-grid" aria-live="polite"></div>
+    <div id="galleryEmpty" class="gallery-empty" hidden>
+      <h3>Galeria czeka na pierwsze zdjęcie</h3>
+      <p>Wgraj plik do folderu <code>gallery/</code> i dopisz jego nazwę w <code>gallery/manifest.json</code>. Instrukcja jest w pliku <code>README.md</code>.</p>
+    </div>
+  </section>
+
+</div>
+</main>
+
+<div class="lightbox" id="lightbox" onclick="closeLightbox()">
+  <button class="close" aria-label="Zamknij" onclick="closeLightbox()">✕</button>
+  <img id="lightboxImg" src="" alt="">
+  <div class="cap" id="lightboxCap"></div>
+</div>
+
+
+<script>
+/* ================= data ================= */
+const PIZZAS = [
+  {id:"margherita", name:"Margherita", kind:"Klasyka", desc:"Sos pomidorowy, fior di latte, świeża bazylia i oliwa. Wzorzec, od którego wszystko się zaczęło.",
+   top:[["Sos pomidorowy",80,"g"],["Mozzarella fior di latte",80,"g"],["Bazylia świeża",4,"listki"],["Oliwa extra vergine",5,"ml"]]},
+  {id:"marinara", name:"Marinara", kind:"Klasyka · bez sera", desc:"Sos pomidorowy, czosnek, oregano i oliwa. Najstarsza neapolitańska — czysty smak pomidora.",
+   top:[["Sos pomidorowy",90,"g"],["Czosnek",1,"ząbek"],["Oregano suszone",1,"g"],["Oliwa extra vergine",8,"ml"]]},
+  {id:"bufala", name:"Bufala", kind:"Klasyka premium", desc:"Jak Margherita, ale z mozzarellą di bufala dodaną tuż po pieczeniu. Kremowa i wyrazista.",
+   top:[["Sos pomidorowy",80,"g"],["Mozzarella di bufala",90,"g"],["Bazylia świeża",4,"listki"],["Oliwa extra vergine",5,"ml"]]},
+  {id:"diavola", name:"Diavola", kind:"Pikantna", desc:"Sos, mozzarella i pikantne salami. Odrobina ostrości, dużo charakteru.",
+   top:[["Sos pomidorowy",80,"g"],["Mozzarella fior di latte",70,"g"],["Salami pikantne",40,"g"],["Oliwa extra vergine",5,"ml"]]},
+  {id:"prosciutto", name:"Prosciutto e funghi", kind:"Rodzinna", desc:"Szynka i pieczarki na klasycznej bazie. Bezpieczny wybór, który zawsze znika pierwszy.",
+   top:[["Sos pomidorowy",70,"g"],["Mozzarella fior di latte",70,"g"],["Szynka dobrej jakości",50,"g"],["Pieczarki",50,"g"]]},
+  {id:"capricciosa", name:"Capricciosa", kind:"Bogata", desc:"Szynka, pieczarki, karczochy i oliwki — po kawałku wszystkiego, co dobre.",
+   top:[["Sos pomidorowy",70,"g"],["Mozzarella fior di latte",70,"g"],["Szynka dobrej jakości",40,"g"],["Pieczarki",40,"g"],["Karczochy marynowane",40,"g"],["Oliwki czarne",15,"g"]]},
+  {id:"quattro", name:"Quattro formaggi", kind:"Biała", desc:"Bez sosu: fior di latte, gorgonzola, scamorza i parmezan. Dla miłośników sera.",
+   top:[["Mozzarella fior di latte",60,"g"],["Gorgonzola",30,"g"],["Scamorza lub provolone",30,"g"],["Parmezan tarty",15,"g"]]},
+  {id:"bianca", name:"Bianca ze szpinakiem", kind:"Biała · wege", desc:"Śmietanka, szpinak, czosnek i mozzarella. Lekka odmiana bez pomidora.",
+   top:[["Śmietanka 30%",40,"ml"],["Mozzarella fior di latte",70,"g"],["Szpinak świeży",40,"g"],["Czosnek",1,"ząbek"],["Parmezan tarty",10,"g"]]},
+];
+/* per-style dough spec: weight per unit [g], baker's percentages, topping scale factor */
+const STYLES = [
+  {id:"napoletana", name:"Napoletana", unit:"placek ~30 cm", w:260, hyd:.65, salt:.03, oil:0, sugar:0, yeast:.0025,
+   flour:"mąka typu 00 (min. 12% białka)", factor:1,
+   note:"Hydratacja 65% · sól 3% · świeże drożdże 0,25%. 24 h zimnej fermentacji, pieczenie 4–6 min w maks. temperaturze — miękki rant, chrupiący spód."},
+  {id:"newyork", name:"New York", unit:"placek ~35 cm", w:320, hyd:.63, salt:.025, oil:.025, sugar:.02, yeast:.004,
+   flour:"mąka chlebowa (typ 650–750)", factor:1.25,
+   note:"Hydratacja 63% z oliwą i odrobiną cukru — złocisty, składany w trójkąt kawałek. 24–48 h w lodówce, pieczenie 250–280°C przez 7–9 min."},
+  {id:"detroit", name:"Detroit", unit:"blaszka 20×25 cm", w:350, hyd:.75, salt:.02, oil:.005, sugar:0, yeast:.005,
+   flour:"mąka chlebowa (typ 650–750)", factor:1.3,
+   note:"Grube, puszyste ciasto 75% hydratacji pieczone w wysmarowanej olejem blaszce. Ser (idealnie brick lub cheddar + mozzarella) układa się aż po brzegi — karmelizuje się na krawędziach. 220–250°C, 12–15 min."},
+  {id:"rzymska", name:"Rzymska al taglio", unit:"blacha 30×40 cm (4–6 porcji)", w:750, hyd:.80, salt:.025, oil:.02, sugar:0, yeast:.003,
+   flour:"mąka o wysokim białku (typ 00 lub 550, 13%+)", factor:2.6,
+   note:"Bardzo mokre ciasto 80% hydratacji, 24–48 h w lodówce, rozciągane na całą blachę i cięte nożycami na prostokąty. 250°C, 15–18 min — chrupiące na zewnątrz, alweolowane w środku."},
+  {id:"pinsa", name:"Pinsa romana", unit:"owalny placek ~25×18 cm", w:230, hyd:.78, salt:.025, oil:.02, sugar:0, yeast:.003,
+   flour:"mieszanka do pinsy (pszenna + ryżowa + sojowa)", factor:0.95,
+   note:"Owalna, lekka i chrupiąca — mieszanka mąk z ryżową zatrzymuje wilgoć. 48–72 h zimnej fermentacji, pieczenie 250–300°C przez 5–7 min."},
+];
+let styleId = "napoletana";
+const styleOf = () => STYLES.find(s=>s.id===styleId);
+
+/* per-style recipe: fermentation profile + shaping/baking narrative + extras */
+const RECIPES = {
+  napoletana: {
+    sub:"Hydratacja 65%, długa fermentacja, miękki brzeg i chrupiący spód. Ilości znajdziesz w zakładce Pizze — przeliczone dla twojego zamówienia.",
+    coldH:24, shape:"Kulki po ok. 260 g", stretch:"Rozciągnij dłońmi do ok. 30 cm, zostawiając puszysty rant 1,5–2 cm. Bez wałka!",
+    steps:[
+      ["Rozpuszczenie soli i drożdży","Do dużej miski wlej zimną wodę i rozpuść w niej sól. Dodaj ok. 10% mąki i wymieszaj. Dopiero teraz rozkrusz i rozpuść drożdże — sól w bezpośrednim kontakcie je osłabia."],
+      ["Wyrabianie · 15–20 min","Stopniowo dodawaj resztę mąki. Wyrabiaj ręcznie 15–20 minut (mikser z hakiem: 8–10 min), aż ciasto będzie gładkie i elastyczne. Ma być miękkie — nie dosypuj mąki na siłę."],
+      ["Odpoczynek wstępny · 2 h","Uformuj kulę, przykryj wilgotną ściereczką i zostaw na blacie."],
+      ["Formowanie kulek (staglio)","Podziel na kulki po ok. 260 g i uformuj napięte, gładkie kule. Do pojemnika z przykrywką."],
+      ["Dojście do temperatury · 2,5–3 h","Wyjmij kulki z lodówki na 2,5–3 h przed pieczeniem. Zimne ciasto rwie się przy rozciąganiu."],
+      ["Rozciąganie placka","Na semoli dociskaj palcami od środka na zewnątrz, wypychając powietrze w stronę brzegu. Rant nietykalny."],
+    ],
+    extras:[
+      ["Sos San Marzano",["Puszka pomidorów San Marzano (400 g) — rozgnieć ręcznie","Szczypta soli, bez gotowania i bez cukru","Ok. 80 g sosu na pizzę, rozprowadź od środka"]],
+      ["Wskazówki",["Mozzarellę pokrój i odsącz min. 30 min przed pieczeniem","Bazylię i oliwę dodawaj po upieczeniu","Waż składniki co do grama — zwłaszcza drożdże"]],
+    ],
+  },
+  newyork: {
+    sub:"Hydratacja 63% z oliwą i odrobiną cukru — cienki, elastyczny placek, który składasz w trójkąt. Ilości przelicza zakładka Pizze.",
+    coldH:24, shape:"Kulki po ok. 320 g", stretch:"Rozciągnij do ok. 35 cm — cienko w środku, cieńszy niż neapolitańska. Dopuszczalny lekki wałek do wyrównania.",
+    steps:[
+      ["Rozczyn z oliwą i cukrem","Rozpuść w wodzie sól i cukier, dodaj oliwę. Wmieszaj drożdże i część mąki chlebowej."],
+      ["Wyrabianie · 10–12 min","Dodaj resztę mąki i wyrabiaj do gładkości i elastyczności. Ciasto ma być jędrne, mniej mokre niż neapolitańskie."],
+      ["Odpoczynek wstępny · 1 h","Kula pod folią na blacie."],
+      ["Formowanie kulek","Podziel na kulki po ok. 320 g, do naoliwionych pojemników."],
+      ["Dojście do temperatury · 2 h","Wyjmij kulki z lodówki na ok. 2 h przed pieczeniem."],
+      ["Rozciąganie placka","Rozciągaj na cienko do ok. 35 cm; brzeg tylko lekko grubszy."],
+    ],
+    extras:[
+      ["Sos NY-style",["Pomidory pelati + łyżka oregano, szczypta cukru i czosnku","Krótko podduszony, gęsty — mniej wodnisty niż neapolitański","Low-moisture mozzarella zamiast fior di latte"]],
+      ["Wskazówki",["Piecz na dobrze nagrzanym kamieniu 250–280°C, 7–9 min","Skropienie oliwą po brzegu daje chrupkość","Kawałek składa się w trójkąt — to znak dobrego NY slice"]],
+    ],
+  },
+  detroit: {
+    sub:"Grube, puszyste ciasto 75% hydratacji z naoliwionej blaszki, z serem karmelizowanym po brzegach. Ilości przelicza zakładka Pizze.",
+    coldH:24, shape:"Bochenek na blaszkę 20×25 cm", stretch:"Rozciągnij ciasto palcami na dno naoliwionej blaszki; jeśli się kurczy, odczekaj 15 min i dociśnij do rogów.",
+    steps:[
+      ["Wymieszanie mokrego ciasta","Rozpuść sól w wodzie, dodaj oliwę i drożdże. Wmieszaj mąkę chlebową na luźne, klejące ciasto."],
+      ["Wyrabianie / składanie · 10 min","Wyrabiaj mikserem lub techniką stretch & fold. Ciasto zostanie miękkie i lepkie — tak ma być."],
+      ["Odpoczynek wstępny · 1 h","Miska pod folią."],
+      ["Do blaszki i fermentacja","Przełóż na dno grubo naoliwionej blaszki (najlepiej stalowej Detroit)."],
+      ["Dojście do temperatury · 2 h","Wyjmij blaszkę z lodówki na ok. 2 h; ciasto ma wypełnić rogi i być bąbelkowate."],
+      ["Rozłożenie sera po brzegi","Ser (brick lub cheddar + mozzarella) układaj aż do krawędzi blaszki — na brzegach powstanie chrupiąca koronka. Sos w 2–3 pasach na wierzchu."],
+    ],
+    extras:[
+      ["Sos na wierzch",["Gęsty sos pomidorowy z oregano i czosnkiem","Nakładany w pasach PO serze — to sygnatura Detroit","Opcjonalnie łyżka na gotowy placek"]],
+      ["Wskazówki",["Ser aż do metalu daje karmelizowaną koronkę (frico)","Piecz 220–250°C, 12–15 min do złocistego spodu","Wyjmij z blaszki od razu, by spód nie zmiękł"]],
+    ],
+  },
+  rzymska: {
+    sub:"Bardzo mokre ciasto 80% hydratacji, cięte nożycami na prostokąty. Ilości na całą blachę przelicza zakładka Pizze.",
+    coldH:36, shape:"Ciasto na blachę 30×40 cm", stretch:"Delikatnie rozciągnij na całą blachę, zachowując pęcherze powietrza. Pracuj mokrymi dłońmi.",
+    steps:[
+      ["Autoliza · 30 min","Wymieszaj mąkę z większością wody i odstaw na 30 min bez drożdży i soli."],
+      ["Dodanie drożdży i soli","Wmieszaj drożdże, potem sól i oliwę. Dodawaj resztę wody stopniowo (bassinage)."],
+      ["Składanie · 3–4 serie","Zamiast wyrabiania: seria stretch & fold co 30 min, aż ciasto nabierze siły."],
+      ["Fermentacja masy","Ciasto fermentuje w bloku (nie w kulkach), pod przykryciem."],
+      ["Dojście do temperatury · 2 h","Wyłóż ciasto na naoliwioną blachę i pozwól dojść do temperatury pokojowej."],
+      ["Rozciąganie na blachę","Rozprowadź na całą blachę mokrymi dłońmi, chroniąc pęcherze. Dodatki dopiero na koniec."],
+    ],
+    extras:[
+      ["Baza i dodatki",["Prosta baza: sos pomidorowy lub sama oliwa z solą (bianca)","Dodatki lekkie — ciasto ma zostać chrupiące","Po upieczeniu tnij nożycami na prostokąty"]],
+      ["Wskazówki",["Piecz 250°C, 15–18 min do chrupiącego spodu","Wysoka hydratacja = duże alweole w środku","Blacha dobrze naoliwiona lub na papierze"]],
+    ],
+  },
+  pinsa: {
+    sub:"Owalna, lekka i chrupiąca pinsa na mieszance mąk z ryżową. Bardzo długa, zimna fermentacja. Ilości przelicza zakładka Pizze.",
+    coldH:60, shape:"Owalne kulki po ok. 230 g", stretch:"Uformuj charakterystyczny owal ~25×18 cm, dociskając palcami; brzegi lekko grubsze.",
+    steps:[
+      ["Wymieszanie mieszanki mąk","Połącz mieszankę do pinsy (pszenna + ryżowa + sojowa) z zimną wodą, drożdżami i oliwą."],
+      ["Wyrabianie · 10 min","Wyrabiaj do gładkości. Ciasto jest bardzo mokre — pomóż sobie skrobką."],
+      ["Odpoczynek wstępny · 1 h","Miska pod folią."],
+      ["Formowanie owalnych kulek","Podziel na porcje po ok. 230 g; delikatnie zaokrąglij."],
+      ["Dojście do temperatury · 2 h","Wyjmij kulki z lodówki na ok. 2 h przed pieczeniem."],
+      ["Formowanie owalu","Rozciągnij w podłużny owal na semoli; brzeg lekko grubszy."],
+    ],
+    extras:[
+      ["Klasyczne wykończenie",["Pinsa często pieczona najpierw sama (bianca), dodatki później","Świetna baza pod mozzarellę di bufala i szynkę na zimno","Lekka struktura dzięki mące ryżowej"]],
+      ["Wskazówki",["Piecz 250–300°C, 5–7 min do chrupkości","Bardzo długa fermentacja (48–72 h) = lekkostrawność","Mniej drożdży, więcej czasu"]],
+    ],
+  },
+};
+const recipeOf = () => RECIPES[styleId] || RECIPES.napoletana;
+
+function doughPerUnit(){
+  const s = styleOf();
+  const denom = 1 + s.hyd + s.salt + s.oil + s.sugar + s.yeast;
+  const flour = s.w/denom;
+  return {flour, water:flour*s.hyd, salt:flour*s.salt, oil:flour*s.oil, sugar:flour*s.sugar, yeast:flour*s.yeast};
+}
+const counts = Object.fromEntries(PIZZAS.map(p=>[p.id,0]));
+
+/* ================= tabs ================= */
+let galleryLoaded = false;
+function switchTab(name){
+  for(const t of ["pizze","przepisy","galeria"]){
+    document.getElementById("panel-"+t).classList.toggle("active", t===name);
+    document.getElementById("tab-"+t).setAttribute("aria-selected", t===name ? "true":"false");
+  }
+  if(name==="galeria" && !galleryLoaded){ galleryLoaded = true; loadGallery(); }
+  window.scrollTo({top:0, behavior:"smooth"});
+}
+
+/* ================= gallery ================= */
+async function loadGallery(){
+  const grid = document.getElementById("galleryGrid");
+  const empty = document.getElementById("galleryEmpty");
+  let items = [];
+  try{
+    const res = await fetch("gallery/manifest.json", {cache:"no-store"});
+    if(res.ok){
+      const data = await res.json();
+      items = Array.isArray(data) ? data : (data.photos || []);
+    }
+  }catch(e){ /* manifest missing or offline — show empty state */ }
+  if(!items.length){ empty.hidden = false; grid.innerHTML = ""; return; }
+  empty.hidden = true;
+  grid.innerHTML = items.map(it=>{
+    const file = typeof it === "string" ? it : it.file;
+    const cap = typeof it === "string" ? "" : (it.caption || "");
+    const src = "gallery/"+file;
+    return `<figure class="gcard" onclick="openLightbox('${src.replace(/'/g,"\\'")}','${cap.replace(/'/g,"\\'")}')">
+      <img src="${src}" alt="${cap||"Zdjęcie pizzy"}" loading="lazy">
+      ${cap?`<figcaption>${cap}</figcaption>`:""}
+    </figure>`;
+  }).join("");
+}
+function openLightbox(src, cap){
+  document.getElementById("lightboxImg").src = src;
+  document.getElementById("lightboxImg").alt = cap || "Zdjęcie pizzy";
+  document.getElementById("lightboxCap").textContent = cap || "";
+  document.getElementById("lightbox").classList.add("open");
+}
+function closeLightbox(){ document.getElementById("lightbox").classList.remove("open"); }
+document.addEventListener("keydown", e=>{ if(e.key==="Escape") closeLightbox(); });
+
+/* ================= style selector ================= */
+function renderStyles(){
+  document.getElementById("styleRow").innerHTML = STYLES.map(s=>
+    `<button class="style-btn" aria-pressed="${s.id===styleId}" onclick="setStyle('${s.id}')">${s.name}</button>`).join("");
+  const s = styleOf();
+  document.getElementById("styleSpec").innerHTML =
+    `<b>${s.unit}</b> · ${Math.round(s.w)} g ciasta · hydratacja ${Math.round(s.hyd*100)}% · ${s.flour}`;
+  document.getElementById("recStyleRow").innerHTML = STYLES.map(s=>
+    `<button class="style-btn" aria-pressed="${s.id===styleId}" onclick="setStyle('${s.id}')">${s.name}</button>`).join("");
+  document.getElementById("recStyleSpec").innerHTML =
+    `<b>${s.unit}</b> · ${Math.round(s.w)} g ciasta · hydratacja ${Math.round(s.hyd*100)}% · ${s.flour}`;
+}
+function setStyle(id){
+  styleId = id;
+  renderStyles(); renderCards(); renderDough(); renderShop();
+  renderRecipe(); renderSchedule();
+}
+
+/* ================= recipe (per style) ================= */
+function renderRecipe(){
+  const s = styleOf(), r = recipeOf();
+  document.getElementById("recTitle").textContent = `Ciasto ${s.name}, krok po kroku`;
+  document.getElementById("recSub").textContent = r.sub;
+  const ferm = r.coldH >= 48
+    ? `Fermentacja · ${r.coldH} h w lodówce`
+    : `Fermentacja · ${r.coldH} h w lodówce (lub wariant szybki: ok. 8 h na blacie)`;
+  const fermDesc = `Wariant klasyczny: ${r.coldH} h zimnej fermentacji. Harmonogram powyżej dobiera wariant do twojej daty i źródła ciepła.`;
+  const h = heatOf();
+  const bakeTitle = h.id==="alfa" ? "Pieczenie w Alfa Forni" : (h.id==="oven" ? "Pieczenie w piekarniku" : "Pieczenie na grillu");
+  const steps = [
+    ...r.steps.slice(0,4),
+    [ferm, fermDesc],
+    ...r.steps.slice(4),
+    [bakeTitle, h.preD+" "+cap(h.bakeD)],
+  ];
+  document.getElementById("recSteps").innerHTML = steps.map(([t,d])=>
+    `<div class="step"><div class="no" aria-hidden="true"></div><div><h3>${t}</h3><p>${d}</p></div></div>`).join("");
+  document.getElementById("recExtras").innerHTML = r.extras.map(([t,items])=>
+    `<div class="mini"><h3>${t}</h3><ul>${items.map(i=>`<li>${i}</li>`).join("")}</ul></div>`).join("");
+}
+
+/* ================= pizza cards ================= */
+function fmt(n){ return (Math.round(n*10)/10).toLocaleString("pl-PL"); }
+function scaleAmt(v,unit){
+  const s = v*styleOf().factor;
+  if(unit!=="g" && unit!=="ml") return Math.max(1, Math.round(s));
+  return s>=10 ? Math.round(s/5)*5 : Math.round(s*10)/10;
+}
+function renderCards(){
+  document.getElementById("pizzaGrid").innerHTML = PIZZAS.map(p=>`
+    <div class="pcard ${counts[p.id]>0?"sel":""}" id="card-${p.id}">
+      <div>
+        <div class="kind">${p.kind}</div>
+        <h3>${p.name}</h3>
+      </div>
+      <div class="desc">${p.desc}<br><span style="color:var(--faint)">${p.top.map(t=>`${t[0].toLowerCase()} ${fmt(scaleAmt(t[1],t[2]))} ${t[2]}`).join(" · ")}</span></div>
+      <div class="stepper">
+        <span class="lbl">Ilość sztuk</span>
+        <div class="step-ctl">
+          <button class="step-btn" aria-label="Mniej: ${p.name}" onclick="change('${p.id}',-1)">−</button>
+          <span class="count" id="cnt-${p.id}">${counts[p.id]}</span>
+          <button class="step-btn" aria-label="Więcej: ${p.name}" onclick="change('${p.id}',1)">+</button>
+        </div>
+      </div>
+    </div>`).join("");
+}
+function change(id,d){
+  counts[id] = Math.max(0, Math.min(12, counts[id]+d));
+  document.getElementById("cnt-"+id).textContent = counts[id];
+  document.getElementById("card-"+id).classList.toggle("sel", counts[id]>0);
+  renderDough(); renderShop();
+}
+
+/* ================= dough summary ================= */
+function totalBalls(){ return Object.values(counts).reduce((a,b)=>a+b,0); }
+function renderDough(){
+  const n = totalBalls();
+  const s = styleOf();
+  const balls = document.getElementById("balls");
+  balls.innerHTML = Array.from({length:n},()=>'<span class="ball"></span>').join("");
+  document.getElementById("doughTitle").textContent =
+    n===0 ? "Twoje ciasto" : `Ciasto ${s.name} — ${n} × ${s.unit.split(" (")[0]}`;
+  const body = document.getElementById("doughBody");
+  document.getElementById("doughNote").textContent = s.note;
+  if(n===0){
+    body.innerHTML = '<p class="dough-empty">Dodaj pizze powyżej, a przeliczymy składniki ciasta.</p>';
+    return;
+  }
+  const u = doughPerUnit();
+  const rows = [
+    [Math.round(n*u.flour/5)*5, "g", s.flour],
+    [Math.round(n*u.water), "ml", "zimna woda"],
+    [n*u.salt, "g", "sól morska"],
+    [n*u.yeast, "g", "świeże drożdże"],
+  ];
+  if(u.oil>0) rows.push([Math.round(n*u.oil), "ml", "oliwa / olej"]);
+  if(u.sugar>0) rows.push([Math.round(n*u.sugar), "g", "cukier"]);
+  body.innerHTML = `<div class="dough-grid">${rows.map(([v,un,k])=>
+    `<div class="dq"><div class="v">${fmt(typeof v==="number"?Math.round(v*10)/10:v)}<small>${un}</small></div><div class="k">${k}</div></div>`).join("")}</div>`;
+}
+
+/* ================= shopping list ================= */
+function renderShop(){
+  const s = styleOf();
+  const agg = new Map();
+  for(const p of PIZZAS){
+    if(!counts[p.id]) continue;
+    for(const [name,amt,unit] of p.top){
+      const key = name+"|"+unit;
+      agg.set(key,(agg.get(key)||0)+scaleAmt(amt,unit)*counts[p.id]);
+    }
+  }
+  const el = document.getElementById("shopBody");
+  const n = totalBalls();
+  if(n===0){ el.innerHTML = '<p class="shop-empty">Lista pojawi się, gdy wybierzesz pizze.</p>'; return; }
+  const rows = [...agg.entries()]
+    .map(([k,v])=>{const [name,unit]=k.split("|");return {name,unit,v};})
+    .sort((a,b)=>a.name.localeCompare(b.name,"pl"));
+  const u = doughPerUnit();
+  const dough = [
+    {name:cap(s.flour), unit:"g", v:Math.round(n*u.flour/5)*5},
+    {name:"Świeże drożdże", unit:"g", v:Math.round(n*u.yeast*10)/10},
+  ];
+  if(u.oil>0) dough.push({name:"Oliwa / olej do ciasta", unit:"ml", v:Math.round(n*u.oil)});
+  if(u.sugar>0) dough.push({name:"Cukier", unit:"g", v:Math.round(n*u.sugar)});
+  if(s.id==="napoletana"||s.id==="pinsa"||s.id==="newyork") dough.push({name:"Semola do podsypki", unit:"g", v:Math.max(100, n*30)});
+  if(s.id==="detroit"||s.id==="rzymska") dough.push({name:"Olej do blaszki", unit:"ml", v:n*(s.id==="detroit"?15:25)});
+  el.innerHTML = `<div class="shop-grid">${
+    [...dough, ...rows].map(r=>`<div class="srow"><span class="n">${r.name}</span><span class="a">${fmt(r.v)} ${r.unit}</span></div>`).join("")
+  }</div>`;
+}
+
+/* ================= dynamic schedule ================= */
+const DF = new Intl.DateTimeFormat("pl-PL",{weekday:"long", day:"numeric", month:"long"});
+const TF = new Intl.DateTimeFormat("pl-PL",{hour:"2-digit", minute:"2-digit"});
+const cap = s => s.charAt(0).toUpperCase()+s.slice(1);
+const H = 3600000, MIN = 60000;
+
+function nextSaturday15(){
+  const d = new Date();
+  d.setHours(15,0,0,0);
+  const add = (6 - d.getDay() + 7) % 7 || 7;
+  d.setDate(d.getDate()+add);
+  return d;
+}
+function toLocalInput(d){
+  const p = x => String(x).padStart(2,"0");
+  return `${d.getFullYear()}-${p(d.getMonth()+1)}-${p(d.getDate())}T${p(d.getHours())}:${p(d.getMinutes())}`;
+}
+
+const HEAT = [
+  {id:"alfa", name:"Alfa Forni", pre:45*MIN,
+   preT:"Rozpalanie Alfa Forni",
+   preD:"Rozpal piec i doprowadź kamień do 430–450°C — sprawdź pirometrem.",
+   bakeD:"60–90 s na placek, obracaj co 20–30 s. Rozciągaj następny, gdy poprzedni jest w piecu."},
+  {id:"oven", name:"Piekarnik", pre:70*MIN,
+   preT:"Nagrzewanie piekarnika",
+   preD:"Kamień lub stal na najwyższym poziomie, maksymalna temperatura, tryb z grillem. Minimum 60 minut nagrzewania.",
+   bakeD:"4–6 minut na placek, najwyższy poziom. Rozciągaj następny, gdy poprzedni jest w piecu."},
+  {id:"grill", name:"Grill", pre:40*MIN,
+   preT:"Rozgrzewanie grilla",
+   preD:"Kamień na ruszcie, pokrywa zamknięta, pełna moc — celuj w 300–350°C pod pokrywą.",
+   bakeD:"5–7 minut pod zamkniętą pokrywą; obróć placek w połowie pieczenia."},
+];
+let heatId = "alfa";
+const heatOf = () => HEAT.find(h=>h.id===heatId);
+function renderHeat(){
+  document.getElementById("heatRow").innerHTML = HEAT.map(h=>
+    `<button class="style-btn" aria-pressed="${h.id===heatId}" onclick="setHeat('${h.id}')">${h.name}</button>`).join("");
+}
+function setHeat(id){ heatId = id; renderHeat(); renderSchedule(); renderRecipe(); }
+
+function finishSteps(T){
+  const h = heatOf();
+  const bakeTitle = h.id==="alfa" ? "Pieczenie" : (h.id==="oven" ? "Pieczenie w piekarniku" : "Pieczenie na grillu");
+  return [
+    [T-h.pre-25*MIN, h.preT, h.preD],
+    [T-40*MIN,"Sos i dodatki „na linii”","Sos w misce, mozzarella pokrojona i odsączona, bazylia umyta."],
+    [T-10*MIN,"Rozciąganie pierwszego placka","Na semoli, palcami od środka — rant nietykalny."],
+    [T, bakeTitle, h.bakeD],
+  ];
+}
+function planClassic(T){
+  const s = styleOf(), r = recipeOf();
+  const cold = r.coldH;                 // hours in fridge
+  const rest = 3;                       // hours to come to room temp
+  const preFerm = 2.25;                 // knead + initial rest + shaping window
+  return [
+    [T-(cold+rest+preFerm)*H,"Wyrabianie ciasta","Woda + sól, część mąki, drożdże, reszta mąki. 15–20 minut wyrabiania."],
+    [T-(cold+rest+preFerm-0.5)*H,"Odpoczynek wstępny","Kula pod wilgotną ściereczką na blacie, 2 godziny."],
+    [T-(cold+rest+0.25)*H,r.shape.startsWith("Ciasto")||r.shape.startsWith("Bochenek")?"Formowanie ciasta":"Formowanie kulek",`${r.shape}, do pojemnika z przykrywką.`],
+    [T-(cold+rest)*H,"Do lodówki",`Start ${cold}-godzinnej zimnej fermentacji.`],
+    [T-rest*H,"Wyjęcie z lodówki","Dochodzenie do temperatury pokojowej (2,5–3 h; w upale wystarczą 2 h)."],
+    ...finishSteps(T),
+  ];
+}
+function planFast(T){ return [
+  [T-11*H,"Wyrabianie ciasta","Wariant szybki: podwój drożdże (0,5 g na kulkę). 15–20 minut wyrabiania."],
+  [T-10.5*H,"Odpoczynek wstępny","Kula pod wilgotną ściereczką, 2 godziny."],
+  [T-8.5*H,"Formowanie kulek i fermentacja na blacie","Kulki po ok. 260 g, przykryte. Ok. 8 godzin w temperaturze pokojowej (20–22°C) — bez lodówki."],
+  ...finishSteps(T),
+];}
+
+function renderSchedule(){
+  const input = document.getElementById("bakeAt");
+  const bake = new Date(input.value);
+  const badge = document.getElementById("planBadge");
+  const tl = document.getElementById("timeline");
+  if(isNaN(bake)){ tl.innerHTML=""; badge.textContent="Wybierz datę, aby zobaczyć plan."; badge.className="plan-badge"; return; }
+
+  const s = styleOf(), r = recipeOf();
+  const classicLead = (r.coldH + 5.25) * H;   // full cold plan span
+  const lead = bake - Date.now();
+  let steps, note, warn=false;
+  if(lead >= classicLead){
+    steps = planClassic(+bake);
+    note = `Wariant klasyczny · ${r.coldH} h zimnej fermentacji — najlepszy smak i struktura`;
+  } else if(lead >= 11.5*H){
+    steps = planFast(+bake);
+    note = `Za mało czasu na pełną (${r.coldH} h) fermentację — plan szybki: 8 h na blacie, podwójne drożdże`;
+    warn = true;
+  } else if(lead > 0){
+    steps = null;
+    note = `Mniej niż 12 godzin do pieczenia — ciasto ${s.name} nie zdąży wyrosnąć. Wybierz późniejszy termin.`;
+    warn = true;
+  } else {
+    steps = null;
+    note = "Ta data już minęła — wybierz termin w przyszłości.";
+    warn = true;
+  }
+  badge.textContent = note;
+  badge.className = "plan-badge"+(warn?" warn":"");
+  if(!steps){ tl.innerHTML=""; return; }
+
+  let html = "", lastDay = "";
+  steps.forEach(([ts, tt, td], i)=>{
+    const d = new Date(ts);
+    const day = cap(DF.format(d));
+    if(day !== lastDay){ html += `<div class="day-h">${day}</div>`; lastDay = day; }
+    const cls = i===0 ? " first" : (i===steps.length-1 ? " last" : "");
+    html += `<div class="trow${cls}">
+      <div class="tm">${TF.format(d)}</div>
+      <div class="rail"><span class="dot"></span></div>
+      <div class="body"><div class="tt">${tt}</div><div class="td">${td}</div></div>
+    </div>`;
+  });
+  tl.innerHTML = html;
+}
+
+/* ================= init ================= */
+renderStyles();
+renderCards();
+change("margherita",1); change("margherita",1);
+change("diavola",1);
+change("prosciutto",1);
+document.getElementById("bakeAt").value = toLocalInput(nextSaturday15());
+renderHeat();
+renderRecipe();
+renderSchedule();
+</script>
+</body>
+</html>
