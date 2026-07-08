@@ -4,6 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Via Rozbrat — kalkulator i przepisy</title>
+<link rel="icon" type="image/svg+xml" href="mark.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<link rel="apple-touch-icon" href="favicon-180.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@400;500&display=swap" rel="stylesheet">
@@ -32,8 +35,9 @@ button{font-family:inherit;cursor:pointer}
 /* ---------- nav ---------- */
 nav{position:sticky;top:0;z-index:50;background:rgba(251,251,248,.82);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border-bottom:1px solid var(--line)}
 .nav-in{max-width:1060px;margin:0 auto;padding:0 24px;height:56px;display:flex;align-items:center;justify-content:space-between}
-.brand{font-family:var(--font-d);font-weight:600;font-size:16px;letter-spacing:-.01em;display:flex;align-items:center;gap:9px}
-.brand-dot{width:9px;height:9px;border-radius:50%;background:var(--accent)}
+.brand{font-family:var(--font-d);font-weight:600;font-size:16px;letter-spacing:-.01em;display:flex;align-items:center;gap:9px;text-decoration:none;color:var(--ink)}
+.brand-mark{display:block;border-radius:50%}
+.brand-name{line-height:1}
 .tabs{display:flex;gap:4px;background:var(--sand);padding:4px;border-radius:99px}
 .tab{border:none;background:transparent;padding:7px 20px;border-radius:99px;font-size:14px;font-weight:500;color:var(--muted);transition:color .25s,background .25s}
 .tab[aria-selected="true"]{background:var(--ink);color:#fff}
@@ -58,10 +62,23 @@ section{margin-top:72px}
 
 /* ---------- style selector ---------- */
 .styles{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:36px}
-.style-btn{border:1px solid var(--line);background:var(--card);border-radius:99px;padding:10px 22px;font-size:14px;font-weight:500;color:var(--muted);transition:all .25s}
+.style-btn{border:1px solid var(--line);background:var(--card);border-radius:99px;padding:9px 18px 9px 14px;font-size:14px;font-weight:500;color:var(--muted);transition:all .25s;display:inline-flex;align-items:center;gap:8px}
+.sb-ic{display:inline-flex;width:18px;height:18px}
+.sb-ic svg{width:18px;height:18px}
+.style-btn[aria-pressed="true"] .sb-ic{color:#fff}
 .style-btn:hover{border-color:#CFCDC4;color:var(--ink)}
 .style-btn[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:#fff}
 .style-spec{text-align:center;margin-top:16px;font-size:13.5px;color:var(--faint)}
+.hyd-control{max-width:420px;margin:22px auto 0;text-align:left}
+.hyd-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px}
+.hyd-lbl{font-size:12px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:var(--faint)}
+.hyd-val{font-size:15px;color:var(--muted)}
+.hyd-val b{font-family:var(--font-d);font-weight:600;color:var(--accent-ink);font-variant-numeric:tabular-nums}
+.hyd-reset{border:none;background:none;font-family:var(--font-b);font-size:12px;color:var(--accent);cursor:pointer;margin-left:8px;text-decoration:underline;padding:0}
+.hyd-control input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:4px;border-radius:99px;background:var(--line);outline:none;margin:6px 0}
+.hyd-control input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:22px;height:22px;border-radius:50%;background:var(--accent);cursor:grab;border:3px solid var(--card);box-shadow:0 2px 8px rgba(55,80,61,.35)}
+.hyd-control input[type=range]::-moz-range-thumb{width:22px;height:22px;border-radius:50%;background:var(--accent);cursor:grab;border:3px solid var(--card);box-shadow:0 2px 8px rgba(55,80,61,.35)}
+.hyd-scale{display:flex;justify-content:space-between;font-size:11.5px;color:var(--faint)}
 .style-spec b{color:var(--muted);font-weight:500}
 
 /* ---------- pizza cards ---------- */
@@ -70,6 +87,10 @@ section{margin-top:72px}
 .pcard:hover{border-color:#D8D6CD;box-shadow:0 12px 32px rgba(28,28,26,.05)}
 .pcard.sel{border-color:var(--accent);box-shadow:0 12px 32px rgba(55,80,61,.10)}
 .pcard h3{font-family:var(--font-d);font-weight:600;font-size:19px;letter-spacing:-.01em}
+.pcard-head{display:flex;align-items:center;gap:13px}
+.pcard-ic{flex-shrink:0;width:40px;height:40px;border-radius:12px;background:var(--accent-soft);color:var(--accent);display:grid;place-items:center}
+.pcard-ic svg{width:22px;height:22px}
+.pcard.sel .pcard-ic{background:var(--accent);color:#fff}
 .pcard .kind{font-size:11.5px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--faint)}
 .pcard .desc{font-size:13.5px;color:var(--muted);line-height:1.55;flex:1}
 .stepper{display:flex;align-items:center;justify-content:space-between;border-top:1px solid var(--line);padding-top:16px}
@@ -94,6 +115,10 @@ section{margin-top:72px}
 .dq .v small{font-size:.5em;color:#8E8E85;font-weight:400;margin-left:2px}
 .dq .k{font-size:13px;color:#8E8E85;margin-top:2px}
 .dough-note{margin-top:26px;font-size:13px;color:#8E8E85;max-width:560px}
+.recipe-cta{margin-top:28px;display:inline-flex;align-items:center;gap:9px;background:#F4F3EE;color:var(--ink);border:none;border-radius:99px;padding:13px 24px;font-family:var(--font-b);font-size:14.5px;font-weight:500;cursor:pointer;transition:transform .2s,background .2s}
+.recipe-cta:hover{background:#fff;transform:translateX(2px)}
+.recipe-cta svg{transition:transform .2s}
+.recipe-cta:hover svg{transform:translateX(3px)}
 .dough-empty{margin-top:30px;color:#8E8E85;font-size:15px}
 
 /* ---------- shopping list ---------- */
@@ -148,6 +173,10 @@ section{margin-top:72px}
 .mini li::before{content:"";position:absolute;left:2px;top:16px;width:5px;height:5px;border-radius:50%;background:var(--accent)}
 
 /* ---------- gallery ---------- */
+.gallery-hero{padding-bottom:32px}
+.kitchen-banner{position:relative;border-radius:26px;overflow:hidden;margin-bottom:8px;border:1px solid var(--line)}
+.kitchen-banner img{width:100%;height:auto;display:block;aspect-ratio:3/1;object-fit:cover}
+.kitchen-banner figcaption{position:absolute;left:0;bottom:0;right:0;padding:40px 24px 18px;color:#fff;font-size:14px;font-weight:500;background:linear-gradient(transparent,rgba(20,20,18,.6))}
 .gallery-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px;margin-top:32px}
 .gcard{position:relative;border-radius:var(--radius);overflow:hidden;background:var(--sand);border:1px solid var(--line);aspect-ratio:4/3;cursor:zoom-in;transition:transform .3s,box-shadow .3s}
 .gcard:hover{transform:translateY(-2px);box-shadow:0 14px 34px rgba(28,28,26,.08)}
@@ -171,7 +200,7 @@ code{font-family:var(--font-b);font-size:.88em;background:var(--sand);padding:2p
 
 <nav>
   <div class="nav-in">
-    <div class="brand"><span class="brand-dot"></span>Via Rozbrat</div>
+    <a class="brand" href="#" onclick="switchTab('pizze');return false;" aria-label="Via Rozbrat — strona główna"><img src="mark.svg" alt="" class="brand-mark" width="26" height="26"><span class="brand-name">Via Rozbrat</span></a>
     <div class="tabs" role="tablist" aria-label="Sekcje">
       <button class="tab" role="tab" id="tab-pizze" aria-selected="true" aria-controls="panel-pizze" onclick="switchTab('pizze')">Pizza</button>
       <button class="tab" role="tab" id="tab-przepisy" aria-selected="false" aria-controls="panel-przepisy" onclick="switchTab('przepisy')">Przepis</button>
@@ -190,6 +219,7 @@ code{font-family:var(--font-b);font-size:.88em;background:var(--sand);padding:2p
     <p>Wybierz styl ciasta i pizze na wieczór, a składniki i lista zakupów przeliczą się same — co do grama.</p>
     <div class="styles" id="styleRow" role="group" aria-label="Styl pizzy"></div>
     <p class="style-spec" id="styleSpec"></p>
+    <div class="hyd-control" id="hydControl"></div>
   </div>
 
   <section>
@@ -253,10 +283,15 @@ code{font-family:var(--font-b);font-size:.88em;background:var(--sand);padding:2p
 <!-- ============ TAB: GALERIA ============ -->
 <div class="panel" id="panel-galeria" role="tabpanel" aria-labelledby="tab-galeria">
 
-  <div class="hero">
+  <div class="hero gallery-hero">
     <h1>Z pieca <em>prosto tutaj.</em></h1>
     <p>Twoje wypieki z Alfa Forni. Zdjęcia dodajesz, wgrywając pliki do folderu <code>gallery/</code> w repozytorium.</p>
   </div>
+
+  <figure class="kitchen-banner">
+    <img src="gallery/kuchnia-baner.jpg" alt="Kuchnia ogrodowa z piecem Alfa Forni" loading="lazy">
+    <figcaption>Kuchnia ogrodowa · piec Alfa Forni</figcaption>
+  </figure>
 
   <section>
     <div id="galleryGrid" class="gallery-grid" aria-live="polite"></div>
@@ -279,43 +314,64 @@ code{font-family:var(--font-b);font-size:.88em;background:var(--sand);padding:2p
 <script>
 /* ================= data ================= */
 const PIZZAS = [
-  {id:"margherita", name:"Margherita", kind:"Klasyka", desc:"Sos pomidorowy, fior di latte, świeża bazylia i oliwa. Wzorzec, od którego wszystko się zaczęło.",
+  {id:"margherita", name:"Margherita", kind:"Klasyka", ic:"basil", desc:"Sos pomidorowy, fior di latte, świeża bazylia i oliwa. Wzorzec, od którego wszystko się zaczęło.",
    top:[["Sos pomidorowy",80,"g"],["Mozzarella fior di latte",80,"g"],["Bazylia świeża",4,"listki"],["Oliwa extra vergine",5,"ml"]]},
-  {id:"marinara", name:"Marinara", kind:"Klasyka · bez sera", desc:"Sos pomidorowy, czosnek, oregano i oliwa. Najstarsza neapolitańska — czysty smak pomidora.",
+  {id:"marinara", name:"Marinara", kind:"Klasyka · bez sera", ic:"garlic", desc:"Sos pomidorowy, czosnek, oregano i oliwa. Najstarsza neapolitańska — czysty smak pomidora.",
    top:[["Sos pomidorowy",90,"g"],["Czosnek",1,"ząbek"],["Oregano suszone",1,"g"],["Oliwa extra vergine",8,"ml"]]},
-  {id:"bufala", name:"Bufala", kind:"Klasyka premium", desc:"Jak Margherita, ale z mozzarellą di bufala dodaną tuż po pieczeniu. Kremowa i wyrazista.",
+  {id:"bufala", name:"Bufala", kind:"Klasyka premium", ic:"cheese", desc:"Jak Margherita, ale z mozzarellą di bufala dodaną tuż po pieczeniu. Kremowa i wyrazista.",
    top:[["Sos pomidorowy",80,"g"],["Mozzarella di bufala",90,"g"],["Bazylia świeża",4,"listki"],["Oliwa extra vergine",5,"ml"]]},
-  {id:"diavola", name:"Diavola", kind:"Pikantna", desc:"Sos, mozzarella i pikantne salami. Odrobina ostrości, dużo charakteru.",
+  {id:"diavola", name:"Diavola", kind:"Pikantna", ic:"chili", desc:"Sos, mozzarella i pikantne salami. Odrobina ostrości, dużo charakteru.",
    top:[["Sos pomidorowy",80,"g"],["Mozzarella fior di latte",70,"g"],["Salami pikantne",40,"g"],["Oliwa extra vergine",5,"ml"]]},
-  {id:"prosciutto", name:"Prosciutto e funghi", kind:"Rodzinna", desc:"Szynka i pieczarki na klasycznej bazie. Bezpieczny wybór, który zawsze znika pierwszy.",
+  {id:"prosciutto", name:"Prosciutto e funghi", kind:"Rodzinna", ic:"mushroom", desc:"Szynka i pieczarki na klasycznej bazie. Bezpieczny wybór, który zawsze znika pierwszy.",
    top:[["Sos pomidorowy",70,"g"],["Mozzarella fior di latte",70,"g"],["Szynka dobrej jakości",50,"g"],["Pieczarki",50,"g"]]},
-  {id:"capricciosa", name:"Capricciosa", kind:"Bogata", desc:"Szynka, pieczarki, karczochy i oliwki — po kawałku wszystkiego, co dobre.",
+  {id:"capricciosa", name:"Capricciosa", kind:"Bogata", ic:"olive", desc:"Szynka, pieczarki, karczochy i oliwki — po kawałku wszystkiego, co dobre.",
    top:[["Sos pomidorowy",70,"g"],["Mozzarella fior di latte",70,"g"],["Szynka dobrej jakości",40,"g"],["Pieczarki",40,"g"],["Karczochy marynowane",40,"g"],["Oliwki czarne",15,"g"]]},
-  {id:"quattro", name:"Quattro formaggi", kind:"Biała", desc:"Bez sosu: fior di latte, gorgonzola, scamorza i parmezan. Dla miłośników sera.",
+  {id:"quattro", name:"Quattro formaggi", kind:"Biała", ic:"cheese", desc:"Bez sosu: fior di latte, gorgonzola, scamorza i parmezan. Dla miłośników sera.",
    top:[["Mozzarella fior di latte",60,"g"],["Gorgonzola",30,"g"],["Scamorza lub provolone",30,"g"],["Parmezan tarty",15,"g"]]},
-  {id:"bianca", name:"Bianca ze szpinakiem", kind:"Biała · wege", desc:"Śmietanka, szpinak, czosnek i mozzarella. Lekka odmiana bez pomidora.",
+  {id:"bianca", name:"Bianca ze szpinakiem", kind:"Biała · wege", ic:"leaf", desc:"Śmietanka, szpinak, czosnek i mozzarella. Lekka odmiana bez pomidora.",
    top:[["Śmietanka 30%",40,"ml"],["Mozzarella fior di latte",70,"g"],["Szpinak świeży",40,"g"],["Czosnek",1,"ząbek"],["Parmezan tarty",10,"g"]]},
 ];
-/* per-style dough spec: weight per unit [g], baker's percentages, topping scale factor */
+/* per-style dough spec: weight per unit [g], baker's percentages, topping scale factor, hydration range, icon */
 const STYLES = [
-  {id:"napoletana", name:"Napoletana", unit:"placek ~30 cm", w:260, hyd:.65, salt:.03, oil:0, sugar:0, yeast:.0025,
-   flour:"mąka typu 00 (min. 12% białka)", factor:1,
+  {id:"napoletana", name:"Napoletana", unit:"placek ~30 cm", w:260, hyd:.65, hydMin:.58, hydMax:.70, salt:.03, oil:0, sugar:0, yeast:.0025,
+   flour:"mąka typu 00 (min. 12% białka)", factor:1, icon:"napoletana",
    note:"Hydratacja 65% · sól 3% · świeże drożdże 0,25%. 24 h zimnej fermentacji, pieczenie 4–6 min w maks. temperaturze — miękki rant, chrupiący spód."},
-  {id:"newyork", name:"New York", unit:"placek ~35 cm", w:320, hyd:.63, salt:.025, oil:.025, sugar:.02, yeast:.004,
-   flour:"mąka chlebowa (typ 650–750)", factor:1.25,
+  {id:"newyork", name:"New York", unit:"placek ~35 cm", w:320, hyd:.63, hydMin:.58, hydMax:.68, salt:.025, oil:.025, sugar:.02, yeast:.004,
+   flour:"mąka chlebowa (typ 650–750)", factor:1.25, icon:"slice",
    note:"Hydratacja 63% z oliwą i odrobiną cukru — złocisty, składany w trójkąt kawałek. 24–48 h w lodówce, pieczenie 250–280°C przez 7–9 min."},
-  {id:"detroit", name:"Detroit", unit:"blaszka 20×25 cm", w:350, hyd:.75, salt:.02, oil:.005, sugar:0, yeast:.005,
-   flour:"mąka chlebowa (typ 650–750)", factor:1.3,
+  {id:"detroit", name:"Detroit", unit:"blaszka 20×25 cm", w:350, hyd:.75, hydMin:.68, hydMax:.80, salt:.02, oil:.005, sugar:0, yeast:.005,
+   flour:"mąka chlebowa (typ 650–750)", factor:1.3, icon:"pan",
    note:"Grube, puszyste ciasto 75% hydratacji pieczone w wysmarowanej olejem blaszce. Ser (idealnie brick lub cheddar + mozzarella) układa się aż po brzegi — karmelizuje się na krawędziach. 220–250°C, 12–15 min."},
-  {id:"rzymska", name:"Rzymska al taglio", unit:"blacha 30×40 cm (4–6 porcji)", w:750, hyd:.80, salt:.025, oil:.02, sugar:0, yeast:.003,
-   flour:"mąka o wysokim białku (typ 00 lub 550, 13%+)", factor:2.6,
+  {id:"rzymska", name:"Rzymska al taglio", unit:"blacha 30×40 cm (4–6 porcji)", w:750, hyd:.80, hydMin:.72, hydMax:.85, salt:.025, oil:.02, sugar:0, yeast:.003,
+   flour:"mąka o wysokim białku (typ 00 lub 550, 13%+)", factor:2.6, icon:"tray",
    note:"Bardzo mokre ciasto 80% hydratacji, 24–48 h w lodówce, rozciągane na całą blachę i cięte nożycami na prostokąty. 250°C, 15–18 min — chrupiące na zewnątrz, alweolowane w środku."},
-  {id:"pinsa", name:"Pinsa romana", unit:"owalny placek ~25×18 cm", w:230, hyd:.78, salt:.025, oil:.02, sugar:0, yeast:.003,
-   flour:"mieszanka do pinsy (pszenna + ryżowa + sojowa)", factor:0.95,
+  {id:"pinsa", name:"Pinsa romana", unit:"owalny placek ~25×18 cm", w:230, hyd:.78, hydMin:.70, hydMax:.82, salt:.025, oil:.02, sugar:0, yeast:.003,
+   flour:"mieszanka do pinsy (pszenna + ryżowa + sojowa)", factor:0.95, icon:"oval",
    note:"Owalna, lekka i chrupiąca — mieszanka mąk z ryżową zatrzymuje wilgoć. 48–72 h zimnej fermentacji, pieczenie 250–300°C przez 5–7 min."},
+  {id:"chleb", name:"Chleb", unit:"bochenek ~800 g", w:800, hyd:.70, hydMin:.60, hydMax:.85, salt:.02, oil:0, sugar:0, yeast:.006,
+   flour:"mąka chlebowa (typ 750) lub 00", factor:1, icon:"bread",
+   note:"Domowy bochenek na tym samym cieście. Hydratacja 70% daje otwarty miękisz i chrupką skórkę. Długa fermentacja, pieczenie w naczyniu żeliwnym 230–250°C ok. 40–45 min (pierwsze 20 min pod przykryciem)."},
 ];
 let styleId = "napoletana";
 const styleOf = () => STYLES.find(s=>s.id===styleId);
+
+/* line icons (own drawings, 24×24, currentColor) */
+const ICONS = {
+  napoletana:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5.5"/><circle cx="10" cy="10.5" r=".6" fill="currentColor" stroke="none"/><circle cx="13.5" cy="11" r=".6" fill="currentColor" stroke="none"/><circle cx="11.5" cy="13.5" r=".6" fill="currentColor" stroke="none"/></svg>',
+  slice:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6.5 12 20l8-13.5A18 18 0 0 0 4 6.5Z"/><circle cx="10" cy="10" r=".7" fill="currentColor" stroke="none"/><circle cx="13.5" cy="12.5" r=".7" fill="currentColor" stroke="none"/></svg>',
+  pan:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="6" width="13" height="12" rx="2"/><path d="M17 9h3.5"/><path d="M8 6v12M12 6v12"/></svg>',
+  tray:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="18" height="10" rx="1.5"/><path d="M9 7v10M15 7v10M3 12h18"/></svg>',
+  oval:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="12" rx="9" ry="6"/><ellipse cx="12" cy="12" rx="5" ry="3"/></svg>',
+  bread:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 14a8 5 0 0 1 16 0v3a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1Z"/><path d="M9 11.5 8 15M12.5 11.5 11.5 15M16 11.5 15 15"/></svg>',
+  basil:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20c0-6 3-10 8-11-1 6-4 9-8 9"/><path d="M12 20c0-5-2.5-8-7-9 .8 5 3.5 7.5 7 7.5"/><path d="M12 20v-4"/></svg>',
+  garlic:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4c-1 2-1 3 0 4 1-1 1-2 0-4Z"/><path d="M12 8c-3 0-5 2.5-5 6a5 5 0 0 0 10 0c0-3.5-2-6-5-6Z"/><path d="M12 8v11"/></svg>',
+  cheese:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 17V13L14 5l6 4-9 8Z"/><circle cx="9" cy="13" r=".8" fill="currentColor" stroke="none"/><circle cx="13" cy="11" r=".8" fill="currentColor" stroke="none"/><path d="M4 17h13"/></svg>',
+  chili:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 18c6 1 11-3 12-10-3 1-4 3-6 3"/><path d="M18 8c1-1 1.5-2.5 1-4-1.5.5-2.5 1.5-2.5 3"/></svg>',
+  mushroom:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12a8 6 0 0 1 16 0Z"/><path d="M10 12v5a2 2 0 0 0 4 0v-5"/></svg>',
+  olive:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="13" rx="4.5" ry="6"/><circle cx="12" cy="13" r="1.4"/><path d="M12 7c0-2 1.5-3 3.5-3"/></svg>',
+  leaf:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 19c0-8 5-13 14-14 0 9-5 14-14 14Z"/><path d="M9 15c2-2 4-3 6-3.5"/></svg>',
+};
+function icon(name){ return ICONS[name] || ICONS.napoletana; }
 
 /* per-style recipe: fermentation profile + shaping/baking narrative + extras */
 const RECIPES = {
@@ -399,14 +455,33 @@ const RECIPES = {
       ["Wskazówki",["Piecz 250–300°C, 5–7 min do chrupkości","Bardzo długa fermentacja (48–72 h) = lekkostrawność","Mniej drożdży, więcej czasu"]],
     ],
   },
+  chleb: {
+    sub:"Domowy bochenek na tym samym cieście co pizza — otwarty miękisz, chrupka skórka. Ilości przelicza zakładka Pizza.",
+    coldH:18, shape:"Bochenek ~800 g", stretch:"Uformuj napięty bochenek, składając ciasto ku środkowi; odłóż szwem do dołu do koszyka rozrostowego (banneton) obsypanego mąką.",
+    steps:[
+      ["Autoliza · 30 min","Wymieszaj mąkę z wodą i odstaw na 30 min bez soli i drożdży — mąka się nawodni."],
+      ["Dodanie soli i drożdży","Wmieszaj drożdże, potem sól. Wyrabiaj lub składaj do gładkości i elastyczności."],
+      ["Składanie · 3–4 serie","Seria stretch & fold co 30 min przez pierwsze 2 godziny — buduje strukturę bez wyrabiania."],
+      ["Formowanie bochenka","Uformuj napięty bochenek i przełóż do obsypanego mąką koszyka (banneton) szwem do góry."],
+      ["Dojście do temperatury · 1,5–2 h","Wyjmij z lodówki; bochenek ma wyrosnąć i lekko oddychać pod dotykiem."],
+      ["Nacięcie i pieczenie","Rozgrzej naczynie żeliwne w piekarniku do 240°C. Przełóż bochenek, natnij ostrym nożem, piecz 20 min pod przykryciem i 20–25 min bez — do ciemnozłotej skórki."],
+    ],
+    extras:[
+      ["Skórka i miękisz",["Pieczenie w żeliwie zatrzymuje parę = chrupka skórka","Nacięcie kieruje wyrastanie bochenka w piecu","Ostudź na kratce min. 1 h przed krojeniem"]],
+      ["Wskazówki",["Hydratacja 70% to dobry start; wyższa = bardziej otwarty miękisz","Garnek musi być rozgrzany razem z piekarnikiem","Mąka chlebowa (typ 750) daje lepszą strukturę niż tortowa"]],
+    ],
+  },
 };
 const recipeOf = () => RECIPES[styleId] || RECIPES.napoletana;
 
+let hydOverride = null;   // user-set hydration (fraction), null = style default
+function currentHyd(){ const s = styleOf(); return hydOverride!=null ? hydOverride : s.hyd; }
 function doughPerUnit(){
   const s = styleOf();
-  const denom = 1 + s.hyd + s.salt + s.oil + s.sugar + s.yeast;
+  const hyd = currentHyd();
+  const denom = 1 + hyd + s.salt + s.oil + s.sugar + s.yeast;
   const flour = s.w/denom;
-  return {flour, water:flour*s.hyd, salt:flour*s.salt, oil:flour*s.oil, sugar:flour*s.sugar, yeast:flour*s.yeast};
+  return {flour, water:flour*hyd, salt:flour*s.salt, oil:flour*s.oil, sugar:flour*s.sugar, yeast:flour*s.yeast};
 }
 const counts = Object.fromEntries(PIZZAS.map(p=>[p.id,0]));
 
@@ -455,19 +530,44 @@ function closeLightbox(){ document.getElementById("lightbox").classList.remove("
 document.addEventListener("keydown", e=>{ if(e.key==="Escape") closeLightbox(); });
 
 /* ================= style selector ================= */
+function styleBtns(){
+  return STYLES.map(s=>
+    `<button class="style-btn" aria-pressed="${s.id===styleId}" onclick="setStyle('${s.id}')"><span class="sb-ic">${icon(s.icon)}</span>${s.name}</button>`).join("");
+}
 function renderStyles(){
-  document.getElementById("styleRow").innerHTML = STYLES.map(s=>
-    `<button class="style-btn" aria-pressed="${s.id===styleId}" onclick="setStyle('${s.id}')">${s.name}</button>`).join("");
   const s = styleOf();
-  document.getElementById("styleSpec").innerHTML =
-    `<b>${s.unit}</b> · ${Math.round(s.w)} g ciasta · hydratacja ${Math.round(s.hyd*100)}% · ${s.flour}`;
-  document.getElementById("recStyleRow").innerHTML = STYLES.map(s=>
-    `<button class="style-btn" aria-pressed="${s.id===styleId}" onclick="setStyle('${s.id}')">${s.name}</button>`).join("");
-  document.getElementById("recStyleSpec").innerHTML =
-    `<b>${s.unit}</b> · ${Math.round(s.w)} g ciasta · hydratacja ${Math.round(s.hyd*100)}% · ${s.flour}`;
+  const spec = `<b>${s.unit}</b> · ${Math.round(s.w)} g ciasta · hydratacja ${Math.round(currentHyd()*100)}% · ${s.flour}`;
+  document.getElementById("styleRow").innerHTML = styleBtns();
+  document.getElementById("styleSpec").innerHTML = spec;
+  document.getElementById("recStyleRow").innerHTML = styleBtns();
+  document.getElementById("recStyleSpec").innerHTML = spec;
+  renderHydration();
+}
+function renderHydration(){
+  const s = styleOf(), hyd = currentHyd();
+  const min = Math.round(s.hydMin*100), max = Math.round(s.hydMax*100), val = Math.round(hyd*100);
+  const el = document.getElementById("hydControl");
+  if(!el) return;
+  el.innerHTML = `
+    <div class="hyd-head">
+      <span class="hyd-lbl">Hydratacja</span>
+      <span class="hyd-val"><b>${val}%</b> <button class="hyd-reset" onclick="resetHyd()" ${hydOverride==null?'hidden':''}>reset</button></span>
+    </div>
+    <input type="range" id="hydSlider" min="${min}" max="${max}" step="1" value="${val}"
+      oninput="setHyd(this.value)" aria-label="Hydratacja ciasta w procentach">
+    <div class="hyd-scale"><span>${min}% suchsze</span><span>${max}% bardziej mokre</span></div>`;
+}
+function setHyd(v){
+  hydOverride = Number(v)/100;
+  renderStyles(); renderDough(); renderShop();
+}
+function resetHyd(){
+  hydOverride = null;
+  renderStyles(); renderDough(); renderShop();
 }
 function setStyle(id){
   styleId = id;
+  hydOverride = null;
   renderStyles(); renderCards(); renderDough(); renderShop();
   renderRecipe(); renderSchedule();
 }
@@ -505,9 +605,12 @@ function scaleAmt(v,unit){
 function renderCards(){
   document.getElementById("pizzaGrid").innerHTML = PIZZAS.map(p=>`
     <div class="pcard ${counts[p.id]>0?"sel":""}" id="card-${p.id}">
-      <div>
-        <div class="kind">${p.kind}</div>
-        <h3>${p.name}</h3>
+      <div class="pcard-head">
+        <span class="pcard-ic">${icon(p.ic)}</span>
+        <div>
+          <div class="kind">${p.kind}</div>
+          <h3>${p.name}</h3>
+        </div>
       </div>
       <div class="desc">${p.desc}<br><span style="color:var(--faint)">${p.top.map(t=>`${t[0].toLowerCase()} ${fmt(scaleAmt(t[1],t[2]))} ${t[2]}`).join(" · ")}</span></div>
       <div class="stepper">
@@ -552,7 +655,11 @@ function renderDough(){
   if(u.oil>0) rows.push([Math.round(n*u.oil), "ml", "oliwa / olej"]);
   if(u.sugar>0) rows.push([Math.round(n*u.sugar), "g", "cukier"]);
   body.innerHTML = `<div class="dough-grid">${rows.map(([v,un,k])=>
-    `<div class="dq"><div class="v">${fmt(typeof v==="number"?Math.round(v*10)/10:v)}<small>${un}</small></div><div class="k">${k}</div></div>`).join("")}</div>`;
+    `<div class="dq"><div class="v">${fmt(typeof v==="number"?Math.round(v*10)/10:v)}<small>${un}</small></div><div class="k">${k}</div></div>`).join("")}</div>
+    <button class="recipe-cta" onclick="switchTab('przepisy')">
+      Zobacz przepis krok po kroku
+      <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+    </button>`;
 }
 
 /* ================= shopping list ================= */

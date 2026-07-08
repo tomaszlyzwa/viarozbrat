@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 80" width="300" height="80" role="img" aria-label="Via Rozbrat">
+  <g transform="translate(6,8)">
+    <path d="M4 60 a36 33 0 0 1 72 0 z" fill="#37503D"/>
+    <path d="M4 60 h72 v7 a3 3 0 0 1 -3 3 h-66 a3 3 0 0 1 -3 -3 z" fill="#2B4031"/>
+    <rect x="54" y="9" width="10" height="22" rx="2.5" fill="#37503D"/>
+    <path d="M39 38 c-6 -5 -3 -12 1 -15 c-1 6 4 6 3 11 c3 -2 3 -6 1 -8 c5 3 6 10 1 15 c-3 3 -8 2 -7 -3z" fill="#E8845C"/>
+    <path d="M39 38 c-4 -3 -2 -8 1 -10 c0 4 3 4 2 7 c2 -1 2 -4 1 -6 c3 2 4 7 0 10 c-2 2 -6 1 -5 -1z" fill="#F5C542"/>
+  </g>
+  <text x="92" y="42" font-family="Georgia, 'Times New Roman', serif" font-size="30" font-weight="bold" font-style="italic" fill="#1C1C1A">Via Rozbrat</text>
+  <text x="93" y="61" font-family="Arial, Helvetica, sans-serif" font-size="10.5" letter-spacing="2.5" fill="#71716A">FORNO A LEGNA · NEAPOL</text>
+</svg>
