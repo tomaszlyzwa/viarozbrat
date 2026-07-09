@@ -35,9 +35,9 @@ button{font-family:inherit;cursor:pointer}
 /* ---------- nav ---------- */
 nav{position:sticky;top:0;z-index:50;background:rgba(251,251,248,.82);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border-bottom:1px solid var(--line)}
 .nav-in{max-width:1060px;margin:0 auto;padding:0 24px;height:56px;display:flex;align-items:center;justify-content:space-between}
-.brand{font-family:var(--font-d);font-weight:600;font-size:16px;letter-spacing:-.01em;display:flex;align-items:center;gap:9px;text-decoration:none;color:var(--ink)}
-.brand-mark{display:block;border-radius:50%}
-.brand-name{line-height:1}
+.brand{display:flex;align-items:center;text-decoration:none}
+.brand-logo{display:block;height:42px;width:auto}
+@media(max-width:520px){.brand-logo{height:36px}}
 .tabs{display:flex;gap:4px;background:var(--sand);padding:4px;border-radius:99px}
 .tab{border:none;background:transparent;padding:7px 20px;border-radius:99px;font-size:14px;font-weight:500;color:var(--muted);transition:color .25s,background .25s}
 .tab[aria-selected="true"]{background:var(--ink);color:#fff}
@@ -201,7 +201,7 @@ code{font-family:var(--font-b);font-size:.88em;background:var(--sand);padding:2p
 
 <nav>
   <div class="nav-in">
-    <a class="brand" href="#" onclick="switchTab('pizze');return false;" aria-label="Via Rozbrat — strona główna"><img src="mark.svg" alt="" class="brand-mark" width="26" height="26"><span class="brand-name">Via Rozbrat</span></a>
+    <a class="brand" href="#" onclick="switchTab('pizze');return false;" aria-label="Via Rozbrat — strona główna"><img src="logo.svg" alt="Via Rozbrat" class="brand-logo"></a>
     <div class="tabs" role="tablist" aria-label="Sekcje">
       <button class="tab" role="tab" id="tab-pizze" aria-selected="true" aria-controls="panel-pizze" onclick="switchTab('pizze')">Pizza</button>
       <button class="tab" role="tab" id="tab-przepisy" aria-selected="false" aria-controls="panel-przepisy" onclick="switchTab('przepisy')">Przepis</button>
