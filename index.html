@@ -93,20 +93,20 @@ section{margin-top:52px}
 .style-btn[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:#fff}
 .style-spec{text-align:center;margin-top:16px;font-size:13.5px;color:var(--faint)}
 /* compact dough summary bar */
-.dough-mini{max-width:660px;margin:22px auto 0;background:var(--ink);color:#F4F3EE;border-radius:18px;padding:16px 22px;display:flex;flex-direction:column;gap:14px;animation:miniIn .5s var(--ease) both}
+.dough-mini{width:100%;max-width:680px;margin:22px auto 0;background:var(--ink);color:#F4F3EE;border-radius:18px;padding:16px 22px;display:flex;flex-direction:column;gap:14px;animation:miniIn .5s var(--ease) both;position:relative}
 @keyframes miniIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
-.dm-top{display:flex;align-items:center;justify-content:center;gap:12px 20px;flex-wrap:wrap}
-.dm-title{display:flex;flex-direction:column;align-items:flex-start;line-height:1.15;padding-right:6px;border-right:1px solid #3a3a37}
-.dm-count{font-size:13px;color:#C9C9C0}
+.dm-top{display:flex;align-items:center;gap:14px}
+.dm-title{flex:0 0 150px;width:150px;display:flex;flex-direction:column;align-items:flex-start;line-height:1.15;padding-right:12px;border-right:1px solid #3a3a37;overflow:hidden}
+.dm-count{font-size:13px;color:#C9C9C0;white-space:nowrap}
 .dm-count b{font-family:var(--font-d);font-weight:600;font-size:19px;color:#F4F3EE;letter-spacing:-.01em;margin-right:3px;font-variant-numeric:tabular-nums}
-.dm-style{font-size:11.5px;color:#9a9a92;margin-top:1px}
-.dm-values{display:flex;align-items:center;gap:10px 18px;flex-wrap:wrap}
-.dm-item{display:flex;flex-direction:column;align-items:center;line-height:1.1}
-.dm-item .dm-v{font-family:var(--font-d);font-weight:600;font-size:19px;letter-spacing:-.01em;font-variant-numeric:tabular-nums}
+.dm-style{font-size:11px;color:#9a9a92;margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+.dm-values{flex:1;display:grid;grid-template-columns:repeat(5,1fr);align-items:center}
+.dm-item{display:flex;flex-direction:column;align-items:center;line-height:1.1;min-width:0}
+.dm-item .dm-v{font-family:var(--font-d);font-weight:600;font-size:18px;letter-spacing:-.01em;font-variant-numeric:tabular-nums;white-space:nowrap}
 .dm-item .dm-v small{font-size:.55em;font-weight:400;color:#9a9a92;margin-left:1px}
 .dm-item .dm-k{font-size:10.5px;color:#9a9a92;margin-top:2px}
-.dm-sep{width:1px;height:24px;background:#3a3a37}
-.dm-cta{display:inline-flex;align-items:center;gap:6px;background:#F4F3EE;color:var(--ink);border:none;border-radius:99px;padding:9px 16px;font-family:var(--font-b);font-size:13.5px;font-weight:500;cursor:pointer;transition:transform .2s var(--ease),background .2s var(--ease)}
+.dm-sep{display:none}
+.dm-cta{flex:0 0 auto;display:inline-flex;align-items:center;gap:6px;background:#F4F3EE;color:var(--ink);border:none;border-radius:99px;padding:9px 16px;font-family:var(--font-b);font-size:13.5px;font-weight:500;cursor:pointer;transition:transform .2s var(--ease),background .2s var(--ease)}
 .dm-cta:hover{background:#fff;transform:translateX(2px)}
 .dm-cta svg{transition:transform .2s var(--ease)}
 .dm-cta:hover svg{transform:translateX(3px)}
@@ -121,7 +121,13 @@ section{margin-top:52px}
 .dm-hyd-val b{font-family:var(--font-d);font-weight:600;font-size:15px;color:#F4F3EE;font-variant-numeric:tabular-nums;min-width:38px;text-align:right}
 .dm-hyd-reset{border:none;background:#2f2f2c;color:#C9C9C0;width:22px;height:22px;border-radius:50%;font-size:12px;cursor:pointer;display:grid;place-items:center;transition:background .2s}
 .dm-hyd-reset:hover{background:#3f3f3b}
-@media(max-width:640px){.dough-mini{padding:14px 16px}.dm-title{border-right:none;border-bottom:1px solid #3a3a37;padding-bottom:8px;width:100%;align-items:center;padding-right:0}.dm-item .dm-v{font-size:17px}.dm-top{gap:10px 14px}}
+.dm-v-off{color:#5a5a56}
+.dm-jump{position:absolute;left:50%;bottom:-14px;transform:translateX(-50%);width:30px;height:30px;border-radius:50%;background:var(--ink);color:#EFE9DA;border:2px solid var(--bg);cursor:pointer;display:grid;place-items:center;transition:transform .25s var(--ease),background .25s var(--ease);animation:jumpBob 2.2s ease-in-out 1s infinite}
+.dm-jump:hover{background:#2b2d31;transform:translateX(-50%) translateY(2px)}
+@keyframes jumpBob{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(3px)}}
+.grid-bread{grid-template-columns:minmax(260px,340px);justify-content:center}
+.bread-card{border-color:var(--accent)}
+@media(max-width:680px){.dough-mini{padding:14px 16px}.dm-top{flex-wrap:wrap;justify-content:center}.dm-title{flex-basis:100%;width:100%;border-right:none;border-bottom:1px solid #3a3a37;padding-bottom:8px;align-items:center;padding-right:0}.dm-values{flex-basis:100%;order:2}.dm-cta{order:3}.dm-item .dm-v{font-size:16px}}
 .style-spec b{color:var(--muted);font-weight:500}
 
 /* ---------- pizza cards ---------- */
@@ -147,7 +153,10 @@ section{margin-top:52px}
 
 /* ---------- shopping list ---------- */
 .shop{margin-top:40px;background:var(--card);border:1px solid var(--line);border-radius:26px;padding:40px}
-.shop-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:0 40px;margin-top:24px}
+.shop-group{margin-top:28px}
+.shop-group:first-of-type{margin-top:24px}
+.shop-h{font-family:var(--font-d);font-weight:600;font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--accent-ink);padding-bottom:6px;border-bottom:2px solid var(--accent-soft)}
+.shop-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:0 40px;margin-top:12px}
 .srow{display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding:11px 0;border-bottom:1px solid var(--line);font-size:14.5px}
 .srow .n{color:var(--ink)}
 .srow .a{font-weight:500;font-variant-numeric:tabular-nums;white-space:nowrap;color:var(--accent-ink)}
@@ -249,10 +258,10 @@ code{font-family:var(--font-b);font-size:.88em;background:var(--sand);padding:2p
     <div class="dough-mini" id="doughMini" hidden></div>
   </div>
 
-  <section class="reveal">
+  <section class="reveal" id="menuSection" style="scroll-margin-top:72px">
     <div class="eyebrow">Menu</div>
-    <h2 class="section-t">Wybierz pizze</h2>
-    <p class="section-sub">Każda kulka ciasta to placek ok. 30 cm. Ilości dodatków podane dla jednej pizzy.</p>
+    <h2 class="section-t" id="menuTitle">Wybierz pizze</h2>
+    <p class="section-sub" id="menuSub">Każda kulka ciasta to placek ok. 30 cm. Ilości dodatków podane dla jednej pizzy.</p>
     <div class="grid" id="pizzaGrid"></div>
   </section>
 
@@ -587,15 +596,17 @@ function updateDoughValues(){
     fmt(Math.round(n*u.water)),
     fmt(Math.round(n*u.salt*10)/10),
     fmt(Math.round(n*u.yeast*10)/10),
+    u.oil>0 ? fmt(Math.round(n*u.oil)) : "—",
   ];
-  if(u.oil>0) vals.push(fmt(Math.round(n*u.oil)));
-  if(u.sugar>0) vals.push(fmt(Math.round(n*u.sugar)));
   document.querySelectorAll("#doughMini .dm-v").forEach((el,i)=>{
-    if(vals[i]!=null){
-      const small = el.querySelector("small");
+    if(vals[i]!=null && el.firstChild){
       el.firstChild.textContent = vals[i];
     }
   });
+}
+function scrollToMenu(){
+  const menu = document.getElementById("menuSection");
+  if(menu) menu.scrollIntoView({behavior:"smooth", block:"start"});
 }
 function resetHyd(){
   hydOverride = null;
@@ -604,6 +615,7 @@ function resetHyd(){
 function setStyle(id){
   styleId = id;
   hydOverride = null;
+  if(id==="chleb" && !counts["_chleb"]) counts["_chleb"] = 1;
   renderStyles(); renderCards(); renderDough(); renderShop();
   renderRecipe(); renderSchedule();
 }
@@ -639,7 +651,39 @@ function scaleAmt(v,unit){
   return s>=10 ? Math.round(s/5)*5 : Math.round(s*10)/10;
 }
 function renderCards(){
-  document.getElementById("pizzaGrid").innerHTML = PIZZAS.map(p=>`
+  const grid = document.getElementById("pizzaGrid");
+  const title = document.getElementById("menuTitle");
+  const sub = document.getElementById("menuSub");
+  if(styleId==="chleb"){
+    title.textContent = "Ile bochenków?";
+    sub.textContent = "Ustaw liczbę bochenków chleba, a składniki na ciasto przeliczą się same.";
+    const nb = counts["_chleb"] || 0;
+    grid.className = "grid grid-bread";
+    grid.innerHTML = `
+      <div class="pcard bread-card ${nb>0?"sel":""}" id="card-_chleb">
+        <div class="pcard-head">
+          <span class="pcard-ic">${icon("bread")}</span>
+          <div>
+            <div class="kind">Wypiek</div>
+            <h3>Chleb pszenny</h3>
+          </div>
+        </div>
+        <div class="desc">Domowy bochenek ~800 g na tym samym cieście. Otwarty miękisz, chrupka skórka.</div>
+        <div class="stepper">
+          <span class="lbl">Liczba bochenków</span>
+          <div class="step-ctl">
+            <button class="step-btn" aria-label="Mniej bochenków" onclick="change('_chleb',-1)">−</button>
+            <span class="count" id="cnt-_chleb">${nb}</span>
+            <button class="step-btn" aria-label="Więcej bochenków" onclick="change('_chleb',1)">+</button>
+          </div>
+        </div>
+      </div>`;
+    return;
+  }
+  title.textContent = "Wybierz pizze";
+  sub.textContent = "Każda kulka ciasta to placek ok. 30 cm. Ilości dodatków podane dla jednej pizzy.";
+  grid.className = "grid";
+  grid.innerHTML = PIZZAS.map(p=>`
     <div class="pcard ${counts[p.id]>0?"sel":""}" id="card-${p.id}">
       <div class="pcard-head">
         <span class="pcard-ic">${icon(p.ic)}</span>
@@ -660,15 +704,20 @@ function renderCards(){
     </div>`).join("");
 }
 function change(id,d){
-  counts[id] = Math.max(0, Math.min(12, counts[id]+d));
+  counts[id] = Math.max(0, Math.min(12, (counts[id]||0)+d));
   document.getElementById("cnt-"+id).textContent = counts[id];
   document.getElementById("card-"+id).classList.toggle("sel", counts[id]>0);
   renderDough(); renderShop();
 }
 
 /* ================= dough summary (compact bar) ================= */
-function totalBalls(){ return Object.values(counts).reduce((a,b)=>a+b,0); }
+function totalBalls(){
+  if(styleId==="chleb") return counts["_chleb"] || 0;
+  return PIZZAS.reduce((a,p)=>a+(counts[p.id]||0),0);
+}
 function pizzaWord(n){ return n===1 ? "pizzę" : (n%10>=2 && n%10<=4 && (n%100<10||n%100>=20) ? "pizze" : "pizz"); }
+function breadWord(n){ return n===1 ? "bochenek" : (n%10>=2 && n%10<=4 && (n%100<10||n%100>=20) ? "bochenki" : "bochenków"); }
+function unitWord(n){ return styleId==="chleb" ? breadWord(n) : pizzaWord(n); }
 function renderDough(){
   const n = totalBalls();
   const s = styleOf();
@@ -676,25 +725,25 @@ function renderDough(){
   if(!mini) return;
   if(n===0){ mini.hidden = true; mini.innerHTML = ""; return; }
   const u = doughPerUnit();
+  const dash = "—";
   const items = [
     [fmt(Math.round(n*u.flour/5)*5), "g", "mąka"],
     [fmt(Math.round(n*u.water)), "ml", "woda"],
     [fmt(Math.round(n*u.salt*10)/10), "g", "sól"],
     [fmt(Math.round(n*u.yeast*10)/10), "g", "drożdże"],
+    [u.oil>0 ? fmt(Math.round(n*u.oil)) : dash, u.oil>0 ? "ml" : "", "olej"],
   ];
-  if(u.oil>0) items.push([fmt(Math.round(n*u.oil)), "ml", "olej"]);
-  if(u.sugar>0) items.push([fmt(Math.round(n*u.sugar)), "g", "cukier"]);
   const unitShort = s.unit.split(" (")[0];
   const hyd = currentHyd();
   const hmin = Math.round(s.hydMin*100), hmax = Math.round(s.hydMax*100), hval = Math.round(hyd*100);
   mini.innerHTML = `
     <div class="dm-top">
       <div class="dm-title">
-        <span class="dm-count"><b>${n}</b> ${pizzaWord(n)}</span>
+        <span class="dm-count"><b>${n}</b> ${unitWord(n)}</span>
         <span class="dm-style">${s.name} · ${unitShort}</span>
       </div>
       <div class="dm-values">${items.map(([v,un,k],i)=>
-        `${i>0?'<span class="dm-sep"></span>':''}<div class="dm-item"><div class="dm-v">${v}<small>${un}</small></div><div class="dm-k">${k}</div></div>`
+        `<div class="dm-item"><div class="dm-v${v===dash?' dm-v-off':''}">${v}${un?`<small>${un}</small>`:''}</div><div class="dm-k">${k}</div></div>`
       ).join("")}</div>
       <button class="dm-cta" onclick="switchTab('przepisy')" aria-label="Przejdź do przepisu">
         Przepis
@@ -707,7 +756,10 @@ function renderDough(){
         style="--fill:${hydFill(hval,hmin,hmax)}"
         oninput="setHyd(this.value)" aria-label="Hydratacja ciasta w procentach">
       <span class="dm-hyd-val"><b id="hydValLbl">${hval}%</b><button class="dm-hyd-reset" onclick="resetHyd()" ${hydOverride==null?'hidden':''} aria-label="Reset hydratacji">↺</button></span>
-    </div>`;
+    </div>
+    <button class="dm-jump" onclick="scrollToMenu()" aria-label="Przejdź do wyboru pizzy">
+      <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+    </button>`;
   mini.hidden = false;
 }
 let _prevNums = {};
@@ -735,32 +787,58 @@ function animateNums(scope){
 /* ================= shopping list ================= */
 function renderShop(){
   const s = styleOf();
-  const agg = new Map();
-  for(const p of PIZZAS){
-    if(!counts[p.id]) continue;
-    for(const [name,amt,unit] of p.top){
-      const key = name+"|"+unit;
-      agg.set(key,(agg.get(key)||0)+scaleAmt(amt,unit)*counts[p.id]);
-    }
-  }
   const el = document.getElementById("shopBody");
   const n = totalBalls();
-  if(n===0){ el.innerHTML = '<p class="shop-empty">Lista pojawi się, gdy wybierzesz pizze.</p>'; return; }
-  const rows = [...agg.entries()]
-    .map(([k,v])=>{const [name,unit]=k.split("|");return {name,unit,v};})
-    .sort((a,b)=>a.name.localeCompare(b.name,"pl"));
+  const isBread = styleId==="chleb";
+  if(n===0){
+    el.innerHTML = `<p class="shop-empty">Lista pojawi się, gdy wybierzesz ${isBread?"liczbę bochenków":"pizze"}.</p>`;
+    return;
+  }
+  // --- dough ingredients ---
   const u = doughPerUnit();
   const dough = [
     {name:cap(s.flour), unit:"g", v:Math.round(n*u.flour/5)*5},
+    {name:"Zimna woda", unit:"ml", v:Math.round(n*u.water)},
+    {name:"Sól morska", unit:"g", v:Math.round(n*u.salt*10)/10},
     {name:"Świeże drożdże", unit:"g", v:Math.round(n*u.yeast*10)/10},
   ];
   if(u.oil>0) dough.push({name:"Oliwa / olej do ciasta", unit:"ml", v:Math.round(n*u.oil)});
   if(u.sugar>0) dough.push({name:"Cukier", unit:"g", v:Math.round(n*u.sugar)});
   if(s.id==="napoletana"||s.id==="pinsa"||s.id==="newyork") dough.push({name:"Semola do podsypki", unit:"g", v:Math.max(100, n*30)});
   if(s.id==="detroit"||s.id==="rzymska") dough.push({name:"Olej do blaszki", unit:"ml", v:n*(s.id==="detroit"?15:25)});
-  el.innerHTML = `<div class="shop-grid">${
-    [...dough, ...rows].map(r=>`<div class="srow"><span class="n">${r.name}</span><span class="a">${fmt(r.v)} ${r.unit}</span></div>`).join("")
+
+  const groupHTML = (rows)=>`<div class="shop-grid">${
+    rows.map(r=>`<div class="srow"><span class="n">${r.name}</span><span class="a">${fmt(r.v)} ${r.unit}</span></div>`).join("")
   }</div>`;
+
+  let html = `
+    <div class="shop-group">
+      <h3 class="shop-h">${isBread ? "Ciasto na chleb" : "Ciasto · "+s.name}</h3>
+      ${groupHTML(dough)}
+    </div>`;
+
+  // --- pizza toppings (only for pizza styles) ---
+  if(!isBread){
+    const agg = new Map();
+    for(const p of PIZZAS){
+      if(!counts[p.id]) continue;
+      for(const [name,amt,unit] of p.top){
+        const key = name+"|"+unit;
+        agg.set(key,(agg.get(key)||0)+scaleAmt(amt,unit)*counts[p.id]);
+      }
+    }
+    const tops = [...agg.entries()]
+      .map(([k,v])=>{const [name,unit]=k.split("|");return {name,unit,v};})
+      .sort((a,b)=>a.name.localeCompare(b.name,"pl"));
+    if(tops.length){
+      html += `
+        <div class="shop-group">
+          <h3 class="shop-h">Dodatki na pizzę</h3>
+          ${groupHTML(tops)}
+        </div>`;
+    }
+  }
+  el.innerHTML = html;
 }
 
 /* ================= dynamic schedule ================= */
