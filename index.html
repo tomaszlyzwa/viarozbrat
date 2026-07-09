@@ -4,6 +4,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Via Rozbrat — kalkulator i przepisy</title>
+<meta name="description" content="Domowa pizzeria Via Rozbrat: kalkulator składników na ciasto, przepisy i dynamiczny harmonogram pieczenia w piecu Alfa Forni.">
+<meta name="theme-color" content="#37503D">
+<meta property="og:title" content="Via Rozbrat">
+<meta property="og:description" content="Kalkulator ciasta, przepisy i harmonogram pieczenia — domowa pizzeria neapolitańska.">
+<meta property="og:type" content="website">
+<meta property="og:image" content="gallery/kuchnia-baner.jpg">
 <link rel="icon" type="image/svg+xml" href="mark.svg">
 <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
 <link rel="apple-touch-icon" href="favicon-180.png">
@@ -23,6 +29,10 @@
   --accent-soft:#EEF3EE;
   --sand:#F5F2EA;
   --radius:20px;
+  --shadow-sm:0 1px 2px rgba(28,28,26,.04),0 2px 6px rgba(28,28,26,.03);
+  --shadow-md:0 4px 12px rgba(28,28,26,.05),0 12px 32px rgba(28,28,26,.05);
+  --shadow-lg:0 8px 24px rgba(28,28,26,.07),0 24px 60px rgba(28,28,26,.08);
+  --ease:cubic-bezier(.2,.7,.2,1);
   --font-d:"Schibsted Grotesk",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
   --font-b:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
 }
@@ -33,24 +43,36 @@ button{font-family:inherit;cursor:pointer}
 :focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:6px}
 
 /* ---------- nav ---------- */
-nav{position:sticky;top:0;z-index:50;background:rgba(251,251,248,.82);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border-bottom:1px solid var(--line)}
+nav{position:sticky;top:0;z-index:50;background:rgba(251,251,248,.82);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border-bottom:1px solid var(--line);transition:box-shadow .4s var(--ease),border-color .4s var(--ease)}
+nav.scrolled{box-shadow:0 4px 20px rgba(28,28,26,.05);border-color:transparent}
 .nav-in{max-width:1060px;margin:0 auto;padding:0 24px;height:56px;display:flex;align-items:center;justify-content:space-between}
-.brand{display:flex;align-items:center;text-decoration:none}
+.brand{display:flex;align-items:center;text-decoration:none;transition:opacity .2s var(--ease)}
+.brand:hover{opacity:.75}
 .brand-logo{display:block;height:42px;width:auto}
 @media(max-width:520px){.brand-logo{height:36px}}
 .tabs{display:flex;gap:4px;background:var(--sand);padding:4px;border-radius:99px}
-.tab{border:none;background:transparent;padding:7px 20px;border-radius:99px;font-size:14px;font-weight:500;color:var(--muted);transition:color .25s,background .25s}
+.tab{border:none;background:transparent;padding:7px 20px;border-radius:99px;font-size:14px;font-weight:500;color:var(--muted);transition:color .3s var(--ease),background .3s var(--ease);position:relative}
 .tab[aria-selected="true"]{background:var(--ink);color:#fff}
 .tab:not([aria-selected="true"]):hover{color:var(--ink)}
+.tab:active{transform:scale(.96)}
 
 main{max-width:1060px;margin:0 auto;padding:0 24px 120px}
 .panel{display:none}
 .panel.active{display:block;animation:fadeUp .5s cubic-bezier(.2,.7,.2,1)}
 @keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
-@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+/* scroll reveal */
+.reveal{opacity:0;transform:translateY(22px);transition:opacity .7s var(--ease),transform .7s var(--ease)}
+.reveal.in{opacity:1;transform:none}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.reveal{opacity:1;transform:none}}
 
 /* ---------- hero ---------- */
-.hero{padding:84px 0 56px;text-align:center}
+.hero{padding:84px 0 56px;text-align:center;position:relative}
+.hero::before{content:"";position:absolute;top:-40px;left:50%;transform:translateX(-50%);width:min(680px,90%);height:340px;background:radial-gradient(ellipse at center,rgba(55,80,61,.06),transparent 68%);pointer-events:none;z-index:-1}
+.hero>*{animation:heroIn .7s var(--ease) both}
+.hero>*:nth-child(2){animation-delay:.08s}
+.hero>*:nth-child(3){animation-delay:.16s}
+.hero>*:nth-child(4){animation-delay:.24s}
+@keyframes heroIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
 .hero h1{font-family:var(--font-d);font-weight:600;font-size:clamp(34px,5.4vw,58px);letter-spacing:-.03em;line-height:1.06}
 .hero h1 em{font-style:italic;font-weight:400;color:var(--accent)}
 .hero p{margin:18px auto 0;max-width:520px;color:var(--muted);font-size:17px}
@@ -76,17 +98,18 @@ section{margin-top:72px}
 .hyd-val{font-size:15px;color:var(--muted)}
 .hyd-val b{font-family:var(--font-d);font-weight:600;color:var(--accent-ink);font-variant-numeric:tabular-nums}
 .hyd-reset{border:none;background:none;font-family:var(--font-b);font-size:12px;color:var(--accent);cursor:pointer;margin-left:8px;text-decoration:underline;padding:0}
-.hyd-control input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:4px;border-radius:99px;background:var(--line);outline:none;margin:6px 0}
-.hyd-control input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:22px;height:22px;border-radius:50%;background:var(--accent);cursor:grab;border:3px solid var(--card);box-shadow:0 2px 8px rgba(55,80,61,.35)}
+.hyd-control input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:4px;border-radius:99px;background:linear-gradient(to right,var(--accent) 0%,var(--accent) var(--fill,50%),var(--line) var(--fill,50%),var(--line) 100%);outline:none;margin:6px 0;transition:background .15s var(--ease)}
+.hyd-control input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:22px;height:22px;border-radius:50%;background:var(--accent);cursor:grab;border:3px solid var(--card);box-shadow:0 2px 8px rgba(55,80,61,.35);transition:transform .15s var(--ease)}
+.hyd-control input[type=range]::-webkit-slider-thumb:active{transform:scale(1.15);cursor:grabbing}
 .hyd-control input[type=range]::-moz-range-thumb{width:22px;height:22px;border-radius:50%;background:var(--accent);cursor:grab;border:3px solid var(--card);box-shadow:0 2px 8px rgba(55,80,61,.35)}
 .hyd-scale{display:flex;justify-content:space-between;font-size:11.5px;color:var(--faint)}
 .style-spec b{color:var(--muted);font-weight:500}
 
 /* ---------- pizza cards ---------- */
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px;margin-top:32px}
-.pcard{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:26px;display:flex;flex-direction:column;gap:14px;transition:border-color .25s,box-shadow .25s,transform .25s}
-.pcard:hover{border-color:#D8D6CD;box-shadow:0 12px 32px rgba(28,28,26,.05)}
-.pcard.sel{border-color:var(--accent);box-shadow:0 12px 32px rgba(55,80,61,.10)}
+.pcard{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:26px;display:flex;flex-direction:column;gap:14px;transition:border-color .35s var(--ease),box-shadow .35s var(--ease),transform .35s var(--ease)}
+.pcard:hover{border-color:#D8D6CD;box-shadow:var(--shadow-md);transform:translateY(-3px)}
+.pcard.sel{border-color:var(--accent);box-shadow:0 8px 28px rgba(55,80,61,.12)}
 .pcard h3{font-family:var(--font-d);font-weight:600;font-size:19px;letter-spacing:-.01em}
 .pcard-head{display:flex;align-items:center;gap:13px}
 .pcard-ic{flex-shrink:0;width:40px;height:40px;border-radius:12px;background:var(--accent-soft);color:var(--accent);display:grid;place-items:center}
@@ -142,7 +165,8 @@ section{margin-top:72px}
 
 .timeline{margin-top:44px;max-width:640px;margin-left:auto;margin-right:auto}
 .day-h{font-family:var(--font-d);font-weight:600;font-size:18px;letter-spacing:-.01em;margin:34px 0 6px;padding-left:2px}
-.trow{display:grid;grid-template-columns:86px 22px 1fr;gap:0 14px;position:relative}
+.trow{display:grid;grid-template-columns:86px 22px 1fr;gap:0 14px;position:relative;animation:trowIn .5s var(--ease) both;animation-delay:var(--tin,0s)}
+@keyframes trowIn{from{opacity:0;transform:translateX(-8px)}to{opacity:1;transform:none}}
 .trow .tm{font-weight:500;font-size:14.5px;color:var(--accent-ink);padding-top:19px;text-align:right;font-variant-numeric:tabular-nums}
 .trow .rail{position:relative}
 .trow .rail::before{content:"";position:absolute;left:50%;top:0;bottom:0;width:1px;background:var(--line);transform:translateX(-50%)}
@@ -150,6 +174,8 @@ section{margin-top:72px}
 .trow.last .rail::before{bottom:auto;height:26px}
 .day-h + .trow .rail::before{top:26px}
 .trow .dot{position:absolute;left:50%;top:26px;width:9px;height:9px;border-radius:50%;background:var(--accent);transform:translate(-50%,-50%)}
+.trow.last .dot{animation:dotPulse 2.4s ease-in-out 1s infinite}
+@keyframes dotPulse{0%,100%{box-shadow:0 0 0 0 rgba(55,80,61,.35)}50%{box-shadow:0 0 0 7px rgba(55,80,61,0)}}
 .trow .body{padding:14px 0 22px}
 .trow .tt{font-weight:500;font-size:15.5px}
 .trow .td{font-size:13.5px;color:var(--muted);margin-top:3px;line-height:1.55}
@@ -223,14 +249,14 @@ code{font-family:var(--font-b);font-size:.88em;background:var(--sand);padding:2p
     <div class="hyd-control" id="hydControl"></div>
   </div>
 
-  <section>
+  <section class="reveal">
     <div class="eyebrow">Menu</div>
     <h2 class="section-t">Wybierz pizze</h2>
     <p class="section-sub">Każda kulka ciasta to placek ok. 30 cm. Ilości dodatków podane dla jednej pizzy.</p>
     <div class="grid" id="pizzaGrid"></div>
   </section>
 
-  <section class="dough" aria-live="polite">
+  <section class="dough reveal" aria-live="polite">
     <div class="eyebrow">Ciasto</div>
     <div class="dough-top">
       <h2 id="doughTitle">Twoje ciasto</h2>
@@ -240,7 +266,7 @@ code{font-family:var(--font-b);font-size:.88em;background:var(--sand);padding:2p
     <p class="dough-note" id="doughNote"></p>
   </section>
 
-  <section class="shop" aria-live="polite">
+  <section class="shop reveal" aria-live="polite">
     <div class="eyebrow">Zakupy</div>
     <h2 class="section-t">Lista zakupów</h2>
     <div id="shopBody"></div>
@@ -271,7 +297,7 @@ code{font-family:var(--font-b);font-size:.88em;background:var(--sand);padding:2p
 
   <div class="timeline" id="timeline" aria-live="polite"></div>
 
-  <section class="rec">
+  <section class="rec reveal">
     <div class="eyebrow" id="recEyebrow">Przepis</div>
     <h2 class="section-t" id="recTitle"></h2>
     <p class="section-sub" id="recSub"></p>
@@ -288,7 +314,7 @@ code{font-family:var(--font-b);font-size:.88em;background:var(--sand);padding:2p
     <h1>Z pieca <em>prosto tutaj.</em></h1>
   </div>
 
-  <figure class="kitchen-banner">
+  <figure class="kitchen-banner reveal">
     <img src="gallery/kuchnia-baner.jpg" alt="Kuchnia ogrodowa z piecem Alfa Forni" loading="lazy">
   </figure>
 
@@ -485,11 +511,13 @@ const counts = Object.fromEntries(PIZZAS.map(p=>[p.id,0]));
 let galleryLoaded = false;
 function switchTab(name){
   for(const t of ["pizze","przepisy","galeria"]){
-    document.getElementById("panel-"+t).classList.toggle("active", t===name);
+    const panel = document.getElementById("panel-"+t);
+    panel.classList.toggle("active", t===name);
     document.getElementById("tab-"+t).setAttribute("aria-selected", t===name ? "true":"false");
   }
   if(name==="galeria" && !galleryLoaded){ galleryLoaded = true; loadGallery(); }
   window.scrollTo({top:0, behavior:"smooth"});
+  if(typeof observeReveals === "function") requestAnimationFrame(observeReveals);
 }
 
 /* ================= gallery ================= */
@@ -530,15 +558,23 @@ function styleBtns(){
   return STYLES.map(s=>
     `<button class="style-btn" aria-pressed="${s.id===styleId}" onclick="setStyle('${s.id}')"><span class="sb-ic">${icon(s.icon)}</span>${s.name}</button>`).join("");
 }
-function renderStyles(){
+function specText(){
   const s = styleOf();
-  const spec = `<b>${s.unit}</b> · ${Math.round(s.w)} g ciasta · hydratacja ${Math.round(currentHyd()*100)}% · ${s.flour}`;
+  return `<b>${s.unit}</b> · ${Math.round(s.w)} g ciasta · hydratacja ${Math.round(currentHyd()*100)}% · ${s.flour}`;
+}
+function updateSpec(){
+  const spec = specText();
+  const a = document.getElementById("styleSpec"), b = document.getElementById("recStyleSpec");
+  if(a) a.innerHTML = spec;
+  if(b) b.innerHTML = spec;
+}
+function renderStyles(){
   document.getElementById("styleRow").innerHTML = styleBtns();
-  document.getElementById("styleSpec").innerHTML = spec;
   document.getElementById("recStyleRow").innerHTML = styleBtns();
-  document.getElementById("recStyleSpec").innerHTML = spec;
+  updateSpec();
   renderHydration();
 }
+function hydFill(val,min,max){ return ((val-min)/(max-min)*100).toFixed(1)+"%"; }
 function renderHydration(){
   const s = styleOf(), hyd = currentHyd();
   const min = Math.round(s.hydMin*100), max = Math.round(s.hydMax*100), val = Math.round(hyd*100);
@@ -547,15 +583,25 @@ function renderHydration(){
   el.innerHTML = `
     <div class="hyd-head">
       <span class="hyd-lbl">Hydratacja</span>
-      <span class="hyd-val"><b>${val}%</b> <button class="hyd-reset" onclick="resetHyd()" ${hydOverride==null?'hidden':''}>reset</button></span>
+      <span class="hyd-val"><b id="hydValLbl">${val}%</b> <button class="hyd-reset" onclick="resetHyd()" ${hydOverride==null?'hidden':''}>reset</button></span>
     </div>
     <input type="range" id="hydSlider" min="${min}" max="${max}" step="1" value="${val}"
+      style="--fill:${hydFill(val,min,max)}"
       oninput="setHyd(this.value)" aria-label="Hydratacja ciasta w procentach">
     <div class="hyd-scale"><span>${min}% suchsze</span><span>${max}% bardziej mokre</span></div>`;
 }
 function setHyd(v){
   hydOverride = Number(v)/100;
-  renderStyles(); renderDough(); renderShop();
+  const s = styleOf();
+  const min = Math.round(s.hydMin*100), max = Math.round(s.hydMax*100), val = Math.round(v);
+  const slider = document.getElementById("hydSlider");
+  if(slider) slider.style.setProperty("--fill", hydFill(val,min,max));
+  const lbl = document.getElementById("hydValLbl");
+  if(lbl) lbl.textContent = val+"%";
+  const reset = document.querySelector(".hyd-reset");
+  if(reset) reset.hidden = false;
+  updateSpec();
+  renderDough(); renderShop();
 }
 function resetHyd(){
   hydOverride = null;
@@ -650,12 +696,36 @@ function renderDough(){
   ];
   if(u.oil>0) rows.push([Math.round(n*u.oil), "ml", "oliwa / olej"]);
   if(u.sugar>0) rows.push([Math.round(n*u.sugar), "g", "cukier"]);
-  body.innerHTML = `<div class="dough-grid">${rows.map(([v,un,k])=>
-    `<div class="dq"><div class="v">${fmt(typeof v==="number"?Math.round(v*10)/10:v)}<small>${un}</small></div><div class="k">${k}</div></div>`).join("")}</div>
+  body.innerHTML = `<div class="dough-grid">${rows.map(([v,un,k],i)=>{
+    const target = typeof v==="number"?Math.round(v*10)/10:v;
+    return `<div class="dq"><div class="v"><span class="num" data-target="${target}">${fmt(target)}</span><small>${un}</small></div><div class="k">${k}</div></div>`;
+  }).join("")}</div>
     <button class="recipe-cta" onclick="switchTab('przepisy')">
       Zobacz przepis krok po kroku
       <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
     </button>`;
+  animateNums(body);
+}
+let _prevNums = {};
+function animateNums(scope){
+  if(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  scope.querySelectorAll(".num").forEach((el,i)=>{
+    const target = parseFloat(el.dataset.target);
+    const from = _prevNums[i]!=null ? _prevNums[i] : target*0.6;
+    _prevNums[i] = target;
+    if(Math.abs(target-from) < 0.5){ el.textContent = fmt(target); return; }
+    const t0 = performance.now(), dur = 450;
+    const dec = target % 1 !== 0;
+    function tick(t){
+      const p = Math.min(1,(t-t0)/dur);
+      const e = 1-Math.pow(1-p,3);
+      const val = from + (target-from)*e;
+      el.textContent = fmt(dec ? Math.round(val*10)/10 : Math.round(val));
+      if(p<1) requestAnimationFrame(tick);
+      else el.textContent = fmt(target);
+    }
+    requestAnimationFrame(tick);
+  });
 }
 
 /* ================= shopping list ================= */
@@ -797,13 +867,38 @@ function renderSchedule(){
     const day = cap(DF.format(d));
     if(day !== lastDay){ html += `<div class="day-h">${day}</div>`; lastDay = day; }
     const cls = i===0 ? " first" : (i===steps.length-1 ? " last" : "");
-    html += `<div class="trow${cls}">
+    html += `<div class="trow${cls}" style="--tin:${i*0.06}s">
       <div class="tm">${TF.format(d)}</div>
       <div class="rail"><span class="dot"></span></div>
       <div class="body"><div class="tt">${tt}</div><div class="td">${td}</div></div>
     </div>`;
   });
   tl.innerHTML = html;
+}
+
+/* ================= scroll polish ================= */
+const _nav = document.querySelector("nav");
+let _ticking = false;
+window.addEventListener("scroll", ()=>{
+  if(_ticking) return;
+  _ticking = true;
+  requestAnimationFrame(()=>{
+    _nav.classList.toggle("scrolled", window.scrollY > 8);
+    _ticking = false;
+  });
+}, {passive:true});
+
+const _reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+let _io = null;
+function observeReveals(){
+  if(_reduce){ document.querySelectorAll(".reveal").forEach(el=>el.classList.add("in")); return; }
+  if(!("IntersectionObserver" in window)){ document.querySelectorAll(".reveal").forEach(el=>el.classList.add("in")); return; }
+  if(!_io){
+    _io = new IntersectionObserver((entries)=>{
+      entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add("in"); _io.unobserve(e.target); } });
+    }, {threshold:.12, rootMargin:"0px 0px -40px 0px"});
+  }
+  document.querySelectorAll(".reveal:not(.in)").forEach(el=>_io.observe(el));
 }
 
 /* ================= init ================= */
@@ -816,6 +911,7 @@ document.getElementById("bakeAt").value = toLocalInput(nextSaturday15());
 renderHeat();
 renderRecipe();
 renderSchedule();
+observeReveals();
 </script>
 </body>
 </html>
