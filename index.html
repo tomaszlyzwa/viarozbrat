@@ -54,6 +54,7 @@ main{max-width:1060px;margin:0 auto;padding:0 24px 120px}
 .hero h1{font-family:var(--font-d);font-weight:600;font-size:clamp(34px,5.4vw,58px);letter-spacing:-.03em;line-height:1.06}
 .hero h1 em{font-style:italic;font-weight:400;color:var(--accent)}
 .hero p{margin:18px auto 0;max-width:520px;color:var(--muted);font-size:17px}
+.hero-logo{display:block;margin:0 auto;width:min(340px,80vw);height:auto}
 
 .eyebrow{font-size:12px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--faint);margin-bottom:10px}
 h2.section-t{font-family:var(--font-d);font-weight:600;font-size:clamp(24px,3vw,32px);letter-spacing:-.02em;margin-bottom:6px}
@@ -174,7 +175,7 @@ section{margin-top:72px}
 
 /* ---------- gallery ---------- */
 .gallery-hero{padding-bottom:32px}
-.kitchen-banner{position:relative;border-radius:26px;overflow:hidden;margin-bottom:8px;border:1px solid var(--line)}
+.kitchen-banner{position:relative;border-radius:26px;overflow:hidden;margin:56px 0 8px;border:1px solid var(--line)}
 .kitchen-banner img{width:100%;height:auto;display:block;aspect-ratio:3/1;object-fit:cover}
 .kitchen-banner figcaption{position:absolute;left:0;bottom:0;right:0;padding:40px 24px 18px;color:#fff;font-size:14px;font-weight:500;background:linear-gradient(transparent,rgba(20,20,18,.6))}
 .gallery-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px;margin-top:32px}
@@ -283,22 +284,13 @@ code{font-family:var(--font-b);font-size:.88em;background:var(--sand);padding:2p
 <!-- ============ TAB: GALERIA ============ -->
 <div class="panel" id="panel-galeria" role="tabpanel" aria-labelledby="tab-galeria">
 
-  <div class="hero gallery-hero">
-    <h1>Z pieca <em>prosto tutaj.</em></h1>
-    <p>Twoje wypieki z Alfa Forni. Zdjęcia dodajesz, wgrywając pliki do folderu <code>gallery/</code> w repozytorium.</p>
-  </div>
-
   <figure class="kitchen-banner">
     <img src="gallery/kuchnia-baner.jpg" alt="Kuchnia ogrodowa z piecem Alfa Forni" loading="lazy">
-    <figcaption>Kuchnia ogrodowa · piec Alfa Forni</figcaption>
   </figure>
 
   <section>
     <div id="galleryGrid" class="gallery-grid" aria-live="polite"></div>
-    <div id="galleryEmpty" class="gallery-empty" hidden>
-      <h3>Galeria czeka na pierwsze zdjęcie</h3>
-      <p>Wgraj plik do folderu <code>gallery/</code> i dopisz jego nazwę w <code>gallery/manifest.json</code>. Instrukcja jest w pliku <code>README.md</code>.</p>
-    </div>
+    <div id="galleryEmpty" class="gallery-empty" hidden></div>
   </section>
 
 </div>
