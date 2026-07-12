@@ -270,6 +270,7 @@ code{font-family:var(--font-b);font-size:.88em;background:var(--sand);padding:2p
 
 /* ---------- PWA: zachęta do instalacji ---------- */
 .a2hs{position:fixed;left:16px;right:16px;bottom:16px;z-index:90;max-width:440px;margin:0 auto;display:flex;align-items:center;gap:13px;background:var(--card);border:1px solid var(--line);border-radius:20px;padding:14px 16px;box-shadow:var(--shadow-lg);animation:a2hsIn .45s var(--ease) both}
+.a2hs[hidden]{display:none!important}   /* bez tego display:flex nadpisuje atrybut hidden */
 @keyframes a2hsIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
 .a2hs-ic{width:42px;height:42px;border-radius:11px;flex:0 0 auto;border:1px solid var(--line)}
 .a2hs-txt{flex:1;min-width:0;line-height:1.35}
@@ -277,10 +278,10 @@ code{font-family:var(--font-b);font-size:.88em;background:var(--sand);padding:2p
 .a2hs-txt span{display:block;font-size:12.5px;color:var(--muted);margin-top:2px}
 .a2hs-go{flex:0 0 auto;border:none;background:var(--accent);color:#fff;border-radius:99px;padding:9px 16px;font-family:var(--font-b);font-size:13px;font-weight:500;cursor:pointer;transition:background .2s var(--ease)}
 .a2hs-go:hover{background:var(--accent-ink)}
-.a2hs-x{position:absolute;top:-9px;right:-9px;width:26px;height:26px;border-radius:50%;border:1px solid var(--line);background:var(--bg);color:var(--muted);font-size:11px;cursor:pointer;display:grid;place-items:center}
-.a2hs-x:hover{color:var(--ink)}
+.a2hs-x{flex:0 0 auto;width:34px;height:34px;border-radius:50%;border:none;background:transparent;color:var(--faint);font-size:13px;cursor:pointer;display:grid;place-items:center;transition:background .2s var(--ease),color .2s var(--ease)}
+.a2hs-x:hover{background:var(--sand);color:var(--ink)}
 .a2hs.ios .a2hs-go{display:none}
-@media(max-width:420px){.a2hs{padding:12px 14px;gap:10px}.a2hs-ic{width:36px;height:36px}}
+@media(max-width:420px){.a2hs{padding:12px 14px;gap:9px}.a2hs-ic{width:36px;height:36px}.a2hs-go{padding:9px 13px;font-size:12.5px}}
 
 /* ---------- print ---------- */
 .print-row{display:flex;justify-content:center;flex-wrap:wrap;gap:10px;margin-top:18px}
@@ -590,13 +591,13 @@ code{font-family:var(--font-b);font-size:.88em;background:var(--sand);padding:2p
 
 <!-- ============ PWA: zachęta do instalacji ============ -->
 <div class="a2hs" id="a2hs" hidden>
-  <button class="a2hs-x" aria-label="Zamknij" onclick="dismissA2HS()">✕</button>
   <img src="icon-192.png" alt="" class="a2hs-ic">
   <div class="a2hs-txt">
     <b>Dodaj Via Rozbrat do ekranu</b>
     <span id="a2hsHow">Harmonogram pod ręką, działa też bez internetu.</span>
   </div>
   <button class="a2hs-go" id="a2hsGo" onclick="installA2HS()">Zainstaluj</button>
+  <button class="a2hs-x" type="button" aria-label="Zamknij" onclick="dismissA2HS()">✕</button>
 </div>
 
 <script>
@@ -1475,14 +1476,16 @@ window.addEventListener("appinstalled", ()=>{
 });
 
 async function installA2HS(){
-  if(!deferredPrompt) return;
+  const el = document.getElementById("a2hs");
+  if(!deferredPrompt){ if(el) el.hidden = true; return; }
   deferredPrompt.prompt();
   await deferredPrompt.userChoice;
   deferredPrompt = null;
-  document.getElementById("a2hs").hidden = true;
+  if(el) el.hidden = true;
 }
 function dismissA2HS(){
-  document.getElementById("a2hs").hidden = true;
+  const el = document.getElementById("a2hs");
+  if(el) el.hidden = true;
   try{ localStorage.setItem("vr:a2hs", String(Date.now())); }catch(e){}
 }
 function showA2HS(ios){
@@ -1501,6 +1504,11 @@ function showA2HS(ios){
       'Naciśnij <b style="font-weight:600">Udostępnij</b> ⎋, a potem <b style="font-weight:600">Do ekranu początkowego</b>.';
   }
   el.hidden = false;
+}
+/* w zainstalowanej aplikacji baner nie ma racji bytu — usuwamy go z DOM */
+if(isStandalone()){
+  const el = document.getElementById("a2hs");
+  if(el) el.remove();
 }
 /* iOS nie wywoła beforeinstallprompt — pokazujemy podpowiedź sami, po chwili obecności */
 if(isIOS() && !isStandalone()){
