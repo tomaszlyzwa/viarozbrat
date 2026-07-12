@@ -269,6 +269,12 @@ code{font-family:var(--font-b);font-size:.88em;background:var(--sand);padding:2p
 @media(max-width:640px){.lightbox .nav{width:40px;height:40px;font-size:18px}.lightbox .nav.prev{left:8px}.lightbox .nav.next{right:8px}}
 
 /* ---------- PWA: zachęta do instalacji ---------- */
+.install-wrap{display:flex;flex-direction:column;align-items:center;gap:7px;padding:0 24px 56px;text-align:center}
+.install-wrap[hidden]{display:none}
+.install-link{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--line);background:var(--card);color:var(--accent-ink);border-radius:99px;padding:10px 20px;font-family:var(--font-b);font-size:13.5px;font-weight:500;cursor:pointer;transition:all .2s var(--ease)}
+.install-link:hover{border-color:var(--accent);background:var(--accent-soft)}
+.install-link svg{width:16px;height:16px}
+.install-wrap span{font-size:12px;color:var(--faint)}
 .a2hs{position:fixed;left:16px;right:16px;bottom:16px;z-index:90;max-width:440px;margin:0 auto;display:flex;align-items:center;gap:13px;background:var(--card);border:1px solid var(--line);border-radius:20px;padding:14px 16px;box-shadow:var(--shadow-lg);animation:a2hsIn .45s var(--ease) both}
 .a2hs[hidden]{display:none!important}   /* bez tego display:flex nadpisuje atrybut hidden */
 @keyframes a2hsIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
@@ -297,7 +303,7 @@ code{font-family:var(--font-b);font-size:.88em;background:var(--sand);padding:2p
   @page{margin:14mm}
   *{-webkit-print-color-adjust:exact;print-color-adjust:exact;box-shadow:none!important}
   html,body{background:#fff!important;color:#000;font-size:11pt}
-  nav,.hero,.print-btn,.print-row,.print-hint,.when-input,.styles,.ferm-row,.dm-jump,.dm-cta,.lightbox,.admin,.gallery-grid,.kitchen-banner,footer{display:none!important}
+  nav,.hero,.print-btn,.print-row,.print-hint,.install-wrap,.a2hs,.when-input,.styles,.ferm-row,.dm-jump,.dm-cta,.lightbox,.admin,.gallery-grid,.kitchen-banner,footer{display:none!important}
   .panel{display:none!important}
   .panel#panel-przepisy{display:block!important}
   main{max-width:none;padding:0}
@@ -517,6 +523,14 @@ code{font-family:var(--font-b);font-size:.88em;background:var(--sand);padding:2p
 
 </div>
 </main>
+
+<div class="install-wrap" id="installWrap" hidden>
+  <button class="install-link" onclick="openInstall()">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="2" width="12" height="20" rx="2.5"/><path d="M12 6v7M9 10.5l3 3 3-3"/><path d="M10.5 18.5h3"/></svg>
+    Zainstaluj aplikację
+  </button>
+  <span>Ikona na ekranie telefonu · działa bez internetu</span>
+</div>
 
 <div class="lightbox" id="lightbox" onclick="closeLightbox()">
   <button class="close" aria-label="Zamknij" onclick="closeLightbox()">✕</button>
@@ -1447,6 +1461,9 @@ const isIOS = () =>
   /iphone|ipad|ipod/i.test(navigator.userAgent) ||
   (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);   // iPadOS udaje Maca
 
+/* klucz zmieniony — stare zamknięcia z wadliwej wersji nie blokują banera */
+const A2HS_KEY = "vr:a2hs2";
+
 let deferredPrompt = null;
 
 /* service worker — offline i szybsze wczytywanie */
@@ -1471,8 +1488,10 @@ window.addEventListener("beforeinstallprompt", e=>{
 });
 window.addEventListener("appinstalled", ()=>{
   deferredPrompt = null;
-  document.getElementById("a2hs").hidden = true;
-  try{ localStorage.setItem("vr:a2hs", "installed"); }catch(e){}
+  const el = document.getElementById("a2hs");
+  if(el) el.hidden = true;
+  try{ localStorage.setItem(A2HS_KEY, "installed"); }catch(e){}
+  renderInstallLink();
 });
 
 async function installA2HS(){
@@ -1486,14 +1505,14 @@ async function installA2HS(){
 function dismissA2HS(){
   const el = document.getElementById("a2hs");
   if(el) el.hidden = true;
-  try{ localStorage.setItem("vr:a2hs", String(Date.now())); }catch(e){}
+  try{ localStorage.setItem(A2HS_KEY, String(Date.now())); }catch(e){}
 }
 function showA2HS(ios){
   const el = document.getElementById("a2hs");
   if(!el || isStandalone()) return;                 // już zainstalowana
   /* nie nękamy: po zamknięciu cisza przez 30 dni */
   let seen = null;
-  try{ seen = localStorage.getItem("vr:a2hs"); }catch(e){}
+  try{ seen = localStorage.getItem(A2HS_KEY); }catch(e){}
   if(seen === "installed") return;
   if(seen && Date.now() - Number(seen) < 30*24*3600*1000) return;
 
@@ -1501,18 +1520,33 @@ function showA2HS(ios){
   if(ios){
     /* Safari nie ma beforeinstallprompt — trzeba pokazać drogę ręcznie */
     document.getElementById("a2hsHow").innerHTML =
-      'Naciśnij <b style="font-weight:600">Udostępnij</b> ⎋, a potem <b style="font-weight:600">Do ekranu początkowego</b>.';
+      'Naciśnij <b style="font-weight:600">Udostępnij</b> na dole ekranu, a potem <b style="font-weight:600">Do ekranu początkowego</b>.';
   }
   el.hidden = false;
+}
+/* ręczne wywołanie z przycisku „Zainstaluj aplikację” — ignoruje 30-dniową ciszę */
+function openInstall(){
+  try{ localStorage.removeItem(A2HS_KEY); }catch(e){}
+  const el = document.getElementById("a2hs");
+  if(!el) return;
+  if(deferredPrompt){ installA2HS(); return; }      // Android: od razu systemowy prompt
+  showA2HS(isIOS());                                // iOS/reszta: instrukcja
+  el.scrollIntoView({block:"nearest"});
+}
+/* przycisk w stopce widoczny tylko poza zainstalowaną aplikacją */
+function renderInstallLink(){
+  const w = document.getElementById("installWrap");
+  if(w) w.hidden = isStandalone();
 }
 /* w zainstalowanej aplikacji baner nie ma racji bytu — usuwamy go z DOM */
 if(isStandalone()){
   const el = document.getElementById("a2hs");
   if(el) el.remove();
 }
+renderInstallLink();
 /* iOS nie wywoła beforeinstallprompt — pokazujemy podpowiedź sami, po chwili obecności */
 if(isIOS() && !isStandalone()){
-  setTimeout(()=>showA2HS(true), 12000);
+  setTimeout(()=>showA2HS(true), 4000);
 }
 
 /* ================= zapamiętywanie konfiguracji ================= */
