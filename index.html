@@ -240,6 +240,41 @@ code{font-family:var(--font-b);font-size:.88em;background:var(--sand);padding:2p
 .lightbox img{max-width:92vw;max-height:86vh;border-radius:12px;box-shadow:0 20px 60px rgba(0,0,0,.4)}
 .lightbox .cap{position:absolute;bottom:24px;left:0;right:0;text-align:center;color:#EDEBE4;font-size:14px}
 .lightbox .close{position:absolute;top:20px;right:24px;width:40px;height:40px;border-radius:50%;border:none;background:rgba(255,255,255,.12);color:#fff;font-size:20px;cursor:pointer;display:grid;place-items:center}
+/* lightbox: przewijanie do kolejnego zdjęcia */
+.lightbox .nav{position:absolute;top:50%;transform:translateY(-50%);width:48px;height:48px;border-radius:50%;border:none;background:rgba(255,255,255,.12);color:#fff;font-size:22px;cursor:pointer;display:grid;place-items:center;transition:background .2s var(--ease),transform .2s var(--ease);backdrop-filter:blur(4px)}
+.lightbox .nav:hover{background:rgba(255,255,255,.24)}
+.lightbox .nav.prev{left:20px}
+.lightbox .nav.next{right:20px}
+.lightbox .nav.prev:hover{transform:translateY(-50%) translateX(-2px)}
+.lightbox .nav.next:hover{transform:translateY(-50%) translateX(2px)}
+.lightbox .counter{position:absolute;top:24px;left:0;right:0;text-align:center;color:#C9C7C0;font-size:13px;font-variant-numeric:tabular-nums;pointer-events:none}
+.lightbox .stage{position:relative;display:grid;place-items:center;touch-action:pan-y}
+.lightbox img{transition:opacity .18s var(--ease)}
+.lightbox img.swapping{opacity:0}
+@media(max-width:640px){.lightbox .nav{width:40px;height:40px;font-size:18px}.lightbox .nav.prev{left:8px}.lightbox .nav.next{right:8px}}
+
+/* ---------- admin: kadrowanie ---------- */
+.admin-crop{position:relative;margin-top:16px;border-radius:16px;overflow:hidden;background:var(--sand);border:1px solid var(--line);touch-action:none;cursor:grab;user-select:none}
+.admin-crop.drag{cursor:grabbing}
+.admin-crop img{position:absolute;top:0;left:0;transform-origin:0 0;pointer-events:none;-webkit-user-drag:none;max-width:none;max-height:none}
+.admin-crop .cgrid{position:absolute;inset:0;pointer-events:none;opacity:0;transition:opacity .2s var(--ease);
+  background:linear-gradient(to right,transparent 33.33%,rgba(255,255,255,.5) 33.33%,rgba(255,255,255,.5) calc(33.33% + 1px),transparent calc(33.33% + 1px),transparent 66.66%,rgba(255,255,255,.5) 66.66%,rgba(255,255,255,.5) calc(66.66% + 1px),transparent calc(66.66% + 1px)),
+             linear-gradient(to bottom,transparent 33.33%,rgba(255,255,255,.5) 33.33%,rgba(255,255,255,.5) calc(33.33% + 1px),transparent calc(33.33% + 1px),transparent 66.66%,rgba(255,255,255,.5) 66.66%,rgba(255,255,255,.5) calc(66.66% + 1px),transparent calc(66.66% + 1px))}
+.admin-crop:hover .cgrid,.admin-crop.drag .cgrid{opacity:1}
+.crop-chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
+.crop-chip{border:1px solid var(--line);background:var(--bg);border-radius:99px;padding:6px 13px;font-family:var(--font-b);font-size:12.5px;font-weight:500;color:var(--muted);cursor:pointer;transition:all .2s var(--ease)}
+.crop-chip:hover{border-color:#CFCDC4;color:var(--ink)}
+.crop-chip[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:#fff}
+.crop-zoom{display:flex;align-items:center;gap:10px;margin-top:12px}
+.crop-zoom .lbl{font-size:11px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:var(--faint)}
+.crop-zoom input[type=range]{-webkit-appearance:none;appearance:none;flex:1;height:4px;border-radius:99px;background:linear-gradient(to right,var(--accent) 0%,var(--accent) var(--fill,0%),var(--line) var(--fill,0%),var(--line) 100%);outline:none}
+.crop-zoom input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:18px;height:18px;border-radius:50%;background:#fff;cursor:grab;border:3px solid var(--accent);box-shadow:0 2px 6px rgba(28,28,26,.15)}
+.crop-zoom input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;background:#fff;cursor:grab;border:3px solid var(--accent)}
+.crop-zoom button{border:none;background:var(--sand);color:var(--muted);width:26px;height:26px;border-radius:50%;font-size:13px;cursor:pointer;display:grid;place-items:center;flex:0 0 auto;transition:background .2s}
+.crop-zoom button:hover{background:var(--line)}
+.crop-meta{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:10px;font-size:12.5px;color:var(--faint)}
+.crop-meta button{border:none;background:none;color:var(--faint);font-size:12.5px;cursor:pointer;text-decoration:underline;text-underline-offset:3px;flex:0 0 auto}
+.crop-meta button:hover{color:var(--ink)}
 
 /* ---------- admin (ukryty panel: #admin) ---------- */
 .admin{position:fixed;inset:0;z-index:120;background:rgba(20,20,18,.45);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);display:none;align-items:flex-start;justify-content:center;overflow-y:auto;padding:48px 20px}
@@ -372,7 +407,12 @@ code{font-family:var(--font-b);font-size:.88em;background:var(--sand);padding:2p
 
 <div class="lightbox" id="lightbox" onclick="closeLightbox()">
   <button class="close" aria-label="Zamknij" onclick="closeLightbox()">✕</button>
-  <img id="lightboxImg" src="" alt="">
+  <div class="counter" id="lightboxCounter"></div>
+  <button class="nav prev" id="lbPrev" aria-label="Poprzednie zdjęcie" onclick="event.stopPropagation();lightboxStep(-1)">‹</button>
+  <div class="stage" id="lightboxStage" onclick="event.stopPropagation()">
+    <img id="lightboxImg" src="" alt="">
+  </div>
+  <button class="nav next" id="lbNext" aria-label="Następne zdjęcie" onclick="event.stopPropagation();lightboxStep(1)">›</button>
   <div class="cap" id="lightboxCap"></div>
 </div>
 
@@ -404,6 +444,24 @@ code{font-family:var(--font-b);font-size:.88em;background:var(--sand);padding:2p
       <div class="admin-drop" id="admDrop" onclick="document.getElementById('admFile').click()">
         <span id="admDropTxt">Kliknij, aby wybrać zdjęcie<br>(albo przeciągnij je tutaj)</span>
       </div>
+
+      <div id="admCropUI" hidden>
+        <div class="admin-crop" id="admCropBox">
+          <img id="admCropImg" alt="Kadrowanie zdjęcia">
+          <div class="cgrid"></div>
+        </div>
+        <div class="crop-chips" id="admAspects" role="group" aria-label="Proporcje kadru"></div>
+        <div class="crop-zoom">
+          <span class="lbl">Zoom</span>
+          <input type="range" id="admZoom" min="100" max="300" step="1" value="100" oninput="admSetZoom(this.value)" aria-label="Powiększenie kadru">
+          <button onclick="admCropReset()" aria-label="Wyśrodkuj i zresetuj kadr">↺</button>
+        </div>
+        <div class="crop-meta">
+          <span id="admCropMeta"></span>
+          <button onclick="admChangeFile()">Zmień zdjęcie</button>
+        </div>
+      </div>
+
       <div class="admin-field">
         <label for="admCaption">Podpis (opcjonalny)</label>
         <input type="text" id="admCaption" placeholder="np. Margherita prosto z pieca" maxlength="120">
@@ -625,26 +683,88 @@ async function loadGallery(){
       items = Array.isArray(data) ? data : (data.photos || []);
     }
   }catch(e){ /* manifest missing or offline — show empty state */ }
-  if(!items.length){ empty.hidden = false; grid.innerHTML = ""; return; }
+  if(!items.length){ empty.hidden = false; grid.innerHTML = ""; GALLERY = []; return; }
   empty.hidden = true;
-  grid.innerHTML = items.map(it=>{
+  GALLERY = items.map(it=>{
     const file = typeof it === "string" ? it : it.file;
     const cap = typeof it === "string" ? "" : (it.caption || "");
-    const src = "gallery/"+file;
-    return `<figure class="gcard" onclick="openLightbox('${src.replace(/'/g,"\\'")}','${cap.replace(/'/g,"\\'")}')">
-      <img src="${src}" alt="${cap||"Zdjęcie pizzy"}" loading="lazy">
-      ${cap?`<figcaption>${cap}</figcaption>`:""}
-    </figure>`;
-  }).join("");
+    return {src:"gallery/"+file, cap};
+  });
+  const esc = s => String(s).replace(/&/g,"&amp;").replace(/"/g,"&quot;").replace(/</g,"&lt;");
+  grid.innerHTML = GALLERY.map((g,i)=>
+    `<figure class="gcard" onclick="openLightbox(${i})">
+      <img src="${esc(g.src)}" alt="${esc(g.cap||"Zdjęcie pizzy")}" loading="lazy">
+      ${g.cap?`<figcaption>${esc(g.cap)}</figcaption>`:""}
+    </figure>`).join("");
 }
-function openLightbox(src, cap){
-  document.getElementById("lightboxImg").src = src;
-  document.getElementById("lightboxImg").alt = cap || "Zdjęcie pizzy";
-  document.getElementById("lightboxCap").textContent = cap || "";
+
+/* ---- lightbox z przewijaniem ---- */
+let GALLERY = [], lbIndex = 0;
+function openLightbox(i){
+  if(!GALLERY.length) return;
+  lbIndex = (i % GALLERY.length + GALLERY.length) % GALLERY.length;
+  lbPaint(false);
   document.getElementById("lightbox").classList.add("open");
 }
+function lbPaint(animate){
+  const g = GALLERY[lbIndex];
+  const img = document.getElementById("lightboxImg");
+  const show = () => {
+    img.src = g.src;
+    img.alt = g.cap || "Zdjęcie pizzy";
+    img.classList.remove("swapping");
+    document.getElementById("lightboxCap").textContent = g.cap || "";
+    document.getElementById("lightboxCounter").textContent =
+      GALLERY.length > 1 ? `${lbIndex+1} / ${GALLERY.length}` : "";
+    lbPreload();
+  };
+  if(animate){ img.classList.add("swapping"); setTimeout(show, 120); }
+  else show();
+  const multi = GALLERY.length > 1;
+  document.getElementById("lbPrev").hidden = !multi;
+  document.getElementById("lbNext").hidden = !multi;
+}
+function lbPreload(){
+  if(GALLERY.length < 2) return;
+  [1,-1].forEach(d=>{
+    const j = (lbIndex + d + GALLERY.length) % GALLERY.length;
+    new Image().src = GALLERY[j].src;
+  });
+}
+function lightboxStep(d){
+  if(GALLERY.length < 2) return;
+  lbIndex = (lbIndex + d + GALLERY.length) % GALLERY.length;
+  lbPaint(true);
+}
 function closeLightbox(){ document.getElementById("lightbox").classList.remove("open"); }
-document.addEventListener("keydown", e=>{ if(e.key==="Escape"){ closeLightbox(); closeAdmin(); } });
+const lbOpen = () => document.getElementById("lightbox").classList.contains("open");
+document.addEventListener("keydown", e=>{
+  if(e.key==="Escape"){ closeLightbox(); closeAdmin(); return; }
+  if(!lbOpen()) return;
+  if(e.key==="ArrowRight"){ e.preventDefault(); lightboxStep(1); }
+  if(e.key==="ArrowLeft"){ e.preventDefault(); lightboxStep(-1); }
+});
+/* swipe na telefonie */
+(function(){
+  const stage = document.getElementById("lightboxStage");
+  let x0 = null, y0 = null;
+  stage.addEventListener("touchstart", e=>{ x0 = e.touches[0].clientX; y0 = e.touches[0].clientY; }, {passive:true});
+  stage.addEventListener("touchend", e=>{
+    if(x0===null) return;
+    const dx = e.changedTouches[0].clientX - x0, dy = e.changedTouches[0].clientY - y0;
+    if(Math.abs(dx) > 45 && Math.abs(dx) > Math.abs(dy)) lightboxStep(dx < 0 ? 1 : -1);
+    x0 = y0 = null;
+  }, {passive:true});
+  /* kółko myszy / gładzik poziomo */
+  let wheelLock = 0;
+  document.getElementById("lightbox").addEventListener("wheel", e=>{
+    if(!lbOpen() || Math.abs(e.deltaX) < Math.abs(e.deltaY)) return;
+    const now = Date.now();
+    if(now - wheelLock < 320) return;
+    wheelLock = now;
+    lightboxStep(e.deltaX > 0 ? 1 : -1);
+  }, {passive:true});
+})();
 
 /* ================= admin (ukryty panel: #admin) =================
    Wejście: viarozbrat.pl/#admin
@@ -719,6 +839,15 @@ function adminLogout(){
 
 function admReset(){
   admFileBlob = null; admFileName = "";
+  admSrc = null;
+  admCrop = {aspId:"4:3", zoom:1, ox:0, oy:0, base:1, cw:0, ch:0};
+  clearTimeout(admBlobTimer);
+  const el = document.getElementById("admCropImg");
+  if(el && el.src.startsWith("blob:")) URL.revokeObjectURL(el.src);
+  if(el) el.removeAttribute("src");
+  document.getElementById("admCropUI").hidden = true;
+  document.getElementById("admDrop").hidden = false;
+  document.getElementById("admCropMeta").textContent = "";
   document.getElementById("admFile").value = "";
   document.getElementById("admCaption").value = "";
   document.getElementById("admDropTxt").innerHTML = "Kliknij, aby wybrać zdjęcie<br>(albo przeciągnij je tutaj)";
@@ -746,6 +875,22 @@ function admDecode(file){
   });
 }
 
+/* ---- kadrowanie ---- */
+const ASPECTS = [
+  {id:"4:3", label:"4:3 · galeria", v:4/3},
+  {id:"1:1", label:"Kwadrat",       v:1},
+  {id:"16:9",label:"Panorama",      v:16/9},
+  {id:"org", label:"Oryginał",      v:0},   // 0 = proporcje zdjęcia
+];
+let admSrc = null;                                    // canvas ze znormalizowanym źródłem
+let admCrop = {aspId:"4:3", zoom:1, ox:0, oy:0, base:1, cw:0, ch:0};
+let admBlobTimer = null;
+
+const admAspectVal = () => {
+  const a = ASPECTS.find(a=>a.id===admCrop.aspId);
+  return a.v || (admSrc ? admSrc.width/admSrc.height : 4/3);
+};
+
 async function admPick(file){
   if(!file) return;
   const st = document.getElementById("admStatus");
@@ -755,26 +900,135 @@ async function admPick(file){
   try{
     const img = await admDecode(file);
     const w = img.width || img.naturalWidth, h = img.height || img.naturalHeight;
-    const k = Math.min(1, 1600 / Math.max(w, h));
+    /* normalizacja: jedno źródło (canvas) działa też dla HEIC/ImageBitmap */
+    const k0 = Math.min(1, 2400 / Math.max(w, h));
     const cv = document.createElement("canvas");
-    cv.width = Math.round(w * k); cv.height = Math.round(h * k);
+    cv.width = Math.round(w * k0); cv.height = Math.round(h * k0);
     cv.getContext("2d").drawImage(img, 0, 0, cv.width, cv.height);
-    admFileBlob = await new Promise(r => cv.toBlob(r, "image/jpeg", .85));
-    if(!admFileBlob) throw new Error("blob");
+    admSrc = cv;
+
+    const prevBlob = await new Promise(r => cv.toBlob(r, "image/jpeg", .92));
+    const el = document.getElementById("admCropImg");
+    if(el.src.startsWith("blob:")) URL.revokeObjectURL(el.src);
+    el.src = URL.createObjectURL(prevBlob);
+    el.style.width = cv.width + "px";
+    el.style.height = cv.height + "px";
+
     const d = new Date(), p = n => String(n).padStart(2, "0");
     admFileName = `p-${d.getFullYear()}${p(d.getMonth()+1)}${p(d.getDate())}-${p(d.getHours())}${p(d.getMinutes())}${p(d.getSeconds())}.jpg`;
-    const txt = document.getElementById("admDropTxt");
-    txt.innerHTML = "";
-    const prev = document.createElement("img");
-    prev.src = URL.createObjectURL(admFileBlob);
-    txt.appendChild(prev);
-    txt.append(`${cv.width}×${cv.height} · ${Math.round(admFileBlob.size/1024)} KB`);
+
+    document.getElementById("admDrop").hidden = true;
+    document.getElementById("admCropUI").hidden = false;
+    admRenderAspects();
+    admCrop.aspId = "4:3"; admCrop.zoom = 1;
+    admLayout(true);
     st.textContent = "";
-    document.getElementById("admSendBtn").disabled = false;
   }catch(e){
     st.classList.add("err");
     st.textContent = "Nie udało się odczytać tego pliku. Jeśli to HEIC z iPhone'a, przy udostępnianiu wybierz format „Najbardziej zgodny” albo zapisz zdjęcie jako JPG i spróbuj ponownie.";
   }
+}
+
+function admRenderAspects(){
+  document.getElementById("admAspects").innerHTML = ASPECTS.map(a=>
+    `<button class="crop-chip" aria-pressed="${a.id===admCrop.aspId}" onclick="admSetAspect('${a.id}')">${a.label}</button>`).join("");
+}
+function admSetAspect(id){
+  admCrop.aspId = id;
+  admCrop.zoom = 1;
+  admRenderAspects();
+  admLayout(true);
+}
+function admSetZoom(v){
+  const z = Number(v)/100;
+  const {cw, ch, base} = admCrop;
+  /* powiększaj względem środka kadru */
+  const cxSrc = (-admCrop.ox + cw/2) / (base*admCrop.zoom);
+  const cySrc = (-admCrop.oy + ch/2) / (base*admCrop.zoom);
+  admCrop.zoom = z;
+  admCrop.ox = cw/2 - cxSrc*base*z;
+  admCrop.oy = ch/2 - cySrc*base*z;
+  admClamp(); admPaint(); admQueueBlob();
+}
+function admCropReset(){ admCrop.zoom = 1; admLayout(true); }
+function admChangeFile(){
+  document.getElementById("admFile").value = "";
+  document.getElementById("admFile").click();
+}
+function admLayout(center){
+  if(!admSrc) return;
+  const box = document.getElementById("admCropBox");
+  const cw = box.clientWidth || 380;
+  const ch = Math.round(cw / admAspectVal());
+  box.style.height = ch + "px";
+  admCrop.cw = cw; admCrop.ch = ch;
+  admCrop.base = Math.max(cw/admSrc.width, ch/admSrc.height);   // cover
+  if(center){
+    const s = admCrop.base * admCrop.zoom;
+    admCrop.ox = (cw - admSrc.width*s)/2;
+    admCrop.oy = (ch - admSrc.height*s)/2;
+  }
+  const zi = document.getElementById("admZoom");
+  zi.value = Math.round(admCrop.zoom*100);
+  zi.style.setProperty("--fill", ((admCrop.zoom*100-100)/200*100).toFixed(1)+"%");
+  admClamp(); admPaint(); admQueueBlob();
+}
+function admClamp(){
+  const s = admCrop.base * admCrop.zoom;
+  const iw = admSrc.width*s, ih = admSrc.height*s;
+  admCrop.ox = Math.min(0, Math.max(admCrop.cw - iw, admCrop.ox));
+  admCrop.oy = Math.min(0, Math.max(admCrop.ch - ih, admCrop.oy));
+}
+function admPaint(){
+  const s = admCrop.base * admCrop.zoom;
+  document.getElementById("admCropImg").style.transform =
+    `translate(${admCrop.ox}px, ${admCrop.oy}px) scale(${s})`;
+  const zi = document.getElementById("admZoom");
+  zi.style.setProperty("--fill", ((admCrop.zoom*100-100)/200*100).toFixed(1)+"%");
+}
+/* przeciąganie kadru */
+(function(){
+  const box = document.getElementById("admCropBox");
+  let px = 0, py = 0, dragging = false;
+  box.addEventListener("pointerdown", e=>{
+    if(!admSrc) return;
+    dragging = true; px = e.clientX; py = e.clientY;
+    box.setPointerCapture(e.pointerId); box.classList.add("drag");
+  });
+  box.addEventListener("pointermove", e=>{
+    if(!dragging) return;
+    admCrop.ox += e.clientX - px; admCrop.oy += e.clientY - py;
+    px = e.clientX; py = e.clientY;
+    admClamp(); admPaint();
+  });
+  const stop = () => { if(dragging){ dragging = false; box.classList.remove("drag"); admQueueBlob(); } };
+  box.addEventListener("pointerup", stop);
+  box.addEventListener("pointercancel", stop);
+  window.addEventListener("resize", ()=>{ if(admSrc && !document.getElementById("admCropUI").hidden) admLayout(false); });
+})();
+/* wynikowy JPG z wybranego kadru */
+function admQueueBlob(){
+  clearTimeout(admBlobTimer);
+  document.getElementById("admSendBtn").disabled = true;
+  admBlobTimer = setTimeout(admMakeBlob, 160);
+}
+async function admMakeBlob(){
+  if(!admSrc) return;
+  const s = admCrop.base * admCrop.zoom;
+  const sx = Math.max(0, -admCrop.ox / s);
+  const sy = Math.max(0, -admCrop.oy / s);
+  const sw = Math.min(admSrc.width - sx, admCrop.cw / s);
+  const sh = Math.min(admSrc.height - sy, admCrop.ch / s);
+  const k = Math.min(1, 1600 / Math.max(sw, sh));
+  const out = document.createElement("canvas");
+  out.width = Math.max(1, Math.round(sw*k));
+  out.height = Math.max(1, Math.round(sh*k));
+  out.getContext("2d").drawImage(admSrc, sx, sy, sw, sh, 0, 0, out.width, out.height);
+  admFileBlob = await new Promise(r => out.toBlob(r, "image/jpeg", .85));
+  if(!admFileBlob) return;
+  document.getElementById("admCropMeta").textContent =
+    `${out.width}×${out.height} · ${Math.round(admFileBlob.size/1024)} KB`;
+  document.getElementById("admSendBtn").disabled = false;
 }
 
 /* wysyłka: 1) plik do gallery/  2) wpis w manifest.json */
