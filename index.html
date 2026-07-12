@@ -263,8 +263,11 @@ code{font-family:var(--font-b);font-size:.88em;background:var(--sand);padding:2p
 @media(max-width:640px){.lightbox .nav{width:40px;height:40px;font-size:18px}.lightbox .nav.prev{left:8px}.lightbox .nav.next{right:8px}}
 
 /* ---------- print ---------- */
-.print-row{display:flex;justify-content:center;margin-top:18px}
+.print-row{display:flex;justify-content:center;flex-wrap:wrap;gap:10px;margin-top:18px}
 .print-btn{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--line);background:var(--card);color:var(--muted);border-radius:99px;padding:8px 18px;font-family:var(--font-b);font-size:13px;font-weight:500;cursor:pointer;transition:all .2s var(--ease)}
+.print-btn[disabled]{opacity:.45;cursor:default}
+.print-btn[disabled]:hover{border-color:var(--line);color:var(--muted);background:var(--card)}
+.print-hint{margin-top:12px;font-size:12.5px;color:var(--faint);max-width:420px;margin-left:auto;margin-right:auto}
 .print-btn:hover{border-color:var(--accent);color:var(--accent-ink);background:var(--accent-soft)}
 .print-btn svg{width:15px;height:15px}
 .print-only{display:none}
@@ -273,7 +276,7 @@ code{font-family:var(--font-b);font-size:.88em;background:var(--sand);padding:2p
   @page{margin:14mm}
   *{-webkit-print-color-adjust:exact;print-color-adjust:exact;box-shadow:none!important}
   html,body{background:#fff!important;color:#000;font-size:11pt}
-  nav,.hero,.print-btn,.print-row,.when-input,.styles,.ferm-row,.dm-jump,.dm-cta,.lightbox,.admin,.gallery-grid,.kitchen-banner,footer{display:none!important}
+  nav,.hero,.print-btn,.print-row,.print-hint,.when-input,.styles,.ferm-row,.dm-jump,.dm-cta,.lightbox,.admin,.gallery-grid,.kitchen-banner,footer{display:none!important}
   .panel{display:none!important}
   .panel#panel-przepisy{display:block!important}
   main{max-width:none;padding:0}
@@ -447,11 +450,16 @@ code{font-family:var(--font-b);font-size:.88em;background:var(--sand);padding:2p
     </div>
     <div><span class="plan-badge" id="planBadge"></span></div>
     <div class="print-row">
+      <button class="print-btn" id="icsBtn" onclick="exportIcs()" aria-label="Dodaj harmonogram do kalendarza">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2.5"/><path d="M3 10h18M8 3v4M16 3v4M12 14v4M10 16h4"/></svg>
+        Dodaj do kalendarza
+      </button>
       <button class="print-btn" onclick="printRecipe()" aria-label="Drukuj harmonogram i przepis">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9V3h12v6"/><rect x="3" y="9" width="18" height="7" rx="2"/><path d="M6 14h12v7H6z"/></svg>
         Drukuj
       </button>
     </div>
+    <p class="print-hint">Każdy krok trafi do kalendarza z przypomnieniem 15 minut wcześniej — telefon sam się odezwie.</p>
   </section>
 
   <div class="print-only print-head" id="printHead"></div>
@@ -1227,6 +1235,123 @@ function admB64Str(b64){
   return new TextDecoder().decode(Uint8Array.from(atob(b64.replace(/\s/g,"")), c => c.charCodeAt(0)));
 }
 
+/* ================= eksport do kalendarza (.ics) ================= */
+let lastPlan = null;
+
+/* czas lokalny w formacie ICS (bez strefy — kalendarz przyjmie jako lokalny) */
+function icsTime(ts){
+  const d = new Date(ts), p = n => String(n).padStart(2,"0");
+  return `${d.getFullYear()}${p(d.getMonth()+1)}${p(d.getDate())}T${p(d.getHours())}${p(d.getMinutes())}00`;
+}
+function icsDate(ts){
+  const d = new Date(ts), p = n => String(n).padStart(2,"0");
+  return `${d.getFullYear()}${p(d.getMonth()+1)}${p(d.getDate())}`;
+}
+/* znaki specjalne wg RFC 5545 */
+function icsEsc(s){
+  return String(s).replace(/\\/g,"\\\\").replace(/;/g,"\\;").replace(/,/g,"\\,").replace(/\r?\n/g,"\\n");
+}
+/* linie dłuższe niż 75 oktetów trzeba łamać, inaczej Kalendarz Google odrzuca plik */
+function icsFold(line){
+  const bytes = new TextEncoder().encode(line);
+  if(bytes.length <= 75) return line;
+  let out = "", cur = 0, chunk = "";
+  for(const ch of line){
+    const n = new TextEncoder().encode(ch).length;
+    if(cur + n > (out ? 74 : 75)){ out += (out ? "\r\n " : "") + chunk; chunk = ""; cur = 0; }
+    chunk += ch; cur += n;
+  }
+  return out + (out ? "\r\n " : "") + chunk;
+}
+function icsUid(i){
+  return `vr-${Date.now().toString(36)}-${i}-${Math.random().toString(36).slice(2,8)}@viarozbrat.pl`;
+}
+
+function exportIcs(){
+  if(!lastPlan) return;
+  const s = styleOf(), n = totalBalls();
+  const {steps, bake} = lastPlan;
+  const stamp = icsTime(Date.now());
+
+  const L = [
+    "BEGIN:VCALENDAR",
+    "VERSION:2.0",
+    "PRODID:-//Via Rozbrat//Harmonogram pizzy//PL",
+    "CALSCALE:GREGORIAN",
+    "METHOD:PUBLISH",
+    `X-WR-CALNAME:Via Rozbrat — ${s.name}`,
+  ];
+
+  steps.forEach(([ts, tt, td], i)=>{
+    const last = i === steps.length - 1;
+    const dur = last ? 60 : 15;                    // pieczenie: godzina, reszta: kwadrans
+    L.push(
+      "BEGIN:VEVENT",
+      `UID:${icsUid(i)}`,
+      `DTSTAMP:${stamp}`,
+      `DTSTART:${icsTime(ts)}`,
+      `DTEND:${icsTime(ts + dur*MIN)}`,
+      icsFold(`SUMMARY:${icsEsc((last ? "🔥 " : "🍕 ") + tt)}`),
+      icsFold(`DESCRIPTION:${icsEsc(td + "\n\n" + s.name + " · " + n + " " + unitWord(n) + "\nviarozbrat.pl")}`),
+      "BEGIN:VALARM",
+      "TRIGGER:-PT15M",
+      "ACTION:DISPLAY",
+      icsFold(`DESCRIPTION:${icsEsc("Za 15 minut: " + tt)}`),
+      "END:VALARM",
+      "END:VEVENT",
+    );
+  });
+
+  /* zakupy — całodniowe wydarzenie dzień przed pierwszym krokiem */
+  if(n > 0){
+    const u = doughPerUnit();
+    const shop = [
+      `Mąka: ${fmt(Math.round(n*u.flour/5)*5)} g (${s.flour})`,
+      `Woda: ${fmt(Math.round(n*u.water))} ml`,
+      `Sól: ${fmt(Math.round(n*u.salt*10)/10)} g`,
+      `Drożdże świeże: ${fmt(Math.round(n*u.yeast*10)/10)} g`,
+    ];
+    if(u.oil > 0)   shop.push(`Oliwa: ${fmt(Math.round(n*u.oil))} ml`);
+    if(u.sugar > 0) shop.push(`Cukier: ${fmt(Math.round(n*u.sugar*10)/10)} g`);
+    if(styleId !== "chleb"){
+      for(const p of PIZZAS){
+        const c = counts[p.id] || 0;
+        if(!c) continue;
+        shop.push(`— ${p.name} ×${c}: ` + p.top.map(([nm,q,un])=>`${nm} ${fmt(Math.round(q*c*s.factor))} ${un}`).join(", "));
+      }
+    }
+    const day0 = new Date(steps[0][0]);
+    day0.setDate(day0.getDate() - 1);
+    const day1 = new Date(day0); day1.setDate(day1.getDate() + 1);
+    L.push(
+      "BEGIN:VEVENT",
+      `UID:${icsUid("shop")}`,
+      `DTSTAMP:${stamp}`,
+      `DTSTART;VALUE=DATE:${icsDate(+day0)}`,
+      `DTEND;VALUE=DATE:${icsDate(+day1)}`,
+      icsFold(`SUMMARY:${icsEsc("🛒 Zakupy na pizzę — " + s.name)}`),
+      icsFold(`DESCRIPTION:${icsEsc(shop.join("\n") + "\n\nviarozbrat.pl")}`),
+      "BEGIN:VALARM",
+      "TRIGGER:-PT2H",
+      "ACTION:DISPLAY",
+      icsFold(`DESCRIPTION:${icsEsc("Zakupy na pizzę")}`),
+      "END:VALARM",
+      "END:VEVENT",
+    );
+  }
+
+  L.push("END:VCALENDAR");
+
+  const blob = new Blob([L.join("\r\n") + "\r\n"], {type:"text/calendar;charset=utf-8"});
+  const d = new Date(bake), p = x => String(x).padStart(2,"0");
+  const name = `via-rozbrat-${s.id}-${d.getFullYear()}${p(d.getMonth()+1)}${p(d.getDate())}.ics`;
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url; a.download = name;
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(()=>URL.revokeObjectURL(url), 2000);
+}
+
 /* ================= wydruk: harmonogram + przepis ================= */
 async function printRecipe(){
   const s = styleOf();
@@ -1853,6 +1978,9 @@ function renderSchedule(){
   }
   badge.textContent = note;
   badge.className = "plan-badge"+(warn?" warn":"");
+  lastPlan = steps ? {steps, bake:+bake, note} : null;
+  const icsBtn = document.getElementById("icsBtn");
+  if(icsBtn) icsBtn.disabled = !steps;
   if(!steps){ tl.innerHTML=""; return; }
 
   let html = "", lastDay = "";
