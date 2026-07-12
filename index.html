@@ -13,6 +13,12 @@
 <link rel="icon" type="image/svg+xml" href="mark.svg">
 <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
 <link rel="apple-touch-icon" href="favicon-180.png">
+<!-- PWA -->
+<link rel="manifest" href="manifest.json">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Via Rozbrat">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@400;500&display=swap" rel="stylesheet">
@@ -261,6 +267,20 @@ code{font-family:var(--font-b);font-size:.88em;background:var(--sand);padding:2p
 .lightbox img{transition:opacity .18s var(--ease)}
 .lightbox img.swapping{opacity:0}
 @media(max-width:640px){.lightbox .nav{width:40px;height:40px;font-size:18px}.lightbox .nav.prev{left:8px}.lightbox .nav.next{right:8px}}
+
+/* ---------- PWA: zachęta do instalacji ---------- */
+.a2hs{position:fixed;left:16px;right:16px;bottom:16px;z-index:90;max-width:440px;margin:0 auto;display:flex;align-items:center;gap:13px;background:var(--card);border:1px solid var(--line);border-radius:20px;padding:14px 16px;box-shadow:var(--shadow-lg);animation:a2hsIn .45s var(--ease) both}
+@keyframes a2hsIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+.a2hs-ic{width:42px;height:42px;border-radius:11px;flex:0 0 auto;border:1px solid var(--line)}
+.a2hs-txt{flex:1;min-width:0;line-height:1.35}
+.a2hs-txt b{display:block;font-family:var(--font-d);font-weight:600;font-size:14.5px;letter-spacing:-.01em}
+.a2hs-txt span{display:block;font-size:12.5px;color:var(--muted);margin-top:2px}
+.a2hs-go{flex:0 0 auto;border:none;background:var(--accent);color:#fff;border-radius:99px;padding:9px 16px;font-family:var(--font-b);font-size:13px;font-weight:500;cursor:pointer;transition:background .2s var(--ease)}
+.a2hs-go:hover{background:var(--accent-ink)}
+.a2hs-x{position:absolute;top:-9px;right:-9px;width:26px;height:26px;border-radius:50%;border:1px solid var(--line);background:var(--bg);color:var(--muted);font-size:11px;cursor:pointer;display:grid;place-items:center}
+.a2hs-x:hover{color:var(--ink)}
+.a2hs.ios .a2hs-go{display:none}
+@media(max-width:420px){.a2hs{padding:12px 14px;gap:10px}.a2hs-ic{width:36px;height:36px}}
 
 /* ---------- print ---------- */
 .print-row{display:flex;justify-content:center;flex-wrap:wrap;gap:10px;margin-top:18px}
@@ -566,6 +586,17 @@ code{font-family:var(--font-b);font-size:.88em;background:var(--sand);padding:2p
       </div>
     </div>
   </div>
+</div>
+
+<!-- ============ PWA: zachęta do instalacji ============ -->
+<div class="a2hs" id="a2hs" hidden>
+  <button class="a2hs-x" aria-label="Zamknij" onclick="dismissA2HS()">✕</button>
+  <img src="icon-192.png" alt="" class="a2hs-ic">
+  <div class="a2hs-txt">
+    <b>Dodaj Via Rozbrat do ekranu</b>
+    <span id="a2hsHow">Harmonogram pod ręką, działa też bez internetu.</span>
+  </div>
+  <button class="a2hs-go" id="a2hsGo" onclick="installA2HS()">Zainstaluj</button>
 </div>
 
 <script>
@@ -1406,6 +1437,74 @@ async function printRecipe(){
     });
   }
   window.print();
+}
+
+/* ================= PWA ================= */
+const isStandalone = () =>
+  window.matchMedia("(display-mode: standalone)").matches || navigator.standalone === true;
+const isIOS = () =>
+  /iphone|ipad|ipod/i.test(navigator.userAgent) ||
+  (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);   // iPadOS udaje Maca
+
+let deferredPrompt = null;
+
+/* service worker — offline i szybsze wczytywanie */
+if("serviceWorker" in navigator){
+  window.addEventListener("load", ()=>{
+    navigator.serviceWorker.register("sw.js").catch(()=>{});
+    /* po wgraniu nowej wersji strony przeładuj, gdy nowy SW przejmie kontrolę */
+    let refreshed = false;
+    navigator.serviceWorker.addEventListener("controllerchange", ()=>{
+      if(refreshed) return;
+      refreshed = true;
+      location.reload();
+    });
+  });
+}
+
+/* Android/Chrome: przeglądarka sama proponuje instalację */
+window.addEventListener("beforeinstallprompt", e=>{
+  e.preventDefault();
+  deferredPrompt = e;
+  showA2HS(false);
+});
+window.addEventListener("appinstalled", ()=>{
+  deferredPrompt = null;
+  document.getElementById("a2hs").hidden = true;
+  try{ localStorage.setItem("vr:a2hs", "installed"); }catch(e){}
+});
+
+async function installA2HS(){
+  if(!deferredPrompt) return;
+  deferredPrompt.prompt();
+  await deferredPrompt.userChoice;
+  deferredPrompt = null;
+  document.getElementById("a2hs").hidden = true;
+}
+function dismissA2HS(){
+  document.getElementById("a2hs").hidden = true;
+  try{ localStorage.setItem("vr:a2hs", String(Date.now())); }catch(e){}
+}
+function showA2HS(ios){
+  const el = document.getElementById("a2hs");
+  if(!el || isStandalone()) return;                 // już zainstalowana
+  /* nie nękamy: po zamknięciu cisza przez 30 dni */
+  let seen = null;
+  try{ seen = localStorage.getItem("vr:a2hs"); }catch(e){}
+  if(seen === "installed") return;
+  if(seen && Date.now() - Number(seen) < 30*24*3600*1000) return;
+
+  el.classList.toggle("ios", ios);
+  if(ios){
+    /* Safari nie ma beforeinstallprompt — trzeba pokazać drogę ręcznie */
+    document.getElementById("a2hsHow").innerHTML =
+      'Naciśnij <b style="font-weight:600">Udostępnij</b> ⎋, a potem <b style="font-weight:600">Do ekranu początkowego</b>.';
+  }
+  el.hidden = false;
+}
+/* iOS nie wywoła beforeinstallprompt — pokazujemy podpowiedź sami, po chwili obecności */
+if(isIOS() && !isStandalone()){
+  setTimeout(()=>showA2HS(true), 12000);
 }
 
 /* ================= zapamiętywanie konfiguracji ================= */
