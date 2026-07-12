@@ -171,21 +171,17 @@ section{margin-top:52px}
 .when-input input:focus{outline:none}
 .plan-badge{margin-top:22px;display:inline-block;font-size:13px;font-weight:500;padding:7px 16px;border-radius:99px;background:var(--card);border:1px solid var(--line);color:var(--muted)}
 .plan-badge.warn{background:#FBF0E9;border-color:#EED8C8;color:#8A5A33}
-.when-ferm{margin:22px auto 0;max-width:420px;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px 18px;text-align:left}
-.wf-top{display:flex;align-items:center;justify-content:space-between;font-size:13px}
-.wf-lbl{font-weight:500;color:var(--muted)}
-.wf-val{display:flex;align-items:center;gap:6px}
-.wf-val b{font-family:var(--font-d);font-weight:600;font-size:15px;color:var(--ink);font-variant-numeric:tabular-nums}
-.wf-reset{border:none;background:var(--sand);color:var(--muted);width:20px;height:20px;border-radius:50%;font-size:11px;cursor:pointer;display:grid;place-items:center;flex-shrink:0}
-.wf-reset:hover{background:var(--line)}
-#fermSlider{-webkit-appearance:none;appearance:none;width:100%;height:4px;border-radius:99px;margin-top:10px;background:linear-gradient(to right,var(--accent) 0%,var(--accent) var(--fill,50%),var(--line) var(--fill,50%),var(--line) 100%);outline:none}
-#fermSlider::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:16px;height:16px;border-radius:50%;background:#fff;cursor:grab;border:3px solid var(--accent);box-shadow:0 1px 3px rgba(0,0,0,.25)}
-#fermSlider::-webkit-slider-thumb:active{cursor:grabbing}
-#fermSlider::-moz-range-thumb{width:16px;height:16px;border-radius:50%;background:#fff;cursor:grab;border:3px solid var(--accent)}
-#fermSlider:disabled{opacity:.4;cursor:not-allowed}
-#fermSlider:disabled::-webkit-slider-thumb{cursor:not-allowed}
-.wf-note{font-size:12px;color:var(--faint);margin-top:8px}
-.express-flag{display:block;margin:0 auto 20px;max-width:560px;text-align:center;font-size:13px;font-weight:500;padding:10px 18px;border-radius:14px;background:#FBF0E9;border:1px solid #EED8C8;color:#8A5A33}
+/* fermentation time slider */
+.ferm-row{margin:20px auto 0;display:flex;align-items:center;gap:12px;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:12px 18px;max-width:440px}
+.ferm-lbl{font-size:11px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:var(--faint);white-space:nowrap}
+.ferm-row input[type=range]{-webkit-appearance:none;appearance:none;flex:1;height:4px;border-radius:99px;background:linear-gradient(to right,var(--accent) 0%,var(--accent) var(--fill,50%),var(--line) var(--fill,50%),var(--line) 100%);outline:none}
+.ferm-row input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:18px;height:18px;border-radius:50%;background:#fff;cursor:grab;border:3px solid var(--accent);box-shadow:0 2px 6px rgba(28,28,26,.15);transition:transform .15s var(--ease)}
+.ferm-row input[type=range]::-webkit-slider-thumb:active{transform:scale(1.15);cursor:grabbing}
+.ferm-row input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;background:#fff;cursor:grab;border:3px solid var(--accent)}
+.ferm-val{display:flex;align-items:center;gap:6px;white-space:nowrap}
+.ferm-val b{font-family:var(--font-d);font-weight:600;font-size:15px;color:var(--accent-ink);font-variant-numeric:tabular-nums;min-width:42px;text-align:right}
+.ferm-reset{border:none;background:var(--sand);color:var(--muted);width:22px;height:22px;border-radius:50%;font-size:12px;cursor:pointer;display:grid;place-items:center;transition:background .2s}
+.ferm-reset:hover{background:var(--line)}
 
 .timeline{margin-top:44px;max-width:640px;margin-left:auto;margin-right:auto}
 .day-h{font-family:var(--font-d);font-weight:600;font-size:18px;letter-spacing:-.01em;margin:34px 0 6px;padding-left:2px}
@@ -244,6 +240,35 @@ code{font-family:var(--font-b);font-size:.88em;background:var(--sand);padding:2p
 .lightbox img{max-width:92vw;max-height:86vh;border-radius:12px;box-shadow:0 20px 60px rgba(0,0,0,.4)}
 .lightbox .cap{position:absolute;bottom:24px;left:0;right:0;text-align:center;color:#EDEBE4;font-size:14px}
 .lightbox .close{position:absolute;top:20px;right:24px;width:40px;height:40px;border-radius:50%;border:none;background:rgba(255,255,255,.12);color:#fff;font-size:20px;cursor:pointer;display:grid;place-items:center}
+
+/* ---------- admin (ukryty panel: #admin) ---------- */
+.admin{position:fixed;inset:0;z-index:120;background:rgba(20,20,18,.45);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);display:none;align-items:flex-start;justify-content:center;overflow-y:auto;padding:48px 20px}
+.admin.open{display:flex;animation:fadeUp .3s ease}
+.admin-card{background:var(--card);border:1px solid var(--line);border-radius:26px;max-width:460px;width:100%;padding:30px 28px;box-shadow:0 24px 70px rgba(28,28,26,.18);position:relative;margin-bottom:48px}
+.admin-card h3{font-family:var(--font-d);font-weight:600;font-size:22px;letter-spacing:-.02em}
+.admin-card .sub{color:var(--muted);font-size:14px;margin-top:6px;line-height:1.5}
+.admin-close{position:absolute;top:18px;right:18px;width:34px;height:34px;border-radius:50%;border:1px solid var(--line);background:var(--bg);color:var(--muted);font-size:14px;cursor:pointer;display:grid;place-items:center;transition:all .2s var(--ease)}
+.admin-close:hover{color:var(--ink);border-color:#CFCDC4}
+.admin-field{margin-top:16px}
+.admin-field label{display:block;font-size:12px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:var(--faint);margin-bottom:6px}
+.admin-field input[type=text],.admin-field input[type=password]{width:100%;border:1px solid var(--line);background:var(--bg);border-radius:12px;padding:11px 14px;font-family:var(--font-b);font-size:15px;color:var(--ink);transition:border-color .2s var(--ease)}
+.admin-field input:focus{outline:none;border-color:var(--accent)}
+.admin-check{display:flex;align-items:center;gap:8px;margin-top:14px;font-size:14px;color:var(--muted);cursor:pointer}
+.admin-check input{accent-color:var(--accent);width:16px;height:16px}
+.admin-btn{margin-top:20px;width:100%;border:none;border-radius:99px;background:var(--accent);color:#fff;padding:13px 20px;font-family:var(--font-b);font-size:15px;font-weight:500;cursor:pointer;transition:background .2s var(--ease),transform .15s var(--ease)}
+.admin-btn:hover{background:var(--accent-ink)}
+.admin-btn:active{transform:scale(.98)}
+.admin-btn[disabled]{opacity:.5;cursor:default}
+.admin-drop{margin-top:16px;border:1.5px dashed var(--line);border-radius:18px;padding:26px 18px;text-align:center;color:var(--muted);font-size:14px;cursor:pointer;transition:border-color .2s var(--ease),background .2s var(--ease)}
+.admin-drop:hover,.admin-drop.over{border-color:var(--accent);background:var(--accent-soft)}
+.admin-drop img{max-width:100%;max-height:220px;border-radius:12px;display:block;margin:0 auto 10px;object-fit:contain}
+.admin-status{margin-top:14px;font-size:13.5px;line-height:1.5;color:var(--muted);min-height:20px}
+.admin-status.err{color:#A2402F}
+.admin-status.ok{color:var(--accent)}
+.admin-meta{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:22px;padding-top:14px;border-top:1px solid var(--line);font-size:12.5px;color:var(--faint)}
+.admin-meta span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.admin-meta button{border:none;background:none;color:var(--faint);font-size:12.5px;cursor:pointer;text-decoration:underline;text-underline-offset:3px;flex:0 0 auto}
+.admin-meta button:hover{color:var(--ink)}
 
 </style>
 </head>
@@ -306,13 +331,10 @@ code{font-family:var(--font-b);font-size:.88em;background:var(--sand);padding:2p
       <input type="datetime-local" id="bakeAt" onchange="renderSchedule()">
     </label>
     <div class="styles" id="heatRow" role="group" aria-label="Źródło ciepła" style="margin-top:20px"></div>
-    <div class="when-ferm" id="fermRow" hidden>
-      <div class="wf-top">
-        <span class="wf-lbl">Czas fermentacji</span>
-        <span class="wf-val"><b id="fermValLbl"></b><button class="wf-reset" id="fermResetBtn" onclick="resetFerm()" hidden aria-label="Reset czasu fermentacji">↺</button></span>
-      </div>
-      <input type="range" id="fermSlider" step="0.5" oninput="setFerm(this.value)" aria-label="Czas fermentacji w godzinach">
-      <p class="wf-note" id="fermNote"></p>
+    <div class="ferm-row">
+      <span class="ferm-lbl">Zimna fermentacja</span>
+      <input type="range" id="fermSlider" min="8" max="72" step="1" oninput="setFerm(this.value)" aria-label="Czas zimnej fermentacji w godzinach">
+      <span class="ferm-val"><b id="fermValLbl"></b><button class="ferm-reset" id="fermReset" onclick="resetFerm()" hidden aria-label="Przywróć domyślny czas fermentacji">↺</button></span>
     </div>
     <div><span class="plan-badge" id="planBadge"></span></div>
   </section>
@@ -354,14 +376,55 @@ code{font-family:var(--font-b);font-size:.88em;background:var(--sand);padding:2p
   <div class="cap" id="lightboxCap"></div>
 </div>
 
+<!-- ============ ADMIN — ukryty panel, otwierany adresem viarozbrat.pl/#admin ============ -->
+<div class="admin" id="admin" role="dialog" aria-modal="true" aria-labelledby="adminTitle">
+  <div class="admin-card">
+    <button class="admin-close" aria-label="Zamknij panel" onclick="closeAdmin()">✕</button>
+
+    <div id="adminLogin">
+      <h3 id="adminTitle">Panel Tomazzo</h3>
+      <p class="sub">Zaloguj się tokenem GitHub, aby dodawać zdjęcia do galerii. Token działa jak hasło — nikt bez niego nic tu nie wgra.</p>
+      <div class="admin-field">
+        <label for="admRepo">Repozytorium (login/nazwa)</label>
+        <input type="text" id="admRepo" placeholder="np. tomazzo/viarozbrat" autocomplete="off" autocapitalize="off" spellcheck="false">
+      </div>
+      <div class="admin-field">
+        <label for="admToken">Token GitHub</label>
+        <input type="password" id="admToken" placeholder="github_pat_…" autocomplete="off">
+      </div>
+      <label class="admin-check"><input type="checkbox" id="admRemember" checked> Zapamiętaj na tym urządzeniu</label>
+      <button class="admin-btn" id="admLoginBtn" onclick="adminLogin()">Zaloguj</button>
+      <div class="admin-status" id="admLoginStatus"></div>
+    </div>
+
+    <div id="adminUpload" hidden>
+      <h3>Nowe zdjęcie</h3>
+      <p class="sub">Wybierz zdjęcie i dodaj podpis. Zdjęcie zostanie zmniejszone i wysłane prosto do galerii.</p>
+      <input type="file" id="admFile" accept="image/*" hidden>
+      <div class="admin-drop" id="admDrop" onclick="document.getElementById('admFile').click()">
+        <span id="admDropTxt">Kliknij, aby wybrać zdjęcie<br>(albo przeciągnij je tutaj)</span>
+      </div>
+      <div class="admin-field">
+        <label for="admCaption">Podpis (opcjonalny)</label>
+        <input type="text" id="admCaption" placeholder="np. Margherita prosto z pieca" maxlength="120">
+      </div>
+      <button class="admin-btn" id="admSendBtn" onclick="adminUpload()" disabled>Dodaj do galerii</button>
+      <div class="admin-status" id="admStatus"></div>
+      <div class="admin-meta">
+        <span id="admRepoLbl"></span>
+        <button onclick="adminLogout()">Wyloguj</button>
+      </div>
+    </div>
+  </div>
+</div>
 
 <script>
 /* ================= data ================= */
 const PIZZAS = [
   {id:"margherita", name:"Margherita", kind:"Klasyka", ic:"basil", desc:"Sos pomidorowy, fior di latte, świeża bazylia i oliwa. Wzorzec, od którego wszystko się zaczęło.",
-   top:[["Sos pomidorowy",80,"g"],["Mozzarella fior di latte",80,"g"],["Bazylia świeża",4,"listki"],["Oliwa extra vergine",6,"ml"]]},
+   top:[["Sos pomidorowy",80,"g"],["Mozzarella fior di latte",80,"g"],["Bazylia świeża",4,"listki"],["Oliwa extra vergine",5,"ml"]]},
   {id:"marinara", name:"Marinara", kind:"Klasyka · bez sera", ic:"garlic", desc:"Sos pomidorowy, czosnek, oregano i oliwa. Najstarsza neapolitańska — czysty smak pomidora.",
-   top:[["Sos pomidorowy",90,"g"],["Czosnek",1,"ząbek"],["Oregano suszone",0.5,"g"],["Oliwa extra vergine",7,"ml"]]},
+   top:[["Sos pomidorowy",90,"g"],["Czosnek",1,"ząbek"],["Oregano suszone",1,"g"],["Oliwa extra vergine",8,"ml"]]},
   {id:"bufala", name:"Bufala", kind:"Klasyka premium", ic:"cheese", desc:"Jak Margherita, ale z mozzarellą di bufala dodaną tuż po pieczeniu. Kremowa i wyrazista.",
    top:[["Sos pomidorowy",80,"g"],["Mozzarella di bufala",90,"g"],["Bazylia świeża",4,"listki"],["Oliwa extra vergine",5,"ml"]]},
   {id:"diavola", name:"Diavola", kind:"Pikantna", ic:"chili", desc:"Sos, mozzarella i pikantne salami. Odrobina ostrości, dużo charakteru.",
@@ -375,27 +438,25 @@ const PIZZAS = [
   {id:"bianca", name:"Bianca ze szpinakiem", kind:"Biała · wege", ic:"leaf", desc:"Śmietanka, szpinak, czosnek i mozzarella. Lekka odmiana bez pomidora.",
    top:[["Śmietanka 30%",40,"ml"],["Mozzarella fior di latte",70,"g"],["Szpinak świeży",40,"g"],["Czosnek",1,"ząbek"],["Parmezan tarty",10,"g"]]},
 ];
-/* per-style dough spec: weight per unit [g], baker's percentages, topping scale factor, hydration range, icon.
-   fermMin/fermMax [h]: bounds oferowane na suwaku czasu fermentacji. place: "room" = fermentacja/dojrzewanie w temp.
-   pokojowej / komorze (bez lodówki) do fermMax, "fridge" = docelowo zimna fermentacja w lodówce. */
+/* per-style dough spec: weight per unit [g], baker's percentages, topping scale factor, hydration range, icon */
 const STYLES = [
-  {id:"napoletana", name:"Napoletana", unit:"placek ~30 cm", w:260, hyd:.60, hydMin:.55, hydMax:.62, salt:.03, oil:0, sugar:0, yeast:.0025,
-   flour:"mąka typu 00 lub 0 (W 250–320, białko 11,5–13,5%)", factor:1, icon:"napoletana", fermMin:8, fermMax:72, place:"room",
-   note:"Wg regulaminu AVPN: hydratacja 55–62%, sól ok. 3%, świeże drożdże w ilości zależnej od czasu i temperatury. 12–24 h fermentacji i dojrzewania w 18–20°C (nie w lodówce), pieczenie 60–90 s w maks. temperaturze — miękki rant, chrupiący spód."},
+  {id:"napoletana", name:"Napoletana", unit:"placek ~30 cm", w:260, hyd:.65, hydMin:.58, hydMax:.70, salt:.03, oil:0, sugar:0, yeast:.0025,
+   flour:"mąka typu 00 (min. 12% białka)", factor:1, icon:"napoletana",
+   note:"Hydratacja 65% · sól 3% · świeże drożdże 0,25%. 24 h zimnej fermentacji, pieczenie 4–6 min w maks. temperaturze — miękki rant, chrupiący spód."},
   {id:"newyork", name:"New York", unit:"placek ~35 cm", w:320, hyd:.63, hydMin:.58, hydMax:.68, salt:.025, oil:.025, sugar:.02, yeast:.004,
-   flour:"mąka chlebowa (typ 650–750)", factor:1.25, icon:"slice", fermMin:8, fermMax:72, place:"fridge",
+   flour:"mąka chlebowa (typ 650–750)", factor:1.25, icon:"slice",
    note:"Hydratacja 63% z oliwą i odrobiną cukru — złocisty, składany w trójkąt kawałek. 24–48 h w lodówce, pieczenie 250–280°C przez 7–9 min."},
   {id:"detroit", name:"Detroit", unit:"blaszka 20×25 cm", w:350, hyd:.75, hydMin:.68, hydMax:.80, salt:.02, oil:.005, sugar:0, yeast:.005,
-   flour:"mąka chlebowa (typ 650–750)", factor:1.3, icon:"pan", fermMin:6, fermMax:48, place:"fridge",
+   flour:"mąka chlebowa (typ 650–750)", factor:1.3, icon:"pan",
    note:"Grube, puszyste ciasto 75% hydratacji pieczone w wysmarowanej olejem blaszce. Ser (idealnie brick lub cheddar + mozzarella) układa się aż po brzegi — karmelizuje się na krawędziach. 220–250°C, 12–15 min."},
   {id:"rzymska", name:"Rzymska al taglio", unit:"blacha 30×40 cm (4–6 porcji)", w:750, hyd:.80, hydMin:.72, hydMax:.85, salt:.025, oil:.02, sugar:0, yeast:.003,
-   flour:"mąka o wysokim białku (typ 00 lub 550, 13%+)", factor:2.6, icon:"tray", fermMin:18, fermMax:72, place:"fridge",
+   flour:"mąka o wysokim białku (typ 00 lub 550, 13%+)", factor:2.6, icon:"tray",
    note:"Bardzo mokre ciasto 80% hydratacji, 24–48 h w lodówce, rozciągane na całą blachę i cięte nożycami na prostokąty. 250°C, 15–18 min — chrupiące na zewnątrz, alweolowane w środku."},
   {id:"pinsa", name:"Pinsa romana", unit:"owalny placek ~25×18 cm", w:230, hyd:.78, hydMin:.70, hydMax:.82, salt:.025, oil:.02, sugar:0, yeast:.003,
-   flour:"mieszanka do pinsy (pszenna + ryżowa + sojowa)", factor:0.95, icon:"oval", fermMin:24, fermMax:96, place:"fridge",
+   flour:"mieszanka do pinsy (pszenna + ryżowa + sojowa)", factor:0.95, icon:"oval",
    note:"Owalna, lekka i chrupiąca — mieszanka mąk z ryżową zatrzymuje wilgoć. 48–72 h zimnej fermentacji, pieczenie 250–300°C przez 5–7 min."},
   {id:"chleb", name:"Chleb", unit:"bochenek ~800 g", w:800, hyd:.70, hydMin:.60, hydMax:.85, salt:.02, oil:0, sugar:0, yeast:.006,
-   flour:"mąka chlebowa (typ 750) lub 00", factor:1, icon:"bread", fermMin:6, fermMax:48, place:"fridge",
+   flour:"mąka chlebowa (typ 750) lub 00", factor:1, icon:"bread",
    note:"Domowy bochenek na tym samym cieście. Hydratacja 70% daje otwarty miękisz i chrupką skórkę. Długa fermentacja, pieczenie w naczyniu żeliwnym 230–250°C ok. 40–45 min (pierwsze 20 min pod przykryciem)."},
 ];
 let styleId = "napoletana";
@@ -422,19 +483,19 @@ function icon(name){ return ICONS[name] || ICONS.napoletana; }
 /* per-style recipe: fermentation profile + shaping/baking narrative + extras */
 const RECIPES = {
   napoletana: {
-    sub:"Wg regulaminu AVPN (Associazione Verace Pizza Napoletana): hydratacja 55–62%, 12–24 h fermentacji i dojrzewania w 18–20°C — bez lodówki. Ilości znajdziesz w zakładce Pizze — przeliczone dla twojego zamówienia.",
-    coldH:18, shape:"Kulki po ok. 260 g (wg AVPN: 200–280 g, zależnie od średnicy)", stretch:"Dociskaj palcami od środka ku brzegowi, przenosząc powietrze do ranta (bez wałka i prasy — tak nakazuje regulamin AVPN). Cel: rant 1–2 cm, środek ok. 0,25–0,3 cm po upieczeniu.",
+    sub:"Hydratacja 65%, długa fermentacja, miękki brzeg i chrupiący spód. Ilości znajdziesz w zakładce Pizze — przeliczone dla twojego zamówienia.",
+    coldH:24, shape:"Kulki po ok. 260 g", stretch:"Rozciągnij dłońmi do ok. 30 cm, zostawiając puszysty rant 1,5–2 cm. Bez wałka!",
     steps:[
-      ["Rozpuszczenie soli i drożdży","Do miski wlej wodę o temp. 16–22°C i rozpuść w niej sól (40–60 g na litr wody wg AVPN). Dodaj część mąki i wymieszaj. Dopiero teraz rozkrusz i rozpuść drożdże — kontakt soli z drożdżami dłuższy niż 5 minut osłabia je."],
-      ["Wyrabianie · do „punto di pasta”","Stopniowo dodawaj resztę mąki (bez grudek, ok. 10 min), aż ciasto osiągnie jednolitą konsystencję, a potem wyrabiaj (miesz ręczny) jeszcze do ok. 20 min — do miękkiej, wilgotnej, nieklejącej się i elastycznej masy. Nigdy nie dodawaj tłuszczu ani cukru do ciasta — tak nakazuje AVPN."],
-      ["Pierwsza fermentacja (puntata)","Uformuj kulę, przykryj wilgotną ściereczką (żeby powierzchnia się nie zaskorupiła) i zostaw na blacie do wyraźnego wzrostu objętości."],
-      ["Staglio — formowanie kulek","Odetnij porcje szpatułką i uformuj napięte, gładkie kule po ok. 260 g (AVPN: 200 g → placek 22–24 cm, 280 g → 28–35 cm). Do pojemników (proofing box)."],
-      ["Gotowość do formowania placka","Po zakończeniu drugiej fermentacji ciasto jest już w temperaturze pokojowej — formuj od razu, bez czekania (w wariancie z lodówką: patrz uwaga niżej)."],
-      ["Rozciąganie placka","Na niewielkiej ilości mąki/semoli dociskaj palcami od środka na zewnątrz, wypychając powietrze w stronę brzegu. Rant nietykalny — bez wałka."],
+      ["Rozpuszczenie soli i drożdży","Do dużej miski wlej zimną wodę i rozpuść w niej sól. Dodaj ok. 10% mąki i wymieszaj. Dopiero teraz rozkrusz i rozpuść drożdże — sól w bezpośrednim kontakcie je osłabia."],
+      ["Wyrabianie · 15–20 min","Stopniowo dodawaj resztę mąki. Wyrabiaj ręcznie 15–20 minut (mikser z hakiem: 8–10 min), aż ciasto będzie gładkie i elastyczne. Ma być miękkie — nie dosypuj mąki na siłę."],
+      ["Odpoczynek wstępny · 2 h","Uformuj kulę, przykryj wilgotną ściereczką i zostaw na blacie."],
+      ["Formowanie kulek (staglio)","Podziel na kulki po ok. 260 g i uformuj napięte, gładkie kule. Do pojemnika z przykrywką."],
+      ["Dojście do temperatury · 2,5–3 h","Wyjmij kulki z lodówki na 2,5–3 h przed pieczeniem. Zimne ciasto rwie się przy rozciąganiu."],
+      ["Rozciąganie placka","Na semoli dociskaj palcami od środka na zewnątrz, wypychając powietrze w stronę brzegu. Rant nietykalny."],
     ],
     extras:[
-      ["Sos San Marzano (wg AVPN)",["Puszka pomidorów San Marzano (400 g) — rozgnieć ręcznie, bez gotowania i bez cukru","Sól: ok. 3–4 g na puszkę 400 g (AVPN: 7–10 g/kg dla San Marzano, 10–12 g/kg dla innych odmian)","Ok. 60–80 g sosu na pizzę (AVPN: margherita 60–80 g, marinara do 100 g), rozprowadź od środka"]],
-      ["Wskazówki wg AVPN",["Mozzarella/fior di latte: 80–100 g na pizzę, pokrój i odsącz przed pieczeniem","Oliwa extra vergine z oliwek: 6–8 g, dodawana spiralnym ruchem przed lub po pieczeniu","Pieczenie bezpośrednio na trzonie pieca (nie na blasze), 60–90 s, temperatura podstawy ok. 380–430°C","Ilość drożdży zależy od czasu i temperatury fermentacji — przelicza ją harmonogram w zakładce Przepis"]],
+      ["Sos San Marzano",["Puszka pomidorów San Marzano (400 g) — rozgnieć ręcznie","Szczypta soli, bez gotowania i bez cukru","Ok. 80 g sosu na pizzę, rozprowadź od środka"]],
+      ["Wskazówki",["Mozzarellę pokrój i odsącz min. 30 min przed pieczeniem","Bazylię i oliwę dodawaj po upieczeniu","Waż składniki co do grama — zwłaszcza drożdże"]],
     ],
   },
   newyork: {
@@ -521,62 +582,18 @@ const RECIPES = {
 const recipeOf = () => RECIPES[styleId] || RECIPES.napoletana;
 
 let hydOverride = null;   // user-set hydration (fraction), null = style default
+let fermOverride = null;  // user-set cold fermentation hours, null = style default
 function currentHyd(){ const s = styleOf(); return hydOverride!=null ? hydOverride : s.hyd; }
-
-/* ---- fermentation time (like stadlermade's calculator): user can set it, yeast adjusts to it ---- */
-let fermOverride = null;  // user-set fermentation time in hours, null = auto (fills time until bake / style default)
-const FERM_SPLIT = 10;    // h — at/below: "wariant szybki" (blat); above: pełna fermentacja/dojrzewanie
-const FAST_ANCHOR_H = 8, FAST_ANCHOR_MULT = 2; // kalibracja: przy 8h (blat) drożdże = 2x wartości bazowej stylu (przy s.coldH)
-function templateFor(h){ return h<=FERM_SPLIT ? "fast" : "long"; }
-// h narzutu poza samą fermentacją (wyrabianie+formowanie [+dojście z lodówki]).
-// Style "room" (Napoletana) mają narzut "pokojowy" tylko do 24h (wg AVPN) — powyżej to już wydłużony wariant w lodówce.
-function coldOverheadH(s,h){ return (s.place==="room" && h<=24) ? 2.25 : 5.25; }
-function requiredLeadH(s,h){ return templateFor(h)==="fast" ? h+3.5 : h+coldOverheadH(s,h); }
-function coldHOf(s){ return (RECIPES[s.id] || RECIPES.napoletana).coldH; } // referencyjny czas "klasycznej" fermentacji (z przepisu)
-/* Ciągła, potęgowa interpolacja ilości drożdży w funkcji czasu fermentacji — zakotwiczona w dwóch punktach
-   już używanych na stronie: s.yeast przy coldH stylu (pełna fermentacja) oraz 2×s.yeast przy 8h (wariant szybki,
-   temp. pokojowa). Nie jest to formuła Stadler Made (niedostępna publicznie) — to własny, przejrzysty
-   przelicznik dopasowany do wartości bazowych stylów z tej strony.*/
-function yeastForHours(s, h){
-  const hh = Math.max(h, 0.1);
-  const coldH = coldHOf(s);
-  const n = Math.log(FAST_ANCHOR_MULT) / Math.log(FAST_ANCHOR_H / coldH);
-  const y = s.yeast * Math.pow(hh / coldH, n);
-  return Math.min(Math.max(y, 0.0008), 0.04);
-}
-function fmtH(h){
-  const r = Math.round(h*2)/2;
-  return (r%1===0 ? String(r) : r.toFixed(1).replace(".", ",")) + " h";
-}
-function fmtPct(frac){
-  let v = Math.round(frac*10000)/100;
-  let s = v.toFixed(2).replace(/0+$/,"").replace(/\.$/,"");
-  return s.replace(".", ",")+"%";
-}
-/* auto-dobrana liczba godzin fermentacji: wykorzystuje cały dostępny czas od teraz do wskazanej godziny
-   pieczenia (mieszcząc się w [fermMin, fermMax] stylu); gdy brak/zła data — domyślna wartość stylu. */
-function effectiveFermH(){
-  const s = styleOf();
-  if(fermOverride!=null) return Math.min(Math.max(fermOverride, s.fermMin), s.fermMax);
-  const input = document.getElementById("bakeAt");
-  const bake = input ? new Date(input.value) : null;
-  if(!input || isNaN(bake)) return coldHOf(s);
-  const leadH = (bake - Date.now())/H;
-  if(leadH<=0) return coldHOf(s);
-  // policz "optymistycznie" (narzut pokojowy, jeśli styl na to pozwala); jeśli wynik wychodzi poza próg 24h
-  // (czyli w praktyce trafiamy już do wariantu lodówkowego), przelicz ponownie z właściwym, większym narzutem.
-  let longAvail = leadH - coldOverheadH(s, 0);
-  if(s.place==="room" && longAvail>24) longAvail = leadH - coldOverheadH(s, 25);
-  if(longAvail >= Math.max(s.fermMin, FERM_SPLIT)) return Math.min(longAvail, s.fermMax);
-  const fastAvail = leadH - 3.5;
-  if(fastAvail >= s.fermMin) return Math.min(fastAvail, FERM_SPLIT);
-  if(longAvail >= s.fermMin) return Math.min(longAvail, s.fermMax);
-  return s.fermMin;
+function fermHours(){ return fermOverride!=null ? fermOverride : (RECIPES[styleId]||RECIPES.napoletana).coldH; }
+/* dłuższa fermentacja = mniej drożdży (w przybliżeniu odwrotnie proporcjonalnie), jak w kalkulatorze Stadler Made */
+function fermFactor(){
+  const base = (RECIPES[styleId]||RECIPES.napoletana).coldH;
+  return Math.min(3, Math.max(0.35, base / fermHours()));
 }
 function doughPerUnit(){
   const s = styleOf();
   const hyd = currentHyd();
-  const yeast = yeastForHours(s, effectiveFermH());
+  const yeast = s.yeast * fermFactor();
   const denom = 1 + hyd + s.salt + s.oil + s.sugar + yeast;
   const flour = s.w/denom;
   return {flour, water:flour*hyd, salt:flour*s.salt, oil:flour*s.oil, sugar:flour*s.sugar, yeast:flour*yeast};
@@ -627,7 +644,203 @@ function openLightbox(src, cap){
   document.getElementById("lightbox").classList.add("open");
 }
 function closeLightbox(){ document.getElementById("lightbox").classList.remove("open"); }
-document.addEventListener("keydown", e=>{ if(e.key==="Escape") closeLightbox(); });
+document.addEventListener("keydown", e=>{ if(e.key==="Escape"){ closeLightbox(); closeAdmin(); } });
+
+/* ================= admin (ukryty panel: #admin) =================
+   Wejście: viarozbrat.pl/#admin
+   Bezpieczeństwo: strona jest statyczna, więc jedynym realnym „hasłem"
+   jest token GitHub (fine-grained PAT z uprawnieniem Contents: Read and write
+   dla tego jednego repozytorium). Token nigdy nie jest zapisany w kodzie —
+   trzyma go wyłącznie przeglądarka zalogowanego urządzenia. */
+const ADM_KEY = "vr_admin";
+let admFileBlob = null, admFileName = "";
+
+function adminCfg(){
+  try{ return JSON.parse(localStorage.getItem(ADM_KEY) || sessionStorage.getItem(ADM_KEY) || "null"); }
+  catch(e){ return null; }
+}
+function openAdmin(){
+  const cfg = adminCfg();
+  document.getElementById("adminLogin").hidden = !!cfg;
+  document.getElementById("adminUpload").hidden = !cfg;
+  if(cfg) document.getElementById("admRepoLbl").textContent = cfg.repo;
+  document.getElementById("admin").classList.add("open");
+  document.body.style.overflow = "hidden";
+}
+function closeAdmin(){
+  const el = document.getElementById("admin");
+  if(!el.classList.contains("open")) return;
+  el.classList.remove("open");
+  document.body.style.overflow = "";
+  if(location.hash === "#admin") history.replaceState(null, "", location.pathname + location.search);
+}
+function admHash(){ if(location.hash === "#admin") openAdmin(); }
+window.addEventListener("hashchange", admHash);
+admHash();
+
+function ghFetch(cfg, path, opts={}){
+  return fetch("https://api.github.com/repos/" + cfg.repo + path, {
+    ...opts,
+    headers:{ "Authorization":"Bearer " + cfg.token, "Accept":"application/vnd.github+json", ...(opts.headers || {}) }
+  });
+}
+
+async function adminLogin(){
+  const repo = document.getElementById("admRepo").value.trim()
+    .replace(/^https:\/\/github\.com\//,"").replace(/\.git$/,"").replace(/\/+$/,"");
+  const token = document.getElementById("admToken").value.trim();
+  const st = document.getElementById("admLoginStatus");
+  st.className = "admin-status";
+  if(!/^[\w.-]+\/[\w.-]+$/.test(repo)){ st.classList.add("err"); st.textContent = "Podaj repozytorium w formacie login/nazwa."; return; }
+  if(!token){ st.classList.add("err"); st.textContent = "Wklej token GitHub."; return; }
+  const btn = document.getElementById("admLoginBtn");
+  btn.disabled = true; st.textContent = "Sprawdzam dostęp…";
+  const cfg = {repo, token};
+  try{
+    const res = await ghFetch(cfg, "");
+    if(!res.ok) throw new Error(
+      res.status === 401 ? "Token nieprawidłowy lub wygasł." :
+      res.status === 404 ? "Nie znaleziono repozytorium — sprawdź nazwę i czy token ma do niego dostęp." :
+      "Błąd GitHub (" + res.status + ").");
+    (document.getElementById("admRemember").checked ? localStorage : sessionStorage)
+      .setItem(ADM_KEY, JSON.stringify(cfg));
+    document.getElementById("admToken").value = "";
+    st.textContent = "";
+    openAdmin();
+  }catch(e){ st.classList.add("err"); st.textContent = e.message || "Brak połączenia z GitHub."; }
+  btn.disabled = false;
+}
+
+function adminLogout(){
+  localStorage.removeItem(ADM_KEY); sessionStorage.removeItem(ADM_KEY);
+  admReset();
+  openAdmin();
+}
+
+function admReset(){
+  admFileBlob = null; admFileName = "";
+  document.getElementById("admFile").value = "";
+  document.getElementById("admCaption").value = "";
+  document.getElementById("admDropTxt").innerHTML = "Kliknij, aby wybrać zdjęcie<br>(albo przeciągnij je tutaj)";
+  document.getElementById("admSendBtn").disabled = true;
+}
+
+/* wybór pliku: podgląd + zmniejszenie do 1600 px + JPEG 85% */
+document.getElementById("admFile").addEventListener("change", e => admPick(e.target.files[0]));
+const admDropEl = document.getElementById("admDrop");
+["dragover","dragleave","drop"].forEach(ev => admDropEl.addEventListener(ev, e => {
+  e.preventDefault();
+  admDropEl.classList.toggle("over", ev === "dragover");
+  if(ev === "drop" && e.dataTransfer.files[0]) admPick(e.dataTransfer.files[0]);
+}));
+
+function admDecode(file){
+  return new Promise((resolve, reject) => {
+    createImageBitmap(file).then(resolve).catch(() => {
+      const url = URL.createObjectURL(file);
+      const img = new Image();
+      img.onload = () => { URL.revokeObjectURL(url); resolve(img); };
+      img.onerror = () => { URL.revokeObjectURL(url); reject(new Error("decode")); };
+      img.src = url;
+    });
+  });
+}
+
+async function admPick(file){
+  if(!file) return;
+  const st = document.getElementById("admStatus");
+  st.className = "admin-status"; st.textContent = "Przygotowuję zdjęcie…";
+  document.getElementById("admSendBtn").disabled = true;
+  admFileBlob = null;
+  try{
+    const img = await admDecode(file);
+    const w = img.width || img.naturalWidth, h = img.height || img.naturalHeight;
+    const k = Math.min(1, 1600 / Math.max(w, h));
+    const cv = document.createElement("canvas");
+    cv.width = Math.round(w * k); cv.height = Math.round(h * k);
+    cv.getContext("2d").drawImage(img, 0, 0, cv.width, cv.height);
+    admFileBlob = await new Promise(r => cv.toBlob(r, "image/jpeg", .85));
+    if(!admFileBlob) throw new Error("blob");
+    const d = new Date(), p = n => String(n).padStart(2, "0");
+    admFileName = `p-${d.getFullYear()}${p(d.getMonth()+1)}${p(d.getDate())}-${p(d.getHours())}${p(d.getMinutes())}${p(d.getSeconds())}.jpg`;
+    const txt = document.getElementById("admDropTxt");
+    txt.innerHTML = "";
+    const prev = document.createElement("img");
+    prev.src = URL.createObjectURL(admFileBlob);
+    txt.appendChild(prev);
+    txt.append(`${cv.width}×${cv.height} · ${Math.round(admFileBlob.size/1024)} KB`);
+    st.textContent = "";
+    document.getElementById("admSendBtn").disabled = false;
+  }catch(e){
+    st.classList.add("err");
+    st.textContent = "Nie udało się odczytać tego pliku. Jeśli to HEIC z iPhone'a, przy udostępnianiu wybierz format „Najbardziej zgodny” albo zapisz zdjęcie jako JPG i spróbuj ponownie.";
+  }
+}
+
+/* wysyłka: 1) plik do gallery/  2) wpis w manifest.json */
+async function adminUpload(){
+  const cfg = adminCfg();
+  if(!cfg){ adminLogout(); return; }
+  if(!admFileBlob) return;
+  const st = document.getElementById("admStatus");
+  const btn = document.getElementById("admSendBtn");
+  st.className = "admin-status"; btn.disabled = true;
+  const caption = document.getElementById("admCaption").value.trim();
+  try{
+    st.textContent = "Wysyłam zdjęcie (krok 1 z 2)…";
+    let res = await ghFetch(cfg, "/contents/gallery/" + admFileName, {
+      method:"PUT",
+      body: JSON.stringify({ message:"Galeria: dodano " + admFileName, content: await admBlobB64(admFileBlob) })
+    });
+    if(!res.ok) throw new Error(
+      res.status === 401 ? "Token wygasł — wyloguj się i zaloguj ponownie." :
+      res.status === 404 ? "Brak uprawnień do zapisu — token musi mieć „Contents: Read and write”." :
+      "Nie udało się wysłać pliku (" + res.status + ").");
+    st.textContent = "Aktualizuję manifest (krok 2 z 2)…";
+    let sha = null, data = [];
+    res = await ghFetch(cfg, "/contents/gallery/manifest.json");
+    if(res.ok){
+      const j = await res.json();
+      sha = j.sha;
+      try{ data = JSON.parse(admB64Str(j.content)); }catch(e){ data = []; }
+    }
+    let list = Array.isArray(data) ? data : (data.photos || []);
+    list.push(caption ? { file: admFileName, caption } : admFileName);
+    if(Array.isArray(data)) data = list; else data.photos = list;
+    res = await ghFetch(cfg, "/contents/gallery/manifest.json", {
+      method:"PUT",
+      body: JSON.stringify({ message:"Galeria: manifest + " + admFileName,
+        content: admStrB64(JSON.stringify(data, null, 2)), ...(sha ? {sha} : {}) })
+    });
+    if(!res.ok) throw new Error("Zdjęcie wysłane, ale manifest się nie zapisał (" + res.status + "). Odśwież stronę i spróbuj ponownie — plik już jest w repozytorium.");
+    admReset();
+    st.className = "admin-status ok";
+    st.textContent = "Gotowe! Zdjęcie pojawi się w galerii za 1–2 minuty, gdy GitHub Pages przebuduje stronę.";
+    galleryLoaded = false; /* galeria przeładuje się przy następnym wejściu w zakładkę */
+  }catch(e){
+    st.classList.add("err");
+    st.textContent = e.message || "Brak połączenia z GitHub.";
+    btn.disabled = false;
+  }
+}
+
+function admBlobB64(blob){
+  return new Promise((res, rej) => {
+    const r = new FileReader();
+    r.onload = () => res(r.result.split(",")[1]);
+    r.onerror = rej;
+    r.readAsDataURL(blob);
+  });
+}
+function admStrB64(str){
+  const bytes = new TextEncoder().encode(str);
+  let bin = "";
+  bytes.forEach(b => bin += String.fromCharCode(b));
+  return btoa(bin);
+}
+function admB64Str(b64){
+  return new TextDecoder().decode(Uint8Array.from(atob(b64.replace(/\s/g,"")), c => c.charCodeAt(0)));
+}
 
 /* ================= style selector ================= */
 function styleBtns(){
@@ -695,7 +908,32 @@ function setStyle(id){
   fermOverride = null;
   if(id==="chleb" && !counts["_chleb"]) counts["_chleb"] = 1;
   renderStyles(); renderCards(); renderDough(); renderShop();
+  renderFerm(); renderRecipe(); renderSchedule();
+}
+
+/* ================= fermentation time control ================= */
+function setFerm(v){
+  fermOverride = Number(v);
+  renderFerm();
   renderRecipe(); renderSchedule();
+  renderDough(); renderShop();   // ilość drożdży zależy od czasu fermentacji
+}
+function resetFerm(){
+  fermOverride = null;
+  renderFerm();
+  renderRecipe(); renderSchedule();
+  renderDough(); renderShop();
+}
+function renderFerm(){
+  const slider = document.getElementById("fermSlider");
+  if(!slider) return;
+  const v = fermHours();
+  slider.value = v;
+  slider.style.setProperty("--fill", ((v-8)/(72-8)*100).toFixed(1)+"%");
+  const lbl = document.getElementById("fermValLbl");
+  if(lbl) lbl.textContent = v+" h";
+  const reset = document.getElementById("fermReset");
+  if(reset) reset.hidden = fermOverride==null;
 }
 
 /* ================= recipe (per style) ================= */
@@ -703,33 +941,17 @@ function renderRecipe(){
   const s = styleOf(), r = recipeOf();
   document.getElementById("recTitle").textContent = `Ciasto ${s.name}, krok po kroku`;
   document.getElementById("recSub").textContent = r.sub;
-  const fermH = effectiveFermH();
-  const tpl = templateFor(fermH);
-  const isRoomAVPN = tpl==="long" && s.place==="room" && fermH<=24;
-  const yeastPct = fmtPct(yeastForHours(s, fermH));
-  let ferm, fermDesc;
-  if(tpl==="fast"){
-    ferm = `Wariant szybki · ${fmtH(fermH)} na blacie`;
-    fermDesc = `Fermentacja w temperaturze pokojowej (20–22°C), drożdże ok. ${yeastPct}. Krótszy czas niż klasyczna receptura — mniej rozwinięty smak i struktura.`;
-  } else if(isRoomAVPN){
-    ferm = `Fermentacja i dojrzewanie · ${fmtH(fermH)} w 18–20°C (AVPN)`;
-    fermDesc = `Zgodnie z regulaminem AVPN: 12–24 h fermentacji i dojrzewania w kontrolowanej temperaturze 18–20°C, wilgotność ok. 60–70% — bez lodówki. Drożdże ok. ${yeastPct}, ilość dobrana do czasu.`;
-  } else {
-    ferm = `Fermentacja · ${fmtH(fermH)} w lodówce`;
-    fermDesc = s.place==="room"
-      ? `Wydłużony wariant ponad klasyczną recepturę (powyżej 24 h) — popularny wśród domowych piekarzy dla głębszego smaku, ale poza ścisłym regulaminem AVPN. Drożdże ok. ${yeastPct}.`
-      : `${fmtH(fermH)} zimnej fermentacji, drożdże ok. ${yeastPct}. Harmonogram powyżej dobiera wariant do wybranego czasu fermentacji.`;
-  }
+  const fh = fermHours();
+  const ferm = fh >= 48
+    ? `Fermentacja · ${fh} h w lodówce`
+    : `Fermentacja · ${fh} h w lodówce (lub wariant szybki: ok. 8 h na blacie)`;
+  const fermDesc = `Wariant klasyczny: ${fh} h zimnej fermentacji${fermOverride!=null?" (ustawione suwakiem — ilość drożdży przeliczona)":""}. Harmonogram powyżej dobiera wariant do twojej daty i źródła ciepła.`;
   const h = heatOf();
   const bakeTitle = h.id==="alfa" ? "Pieczenie w piecu do pizzy" : (h.id==="oven" ? "Pieczenie w piekarniku" : "Pieczenie na grillu");
-  let mid = r.steps.slice(4); // [dojście do temperatury, rozciąganie placka]
-  if(isRoomAVPN){
-    mid = [["Gotowość do formowania placka","Po zakończeniu fermentacji ciasto jest już w temperaturze pokojowej — formuj od razu, bez czekania."], r.steps[5]];
-  }
   const steps = [
     ...r.steps.slice(0,4),
     [ferm, fermDesc],
-    ...mid,
+    ...r.steps.slice(4),
     [bakeTitle, h.preD+" "+cap(h.bakeD)],
   ];
   document.getElementById("recSteps").innerHTML = steps.map(([t,d])=>
@@ -976,6 +1198,15 @@ function renderHeat(){
 }
 function setHeat(id){ heatId = id; renderHeat(); renderSchedule(); renderRecipe(); }
 
+/* cisza nocna: żadna czynność nie może wypadać między 22:00 a 7:00 */
+const QUIET_FROM = 22, QUIET_TO = 7;
+function inQuiet(ts){
+  const d = new Date(ts);
+  const h = d.getHours() + d.getMinutes()/60;
+  return h >= QUIET_FROM || h < QUIET_TO;
+}
+function anyQuiet(steps){ return steps.some(([ts])=>inQuiet(ts)); }
+
 function finishSteps(T){
   const h = heatOf();
   const bakeTitle = h.id==="alfa" ? "Pieczenie" : (h.id==="oven" ? "Pieczenie w piekarniku" : "Pieczenie na grillu");
@@ -986,65 +1217,155 @@ function finishSteps(T){
     [T, bakeTitle, h.bakeD],
   ];
 }
-/* Pełny plan — fermH godzin "długiej" fermentacji (>FERM_SPLIT h). Dla stylu z place:"room" (Napoletana, do 24h)
-   opisuje fermentację w kontrolowanej temperaturze 18–20°C wg AVPN, zamiast lodówki. */
-function planClassic(T, fermH){
-  const s = styleOf(), r = recipeOf();
-  const isRoom = s.place==="room" && fermH<=24;
-  const rest = isRoom ? 0 : 3;          // h powrotu do temp. pokojowej (nie dotyczy fermentacji "w pokoju")
-  const preFerm = 2.25;                 // wyrabianie + odpoczynek wstępny + okno formowania
-  const yeastPct = fmtPct(yeastForHours(s, fermH));
-  const shapeLabel = r.shape.startsWith("Ciasto")||r.shape.startsWith("Bochenek")?"Formowanie ciasta":"Formowanie kulek";
-  const steps = [
-    [T-(fermH+rest+preFerm)*H,"Wyrabianie ciasta",`Woda + sól, część mąki, drożdże (ok. ${yeastPct}), reszta mąki. 15–20 minut wyrabiania.`],
-    [T-(fermH+rest+preFerm-0.5)*H,"Odpoczynek wstępny","Kula pod wilgotną ściereczką na blacie, 2 godziny."],
-    [T-(fermH+rest+0.25)*H, shapeLabel, isRoom ? `${r.shape}, do pojemników (proofing box).` : `${r.shape}, do pojemnika z przykrywką.`],
-  ];
-  if(isRoom){
-    steps.push([T-fermH*H, "Fermentacja i dojrzewanie", `${fmtH(fermH)} w komorze / temperaturze pokojowej 18–20°C, wilgotność ok. 60–70% — zgodnie z regulaminem AVPN (bez lodówki).`]);
-  } else {
-    steps.push([T-(fermH+rest)*H,"Do lodówki",`Start ${fmtH(fermH)} zimnej fermentacji.`]);
-    steps.push([T-rest*H,"Wyjęcie z lodówki","Dochodzenie do temperatury pokojowej (2,5–3 h; w upale wystarczą 2 h)."]);
+/* wyjęcie z lodówki z pominięciem godzin nocnych (wspólne dla planów) */
+function takeoutFor(T){
+  let takeout = T - 3*H;
+  let note = "Dochodzenie do temperatury pokojowej (2,5–3 h; w upale wystarczą 2 h).";
+  let nightIssue = false;
+  if(inQuiet(takeout)){
+    const m = new Date(takeout);
+    m.setHours(QUIET_TO,0,0,0);
+    if(+m < takeout) m.setDate(m.getDate()+1);
+    if(T - +m >= 2*H){
+      takeout = +m;
+      note = "Wyjęcie przesunięte na rano, aby ominąć godziny nocne — ok. "+(Math.round((T-takeout)/H*10)/10).toLocaleString("pl-PL")+" h dojścia do temperatury w zupełności wystarczy.";
+    } else {
+      nightIssue = true;               // pieczenie zbyt wcześnie rano — nie da się ominąć nocy
+    }
   }
-  steps.push(...finishSteps(T));
-  return steps;
+  return {takeout, note, nightIssue};
 }
-/* Wariant szybki — fermH godzin (≤FERM_SPLIT) na blacie, bez lodówki. */
-function planFast(T, fermH){
-  const s = styleOf(), r = recipeOf();
-  const yeastPct = fmtPct(yeastForHours(s, fermH));
-  return [
-    [T-(3+fermH)*H,"Wyrabianie ciasta",`Wariant szybki: zwiększone drożdże (ok. ${yeastPct}). 15–20 minut wyrabiania.`],
-    [T-(2.5+fermH)*H,"Odpoczynek wstępny","Kula pod wilgotną ściereczką, 2 godziny."],
-    [T-fermH*H,"Formowanie i fermentacja na blacie",`${r.shape}, przykryte. Ok. ${fmtH(fermH)} w temperaturze pokojowej (20–22°C) — bez lodówki.`],
+function shapeTitle(r){ return r.shape.startsWith("Ciasto")||r.shape.startsWith("Bochenek") ? "Formowanie ciasta" : "Formowanie kulek"; }
+
+function planClassic(T){
+  const r = recipeOf();
+  const cold = fermHours();             // hours in fridge (wybrane suwakiem lub domyślne stylu)
+  const rest = 3;                       // hours to come to room temp
+  const preFerm = 2.25;                 // knead + initial rest + shaping window
+
+  /* Blok startowy (wyrabianie → lodówka) zakotwiczony na momencie włożenia do lodówki.
+     Jeśli którakolwiek czynność bloku wypada między 22:00 a 7:00, przesuwamy cały blok
+     wcześniej — zimna fermentacja po prostu się wydłuża. */
+  const F0 = T - (cold+rest)*H;         // domyślny moment "do lodówki"
+  let F = F0;
+  const blockOffsets = [-preFerm*H, -(preFerm-0.5)*H, -0.25*H, 0];
+  let guard = 0;
+  while(blockOffsets.some(o=>inQuiet(F+o)) && guard++ < 400) F -= 15*MIN;
+  const shifted = F0 - F > 0;
+
+  const to = takeoutFor(T);
+  const actualCold = Math.round((to.takeout - F)/H);
+  const steps = [
+    [F-preFerm*H,"Wyrabianie ciasta","Woda + sól, część mąki, drożdże, reszta mąki. 15–20 minut wyrabiania."],
+    [F-(preFerm-0.5)*H,"Odpoczynek wstępny","Kula pod wilgotną ściereczką na blacie, 2 godziny."],
+    [F-0.25*H,shapeTitle(r),`${r.shape}, do pojemnika z przykrywką.`],
+    [F,"Do lodówki",`Start zimnej fermentacji — ok. ${actualCold} h w lodówce.`],
+    [to.takeout,"Wyjęcie z lodówki",to.note],
     ...finishSteps(T),
   ];
-}
-/* Harmonogram ekspresowy — używany, gdy nawet minimalna fermentacja stylu (fermMin) się nie mieści.
-   Startuje TERAZ (moment wygenerowania) i ściska proces do czasu, jaki został do wskazanej godziny.
-   Zwraca null, gdy nawet to się nie mieści (mniej niż ok. 45 min na samo ciasto). */
-function expressPlan(T, s, r){
-  const now = Date.now();
-  const doughDeadline = T - 10*MIN; // ciasto uformowane i wyrośnięte musi być gotowe do rozciągania o tej porze
-  const windowMin = (doughDeadline - now)/MIN;
-  if(windowMin < 45) return null;
-  const mixMin = 15, restMin = 10, shapeMin = 8;
-  const fermMinUsed = Math.max(12, windowMin - (mixMin+restMin+shapeMin));
-  const fermHUsed = fermMinUsed/60;
-  const yeastPct = fmtPct(yeastForHours(s, fermHUsed));
-  return [
-    [now, "Wyrabianie ciasta — ekspresowo", `Letnia woda, wyraźnie zwiększone drożdże (ok. ${yeastPct}). Wyrabiaj ok. ${mixMin} min. To skrócona wersja — bez długiej fermentacji ${s.name}.`],
-    [now+mixMin*MIN, "Krótki odpoczynek", `Kula pod ściereczką, ok. ${restMin} min.`],
-    [now+(mixMin+restMin)*MIN, "Formowanie", `${r.shape}. Formuj sprawnie — ciasto będzie mniej elastyczne niż po pełnej fermentacji.`],
-    [now+(mixMin+restMin+shapeMin)*MIN, "Wyrost w cieple", `Przykryj i zostaw w najcieplejszym miejscu w kuchni na ok. ${Math.round(fermMinUsed)} min. Krócej niż zwykle — ciasto wyjdzie gęstsze i mniej lotne niż klasyczna ${s.name}.`],
-    ...finishSteps(T),
-  ];
+  return {steps, shifted, actualCold, nightIssue: to.nightIssue};
 }
 
-function renderTimeline(steps, flagText){
+/* plan dopasowany od chwili wygenerowania: start od razu, zimna fermentacja tyle, ile zostało */
+function planFromNow(T){
+  const r = recipeOf();
+  const start = Math.ceil(Date.now()/(15*MIN))*(15*MIN);   // najbliższy kwadrans
+  const F = start + 2.25*H;
+  const to = takeoutFor(T);
+  const cold = (to.takeout - F)/H;
+  if(cold < 8) return null;                                // minimum sensownej zimnej fermentacji
+  const actualCold = Math.round(cold);
+  const steps = [
+    [start,"Wyrabianie ciasta — start od razu","Woda + sól, część mąki, drożdże, reszta mąki. 15–20 minut wyrabiania."],
+    [start+0.5*H,"Odpoczynek wstępny","Kula pod wilgotną ściereczką na blacie, 2 godziny."],
+    [F-0.25*H,shapeTitle(r),`${r.shape}, do pojemnika z przykrywką.`],
+    [F,"Do lodówki",`Start zimnej fermentacji — ok. ${actualCold} h w lodówce.`],
+    [to.takeout,"Wyjęcie z lodówki",to.note],
+    ...finishSteps(T),
+  ];
+  return {steps, actualCold, nightIssue: to.nightIssue};
+}
+
+/* plan awaryjny „na już” — ciasto zdąży na wskazaną godzinę, ale bez stylowej fermentacji */
+function planEmergency(T){
+  const start = Math.ceil(Date.now()/(15*MIN))*(15*MIN);
+  const shapeT = Math.max(start + 0.75*H, T - 1.5*H);
+  return [
+    [start,"Wyrabianie ciasta „na już”","Ciepła woda (ok. 30°C), potrójna dawka świeżych drożdży i szczypta cukru. Wyrabiaj 10–15 minut."],
+    [start+0.25*H,"Wyrastanie w cieple","Miska pod folią w ciepłym miejscu (25–28°C) — im dłużej do formowania, tym lepiej."],
+    [shapeT,shapeTitle(recipeOf()),"Uformuj i przykryj — porcje dorastają aż do rozciągania."],
+    ...finishSteps(T),
+  ].sort((a,b)=>a[0]-b[0]);
+}
+function planFast(T){ return [
+  [T-11*H,"Wyrabianie ciasta","Wariant szybki: podwój drożdże (0,5 g na kulkę). 15–20 minut wyrabiania."],
+  [T-10.5*H,"Odpoczynek wstępny","Kula pod wilgotną ściereczką, 2 godziny."],
+  [T-8.5*H,"Formowanie kulek i fermentacja na blacie","Kulki po ok. 260 g, przykryte. Ok. 8 godzin w temperaturze pokojowej (20–22°C) — bez lodówki."],
+  ...finishSteps(T),
+];}
+
+function renderSchedule(){
+  const input = document.getElementById("bakeAt");
+  const bake = new Date(input.value);
+  const badge = document.getElementById("planBadge");
   const tl = document.getElementById("timeline");
-  let html = flagText ? `<p class="express-flag">${flagText}</p>` : "";
-  let lastDay = "";
+  if(isNaN(bake)){ tl.innerHTML=""; badge.textContent="Wybierz datę, aby zobaczyć plan."; badge.className="plan-badge"; return; }
+
+  const s = styleOf(), r = recipeOf();
+  const fermSel = fermHours();
+  const classicLead = (fermSel + 5.25) * H;   // pełny plan z wybraną fermentacją
+  const lead = bake - Date.now();
+  const nightNote = ` · Uwaga: przy tej godzinie pieczenia czynności tuż przed wypiekiem wypadają między 22:00 a 7:00 — rozważ pieczenie między 9:00 a 21:00`;
+  let steps = null, note = "", warn = false;
+
+  if(lead <= 0){
+    note = "Ta data już minęła — wybierz termin w przyszłości.";
+    warn = true;
+  } else {
+    /* 1) pełny wariant klasyczny — wybrana fermentacja mieści się w całości */
+    if(lead >= classicLead){
+      const plan = planClassic(+bake);
+      if(plan.steps[0][0] >= Date.now()){
+        steps = plan.steps;
+        note = `Wariant klasyczny · ${plan.actualCold} h zimnej fermentacji — najlepszy smak i struktura`;
+        if(plan.shifted) note += ` · Start przesunięty na wcześniej, aby między 22:00 a 7:00 nie była potrzebna żadna czynność`;
+        if(plan.nightIssue || anyQuiet(finishSteps(+bake))){ note += nightNote; warn = true; }
+      }
+      /* jeśli omijanie nocy wypchnęło start w przeszłość — spadamy do planu „od teraz” */
+    }
+    /* 2) plan dopasowany od chwili wygenerowania — krótsza, ale wciąż zimna fermentacja */
+    if(!steps){
+      const plan = planFromNow(+bake);
+      if(plan){
+        steps = plan.steps;
+        note = `Za mało czasu na pełne ${fermSel} h fermentacji — harmonogram dopasowany od teraz: ok. ${plan.actualCold} h zimnej fermentacji`;
+        warn = true;
+        if(plan.nightIssue || anyQuiet(finishSteps(+bake))) note += nightNote;
+      }
+    }
+    /* 3) plan szybki — 8 h na blacie */
+    if(!steps && lead >= 11.5*H){
+      steps = planFast(+bake);
+      note = `Za mało czasu na zimną fermentację — plan szybki: 8 h na blacie, podwójne drożdże`;
+      if(anyQuiet(steps)) note += ` · Część czynności wypada między 22:00 a 7:00 — wybierz późniejszy termin, aby ich uniknąć`;
+      warn = true;
+    }
+    /* 4) plan awaryjny — ciasto zdąży, ale to nie będzie już dany styl */
+    if(!steps && lead >= 2.5*H){
+      steps = planEmergency(+bake);
+      note = `Mniej niż 12 godzin do pieczenia — ciasto nie zdąży wyrosnąć w stylu ${s.name}. Poniżej awaryjny plan na wskazaną godzinę: upiecze się, ale nie będzie to prawdziwa ${s.name}.`;
+      warn = true;
+    }
+    if(!steps){
+      note = `Mniej niż 2,5 godziny do pieczenia — nawet ciasto awaryjne nie zdąży wyrosnąć. Wybierz późniejszy termin.`;
+      warn = true;
+    }
+  }
+  badge.textContent = note;
+  badge.className = "plan-badge"+(warn?" warn":"");
+  if(!steps){ tl.innerHTML=""; return; }
+
+  let html = "", lastDay = "";
   steps.forEach(([ts, tt, td], i)=>{
     const d = new Date(ts);
     const day = cap(DF.format(d));
@@ -1057,94 +1378,6 @@ function renderTimeline(steps, flagText){
     </div>`;
   });
   tl.innerHTML = html;
-}
-
-function renderFermControl(fermH, enough){
-  const row = document.getElementById("fermRow");
-  if(!row) return;
-  const s = styleOf();
-  row.hidden = false;
-  const slider = document.getElementById("fermSlider");
-  const lbl = document.getElementById("fermValLbl");
-  const resetBtn = document.getElementById("fermResetBtn");
-  const note = document.getElementById("fermNote");
-  const min = s.fermMin, max = s.fermMax;
-  const val = Math.min(Math.max(fermH, min), max);
-  if(slider){
-    slider.min = min; slider.max = max; slider.step = 0.5;
-    slider.value = val;
-    slider.disabled = !enough;
-    slider.style.setProperty("--fill", hydFill(val, min, max));
-  }
-  if(lbl) lbl.textContent = fmtH(fermH);
-  if(resetBtn) resetBtn.hidden = (fermOverride==null);
-  if(note){
-    const yeastPct = fmtPct(yeastForHours(s, fermH));
-    note.textContent = enough
-      ? `Zakres ${fmtH(min)}–${fmtH(max)} · drożdże ok. ${yeastPct} mąki dla wybranego czasu`
-      : `Za mało czasu, by regulować fermentację — patrz harmonogram ekspresowy poniżej`;
-  }
-}
-function setFerm(v){
-  fermOverride = Number(v);
-  renderSchedule(); renderDough(); renderShop(); renderRecipe();
-}
-function resetFerm(){
-  fermOverride = null;
-  renderSchedule(); renderDough(); renderShop(); renderRecipe();
-}
-
-function renderSchedule(){
-  const input = document.getElementById("bakeAt");
-  const bake = new Date(input.value);
-  const badge = document.getElementById("planBadge");
-  const tl = document.getElementById("timeline");
-  const fermRow = document.getElementById("fermRow");
-  if(isNaN(bake)){
-    tl.innerHTML=""; badge.textContent="Wybierz datę, aby zobaczyć plan."; badge.className="plan-badge";
-    if(fermRow) fermRow.hidden = true;
-    return;
-  }
-
-  const s = styleOf(), r = recipeOf();
-  const leadH = (bake - Date.now())/H;
-
-  if(leadH <= 0){
-    tl.innerHTML=""; badge.textContent="Ta data już minęła — wybierz termin w przyszłości."; badge.className="plan-badge warn";
-    if(fermRow) fermRow.hidden = true;
-    return;
-  }
-
-  const fermH = effectiveFermH();
-  const required = requiredLeadH(s, fermH);
-  const enough = leadH >= required;
-  renderFermControl(fermH, enough);
-
-  if(enough){
-    const tpl = templateFor(fermH);
-    const steps = tpl==="fast" ? planFast(+bake, fermH) : planClassic(+bake, fermH);
-    const isRoomAVPN = tpl==="long" && s.place==="room" && fermH<=24;
-    const tierTxt = tpl==="fast" ? "temperatura pokojowa" : (isRoomAVPN ? "komora 18–20°C, wg AVPN" : "lodówka");
-    const note = fermOverride!=null
-      ? `Fermentacja ${fmtH(fermH)} · ${tierTxt} — ustawiona ręcznie`
-      : `Fermentacja ${fmtH(fermH)} · ${tierTxt} — wykorzystano czas od teraz do wskazanej godziny`;
-    badge.textContent = note;
-    badge.className = "plan-badge";
-    renderTimeline(steps);
-    return;
-  }
-
-  // Za mało czasu na minimalną, sensowną fermentację stylu — pokaż komunikat ORAZ ekspresowy harmonogram.
-  const express = expressPlan(+bake, s, r);
-  if(!express){
-    badge.textContent = `Zbyt mało czasu (zostało ${fmtH(Math.max(leadH,0))}) — nawet ekspresowe ciasto potrzebuje min. ok. godziny, do tego dochodzi rozgrzewanie źródła ciepła. Wybierz późniejszy termin.`;
-    badge.className = "plan-badge warn";
-    tl.innerHTML = "";
-    return;
-  }
-  badge.textContent = `Za mało czasu na ${s.name} (trzeba min. ${fmtH(required)}, masz ${fmtH(leadH)}) — poniżej ekspresowy harmonogram na wskazaną godzinę.`;
-  badge.className = "plan-badge warn";
-  renderTimeline(express, `Harmonogram ekspresowy — to NIE jest klasyczna ${s.name}. Krótka fermentacja daje gęstszy miękisz i mniej rozwinięty smak niż pełny proces.`);
 }
 
 /* ================= scroll polish ================= */
@@ -1180,6 +1413,7 @@ change("diavola",1);
 change("prosciutto",1);
 document.getElementById("bakeAt").value = toLocalInput(nextSaturday15());
 renderHeat();
+renderFerm();
 renderRecipe();
 renderSchedule();
 observeReveals();
