@@ -166,9 +166,18 @@ section{margin-top:52px}
 .when{margin-top:40px;background:var(--accent-soft);border-radius:26px;padding:44px 40px;text-align:center}
 .when h2{font-family:var(--font-d);font-weight:600;font-size:clamp(22px,3vw,30px);letter-spacing:-.02em;color:var(--accent-ink)}
 .when p{color:var(--muted);margin-top:8px;font-size:15px}
-.when-input{margin-top:24px;display:inline-flex;align-items:center;gap:12px;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:10px 18px}
-.when-input input{border:none;background:transparent;font-family:var(--font-b);font-size:16px;color:var(--ink);padding:6px 2px}
+.when-input{margin-top:24px;display:inline-flex;align-items:center;gap:10px;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:10px 12px 10px 16px;cursor:pointer;transition:border-color .2s var(--ease),box-shadow .2s var(--ease)}
+.when-input:hover{border-color:#CFCDC4;box-shadow:var(--shadow-sm)}
+.when-input:focus-within{border-color:var(--accent)}
+.wi-ic{display:inline-flex;color:var(--accent);flex:0 0 auto}
+.wi-ic svg{width:19px;height:19px}
+.wi-lbl{font-size:13px;color:var(--muted);white-space:nowrap}
+.when-input input{border:none;background:transparent;font-family:var(--font-b);font-size:16px;color:var(--ink);padding:6px 2px;cursor:pointer}
 .when-input input:focus{outline:none}
+.when-input input::-webkit-calendar-picker-indicator{opacity:0;position:absolute;width:100%;height:100%;left:0;cursor:pointer}
+.wi-open{border:none;background:var(--sand);color:var(--muted);width:28px;height:28px;border-radius:50%;display:grid;place-items:center;cursor:pointer;flex:0 0 auto;transition:background .2s var(--ease),color .2s var(--ease)}
+.wi-open:hover{background:var(--accent-soft);color:var(--accent)}
+.wi-open svg{width:15px;height:15px}
 .plan-badge{margin-top:22px;display:inline-block;font-size:13px;font-weight:500;padding:7px 16px;border-radius:99px;background:var(--card);border:1px solid var(--line);color:var(--muted)}
 .plan-badge.warn{background:#FBF0E9;border-color:#EED8C8;color:#8A5A33}
 /* fermentation time slider */
@@ -254,7 +263,8 @@ code{font-family:var(--font-b);font-size:.88em;background:var(--sand);padding:2p
 @media(max-width:640px){.lightbox .nav{width:40px;height:40px;font-size:18px}.lightbox .nav.prev{left:8px}.lightbox .nav.next{right:8px}}
 
 /* ---------- print ---------- */
-.print-btn{margin-top:22px;margin-left:10px;display:inline-flex;align-items:center;gap:7px;border:1px solid var(--line);background:var(--card);color:var(--muted);border-radius:99px;padding:7px 16px;font-family:var(--font-b);font-size:13px;font-weight:500;cursor:pointer;transition:all .2s var(--ease);vertical-align:middle}
+.print-row{display:flex;justify-content:center;margin-top:18px}
+.print-btn{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--line);background:var(--card);color:var(--muted);border-radius:99px;padding:8px 18px;font-family:var(--font-b);font-size:13px;font-weight:500;cursor:pointer;transition:all .2s var(--ease)}
 .print-btn:hover{border-color:var(--accent);color:var(--accent-ink);background:var(--accent-soft)}
 .print-btn svg{width:15px;height:15px}
 .print-only{display:none}
@@ -263,7 +273,7 @@ code{font-family:var(--font-b);font-size:.88em;background:var(--sand);padding:2p
   @page{margin:14mm}
   *{-webkit-print-color-adjust:exact;print-color-adjust:exact;box-shadow:none!important}
   html,body{background:#fff!important;color:#000;font-size:11pt}
-  nav,.hero,.print-btn,.when-input,.styles,.ferm-row,.dm-jump,.dm-cta,.lightbox,.admin,.gallery-grid,.kitchen-banner,footer{display:none!important}
+  nav,.hero,.print-btn,.print-row,.when-input,.styles,.ferm-row,.dm-jump,.dm-cta,.lightbox,.admin,.gallery-grid,.kitchen-banner,footer{display:none!important}
   .panel{display:none!important}
   .panel#panel-przepisy{display:block!important}
   main{max-width:none;padding:0}
@@ -274,8 +284,10 @@ code{font-family:var(--font-b);font-size:.88em;background:var(--sand);padding:2p
   .print-only{display:block}
   /* nagłówek kartki */
   .print-head{border-bottom:2px solid #000;padding-bottom:3mm;margin-bottom:5mm}
-  .print-head h1{font-family:var(--font-d);font-size:19pt;font-weight:600;letter-spacing:-.02em;margin:0}
-  .print-head .meta{margin-top:2mm;font-size:10pt;color:#333;line-height:1.6}
+  .print-head .ph-top{display:flex;align-items:center;justify-content:space-between;gap:8mm}
+  .print-logo{display:block;height:13mm;width:auto;flex:0 0 auto}
+  .print-head .ph-title{font-family:var(--font-d);font-size:18pt;font-weight:600;letter-spacing:-.02em;color:#000;text-align:right}
+  .print-head .meta{margin-top:2.5mm;font-size:10pt;color:#333;line-height:1.6}
   .print-head .meta b{font-weight:600}
   .print-ing{margin-bottom:5mm;padding:3mm 4mm;border:1px solid #bbb;border-radius:2mm;font-size:10pt}
   .print-ing .t{font-weight:600;font-size:8.5pt;letter-spacing:.08em;text-transform:uppercase;color:#555;margin-bottom:1.5mm}
@@ -417,9 +429,15 @@ code{font-family:var(--font-b);font-size:.88em;background:var(--sand);padding:2p
   <section class="when">
     <h2>Kiedy pieczesz?</h2>
     <p>Wybierz dzień i godzinę, o której pierwsza pizza ma trafić do pieca, oraz źródło ciepła.</p>
-    <label class="when-input">
-      <span style="font-size:13px;color:var(--muted)">Data i godzina</span>
-      <input type="datetime-local" id="bakeAt" onchange="renderSchedule()">
+    <label class="when-input" for="bakeAt">
+      <span class="wi-ic" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2.5"/><path d="M3 10h18M8 3v4M16 3v4"/><circle cx="8.5" cy="14.5" r="1" fill="currentColor" stroke="none"/><circle cx="12" cy="14.5" r="1" fill="currentColor" stroke="none"/><circle cx="15.5" cy="14.5" r="1" fill="currentColor" stroke="none"/></svg>
+      </span>
+      <span class="wi-lbl">Data i godzina</span>
+      <input type="datetime-local" id="bakeAt" onchange="renderSchedule();saveCfg()">
+      <button class="wi-open" type="button" aria-label="Otwórz kalendarz" onclick="openPicker(event)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+      </button>
     </label>
     <div class="styles" id="heatRow" role="group" aria-label="Źródło ciepła" style="margin-top:20px"></div>
     <div class="ferm-row">
@@ -427,8 +445,8 @@ code{font-family:var(--font-b);font-size:.88em;background:var(--sand);padding:2p
       <input type="range" id="fermSlider" min="8" max="72" step="1" oninput="setFerm(this.value)" aria-label="Czas zimnej fermentacji w godzinach">
       <span class="ferm-val"><b id="fermValLbl"></b><button class="ferm-reset" id="fermReset" onclick="resetFerm()" hidden aria-label="Przywróć domyślny czas fermentacji">↺</button></span>
     </div>
-    <div>
-      <span class="plan-badge" id="planBadge"></span>
+    <div><span class="plan-badge" id="planBadge"></span></div>
+    <div class="print-row">
       <button class="print-btn" onclick="printRecipe()" aria-label="Drukuj harmonogram i przepis">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9V3h12v6"/><rect x="3" y="9" width="18" height="7" rx="2"/><path d="M6 14h12v7H6z"/></svg>
         Drukuj
@@ -1210,7 +1228,7 @@ function admB64Str(b64){
 }
 
 /* ================= wydruk: harmonogram + przepis ================= */
-function printRecipe(){
+async function printRecipe(){
   const s = styleOf();
   const n = totalBalls();
   const bake = new Date(document.getElementById("bakeAt").value);
@@ -1225,7 +1243,11 @@ function printRecipe(){
   ].join(" &nbsp;·&nbsp; ");
 
   document.getElementById("printHead").innerHTML =
-    `<h1>Via Rozbrat · ${s.name}</h1><div class="meta">${meta}</div>`;
+    `<div class="ph-top">
+       <img src="logo.svg" alt="Via Rozbrat" class="print-logo">
+       <div class="ph-title">${s.name}</div>
+     </div>
+     <div class="meta">${meta}</div>`;
 
   /* składniki na ciasto — tylko jeśli coś wybrano w zakładce Pizza */
   const ing = document.getElementById("printIng");
@@ -1248,7 +1270,64 @@ function printRecipe(){
       `<div class="t">Ciasto</div>
        <div class="row"><span>Wybierz pizze w zakładce <b>Pizza</b>, aby wydrukować też gramatury składników.</span></div>`;
   }
+  /* logo musi być wczytane, zanim otworzy się okno druku */
+  const logo = document.querySelector("#printHead .print-logo");
+  if(logo && !logo.complete){
+    await new Promise(res=>{
+      const done = () => res();
+      logo.addEventListener("load", done, {once:true});
+      logo.addEventListener("error", done, {once:true});
+      setTimeout(done, 800);          // nie blokuj wydruku, gdyby logo nie doszło
+    });
+  }
   window.print();
+}
+
+/* ================= zapamiętywanie konfiguracji ================= */
+const CFG_KEY = "vr:cfg";
+let cfgReady = false;   // blokuje zapis w trakcie inicjalizacji
+
+function saveCfg(){
+  if(!cfgReady) return;
+  try{
+    localStorage.setItem(CFG_KEY, JSON.stringify({
+      styleId, counts, heatId,
+      hyd:  hydOverride,
+      ferm: fermOverride,
+      bake: document.getElementById("bakeAt").value || "",
+    }));
+  }catch(e){}
+}
+function loadCfg(){
+  let c = null;
+  try{ c = JSON.parse(localStorage.getItem(CFG_KEY) || "null"); }catch(e){}
+  if(!c || typeof c !== "object") return false;
+
+  if(STYLES.some(s=>s.id===c.styleId)) styleId = c.styleId;
+  if(HEAT.some(h=>h.id===c.heatId)) heatId = c.heatId;
+  if(c.counts && typeof c.counts === "object"){
+    for(const k in counts) counts[k] = 0;
+    for(const [k,v] of Object.entries(c.counts)){
+      const n = Number(v);
+      if(Number.isFinite(n) && n > 0) counts[k] = Math.min(12, Math.round(n));
+    }
+  }
+  const s = styleOf();
+  hydOverride  = (typeof c.hyd === "number" && c.hyd >= s.hydMin && c.hyd <= s.hydMax) ? c.hyd : null;
+  fermOverride = (typeof c.ferm === "number" && c.ferm >= 8 && c.ferm <= 72) ? c.ferm : null;
+
+  /* data pieczenia: tylko jeśli wciąż w przyszłości, inaczej świeża propozycja */
+  const inp = document.getElementById("bakeAt");
+  if(c.bake && !isNaN(new Date(c.bake)) && new Date(c.bake) > new Date()) inp.value = c.bake;
+  else inp.value = toLocalInput(nextSaturday15());
+  return true;
+}
+/* otwiera natywny kalendarz kliknięciem w ikonę */
+function openPicker(e){
+  e.preventDefault();
+  const inp = document.getElementById("bakeAt");
+  if(typeof inp.showPicker === "function"){ try{ inp.showPicker(); return; }catch(err){} }
+  inp.focus(); inp.click();
 }
 
 /* ================= style selector ================= */
@@ -1285,6 +1364,7 @@ function setHyd(v){
   updateSpec();
   updateDoughValues();
   renderShop();
+  saveCfg();
 }
 function updateDoughValues(){
   const n = totalBalls();
@@ -1309,7 +1389,7 @@ function scrollToMenu(){
 }
 function resetHyd(){
   hydOverride = null;
-  renderDough(); renderShop(); updateSpec();
+  renderDough(); renderShop(); updateSpec(); saveCfg();
 }
 function setStyle(id){
   styleId = id;
@@ -1318,6 +1398,7 @@ function setStyle(id){
   if(id==="chleb" && !counts["_chleb"]) counts["_chleb"] = 1;
   renderStyles(); renderCards(); renderDough(); renderShop();
   renderFerm(); renderRecipe(); renderSchedule();
+  saveCfg();
 }
 
 /* ================= fermentation time control ================= */
@@ -1325,13 +1406,13 @@ function setFerm(v){
   fermOverride = Number(v);
   renderFerm();
   renderRecipe(); renderSchedule();
-  renderDough(); renderShop();   // ilość drożdży zależy od czasu fermentacji
+  renderDough(); renderShop(); saveCfg();   // ilość drożdży zależy od czasu fermentacji
 }
 function resetFerm(){
   fermOverride = null;
   renderFerm();
   renderRecipe(); renderSchedule();
-  renderDough(); renderShop();
+  renderDough(); renderShop(); saveCfg();
 }
 function renderFerm(){
   const slider = document.getElementById("fermSlider");
@@ -1433,7 +1514,7 @@ function change(id,d){
   counts[id] = Math.max(0, Math.min(12, (counts[id]||0)+d));
   document.getElementById("cnt-"+id).textContent = counts[id];
   document.getElementById("card-"+id).classList.toggle("sel", counts[id]>0);
-  renderDough(); renderShop();
+  renderDough(); renderShop(); saveCfg();
 }
 
 /* ================= dough summary (compact bar) ================= */
@@ -1605,7 +1686,7 @@ function renderHeat(){
   document.getElementById("heatRow").innerHTML = HEAT.map(h=>
     `<button class="style-btn" aria-pressed="${h.id===heatId}" onclick="setHeat('${h.id}')">${h.name}</button>`).join("");
 }
-function setHeat(id){ heatId = id; renderHeat(); renderSchedule(); renderRecipe(); }
+function setHeat(id){ heatId = id; renderHeat(); renderSchedule(); renderRecipe(); saveCfg(); }
 
 /* cisza nocna: żadna czynność nie może wypadać między 22:00 a 7:00 */
 const QUIET_FROM = 22, QUIET_TO = 7;
@@ -1815,16 +1896,22 @@ function observeReveals(){
 }
 
 /* ================= init ================= */
+const hadCfg = loadCfg();
+if(!hadCfg){
+  /* pierwsze wejście — domyślnie 4 margherity */
+  counts["margherita"] = 4;
+  document.getElementById("bakeAt").value = toLocalInput(nextSaturday15());
+}
 renderStyles();
 renderCards();
-change("margherita",1); change("margherita",1);
-change("diavola",1);
-change("prosciutto",1);
-document.getElementById("bakeAt").value = toLocalInput(nextSaturday15());
 renderHeat();
 renderFerm();
+renderDough();
+renderShop();
 renderRecipe();
 renderSchedule();
+cfgReady = true;         // od tej chwili zmiany są zapamiętywane
+if(!hadCfg) saveCfg();
 observeReveals();
 restoreView();
 </script>
