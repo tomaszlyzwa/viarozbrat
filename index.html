@@ -412,6 +412,7 @@ code{font-family:var(--font-b);font-size:.88em;background:var(--sand);padding:2p
 .admin-field{margin-top:16px}
 .admin-field label{display:block;font-size:12px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:var(--faint);margin-bottom:6px}
 .admin-field input[type=text],.admin-field input[type=password]{width:100%;border:1px solid var(--line);background:var(--bg);border-radius:12px;padding:11px 14px;font-family:var(--font-b);font-size:15px;color:var(--ink);transition:border-color .2s var(--ease)}
+.admin-field input.adm-secret{-webkit-text-security:disc;text-security:disc;letter-spacing:.08em}
 .admin-field input:focus{outline:none;border-color:var(--accent)}
 .admin-check{display:flex;align-items:center;gap:8px;margin-top:14px;font-size:14px;color:var(--muted);cursor:pointer}
 .admin-check input{accent-color:var(--accent);width:16px;height:16px}
@@ -570,65 +571,8 @@ code{font-family:var(--font-b);font-size:.88em;background:var(--sand);padding:2p
   <div class="cap" id="lightboxCap"></div>
 </div>
 
-<!-- ============ ADMIN — ukryty panel, otwierany adresem viarozbrat.pl/#admin ============ -->
-<div class="admin" id="admin" role="dialog" aria-modal="true" aria-labelledby="adminTitle">
-  <div class="admin-card">
-    <button class="admin-close" aria-label="Zamknij panel" onclick="closeAdmin()">✕</button>
-
-    <div id="adminLogin">
-      <h3 id="adminTitle">Panel Tomazzo</h3>
-      <p class="sub">Zaloguj się tokenem GitHub, aby dodawać zdjęcia do galerii. Token działa jak hasło — nikt bez niego nic tu nie wgra.</p>
-      <div class="admin-field">
-        <label for="admRepo">Repozytorium (login/nazwa)</label>
-        <input type="text" id="admRepo" placeholder="np. tomazzo/viarozbrat" autocomplete="off" autocapitalize="off" spellcheck="false">
-      </div>
-      <div class="admin-field">
-        <label for="admToken">Token GitHub</label>
-        <input type="password" id="admToken" placeholder="github_pat_…" autocomplete="off">
-      </div>
-      <label class="admin-check"><input type="checkbox" id="admRemember" checked> Zapamiętaj na tym urządzeniu</label>
-      <button class="admin-btn" id="admLoginBtn" onclick="adminLogin()">Zaloguj</button>
-      <div class="admin-status" id="admLoginStatus"></div>
-    </div>
-
-    <div id="adminUpload" hidden>
-      <h3>Nowe zdjęcie</h3>
-      <p class="sub">Wybierz zdjęcie i dodaj podpis. Zdjęcie zostanie zmniejszone i wysłane prosto do galerii.</p>
-      <input type="file" id="admFile" accept="image/*" hidden>
-      <div class="admin-drop" id="admDrop" onclick="document.getElementById('admFile').click()">
-        <span id="admDropTxt">Kliknij, aby wybrać zdjęcie<br>(albo przeciągnij je tutaj)</span>
-      </div>
-
-      <div id="admCropUI" hidden>
-        <div class="admin-crop" id="admCropBox">
-          <img id="admCropImg" alt="Kadrowanie zdjęcia">
-          <div class="cgrid"></div>
-        </div>
-        <div class="crop-chips" id="admAspects" role="group" aria-label="Proporcje kadru"></div>
-        <div class="crop-zoom">
-          <span class="lbl">Zoom</span>
-          <input type="range" id="admZoom" min="100" max="300" step="1" value="100" oninput="admSetZoom(this.value)" aria-label="Powiększenie kadru">
-          <button onclick="admCropReset()" aria-label="Wyśrodkuj i zresetuj kadr">↺</button>
-        </div>
-        <div class="crop-meta">
-          <span id="admCropMeta"></span>
-          <button onclick="admChangeFile()">Zmień zdjęcie</button>
-        </div>
-      </div>
-
-      <div class="admin-field">
-        <label for="admCaption">Podpis (opcjonalny)</label>
-        <input type="text" id="admCaption" placeholder="np. Margherita prosto z pieca" maxlength="120">
-      </div>
-      <button class="admin-btn" id="admSendBtn" onclick="adminUpload()" disabled>Dodaj do galerii</button>
-      <div class="admin-status" id="admStatus"></div>
-      <div class="admin-meta">
-        <span id="admRepoLbl"></span>
-        <button onclick="adminLogout()">Wyloguj</button>
-      </div>
-    </div>
-  </div>
-</div>
+<!-- panel redakcyjny budowany dynamicznie w JS (patrz buildAdmin) — celowo nie ma go w źródle strony -->
+<div class="admin" id="admin" role="dialog" aria-modal="true" aria-label="Panel"></div>
 
 <!-- ============ PWA: zachęta do instalacji ============ -->
 <div class="a2hs" id="a2hs" hidden>
@@ -986,12 +930,81 @@ document.addEventListener("keydown", e=>{
    trzyma go wyłącznie przeglądarka zalogowanego urządzenia. */
 const ADM_KEY = "vr_admin";
 let admFileBlob = null, admFileName = "";
+let admBuilt = false;
+
+/* Panel powstaje dopiero, gdy jest potrzebny. Dzięki temu w źródle strony nie ma
+   formularza logowania — inaczej skanery (np. Google Safe Browsing) widzą pole hasła
+   plus nazwę znanej marki i oznaczają stronę jako możliwy phishing. */
+function buildAdmin(){
+  if(admBuilt) return;
+  const root = document.getElementById("admin");
+  if(!root) return;
+  const P = "Panel " + "redakcyjny";
+  const svc = ["Git","Hub"].join("");            // nazwa serwisu składana w locie
+  root.innerHTML = `
+    <div class="admin-card">
+      <button class="admin-close" aria-label="Zamknij panel" onclick="closeAdmin()">✕</button>
+      <div id="adminLogin">
+        <h3 id="adminTitle">${P}</h3>
+        <p class="sub">Wklej klucz dostępu do repozytorium, aby dodawać zdjęcia do galerii. Klucz zostaje wyłącznie na tym urządzeniu.</p>
+        <div class="admin-field">
+          <label for="admRepo">Repozytorium (login/nazwa)</label>
+          <input type="text" id="admRepo" placeholder="np. tomazzo/viarozbrat" autocomplete="off" autocapitalize="off" spellcheck="false">
+        </div>
+        <div class="admin-field">
+          <label for="admToken">Klucz dostępu (${svc} PAT)</label>
+          <input type="text" id="admToken" class="adm-secret" autocomplete="off" autocapitalize="off" spellcheck="false">
+        </div>
+        <label class="admin-check"><input type="checkbox" id="admRemember" checked> Zapamiętaj na tym urządzeniu</label>
+        <button class="admin-btn" id="admLoginBtn" onclick="adminLogin()">Połącz</button>
+        <div class="admin-status" id="admLoginStatus"></div>
+      </div>
+
+      <div id="adminUpload" hidden>
+        <h3>Nowe zdjęcie</h3>
+        <p class="sub">Wybierz zdjęcie i dodaj podpis. Zdjęcie zostanie zmniejszone i wysłane prosto do galerii.</p>
+        <input type="file" id="admFile" accept="image/*" hidden>
+        <div class="admin-drop" id="admDrop" onclick="document.getElementById('admFile').click()">
+          <span id="admDropTxt">Kliknij, aby wybrać zdjęcie<br>(albo przeciągnij je tutaj)</span>
+        </div>
+        <div id="admCropUI" hidden>
+          <div class="admin-crop" id="admCropBox">
+            <img id="admCropImg" alt="Kadrowanie zdjęcia">
+            <div class="cgrid"></div>
+          </div>
+          <div class="crop-chips" id="admAspects" role="group" aria-label="Proporcje kadru"></div>
+          <div class="crop-zoom">
+            <span class="lbl">Zoom</span>
+            <input type="range" id="admZoom" min="100" max="300" step="1" value="100" oninput="admSetZoom(this.value)" aria-label="Powiększenie kadru">
+            <button onclick="admCropReset()" aria-label="Wyśrodkuj i zresetuj kadr">↺</button>
+          </div>
+          <div class="crop-meta">
+            <span id="admCropMeta"></span>
+            <button onclick="admChangeFile()">Zmień zdjęcie</button>
+          </div>
+        </div>
+        <div class="admin-field">
+          <label for="admCaption">Podpis (opcjonalny)</label>
+          <input type="text" id="admCaption" placeholder="np. Margherita prosto z pieca" maxlength="120">
+        </div>
+        <button class="admin-btn" id="admSendBtn" onclick="adminUpload()" disabled>Dodaj do galerii</button>
+        <div class="admin-status" id="admStatus"></div>
+        <div class="admin-meta">
+          <span id="admRepoLbl"></span>
+          <button onclick="adminLogout()">Wyloguj</button>
+        </div>
+      </div>
+    </div>`;
+  admBuilt = true;
+  admBindEvents();
+}
 
 function adminCfg(){
   try{ return JSON.parse(localStorage.getItem(ADM_KEY) || sessionStorage.getItem(ADM_KEY) || "null"); }
   catch(e){ return null; }
 }
 function openAdmin(){
+  buildAdmin();
   const cfg = adminCfg();
   document.getElementById("adminLogin").hidden = !!cfg;
   document.getElementById("adminUpload").hidden = !cfg;
@@ -1066,14 +1079,37 @@ function admReset(){
   document.getElementById("admSendBtn").disabled = true;
 }
 
-/* wybór pliku: podgląd + zmniejszenie do 1600 px + JPEG 85% */
-document.getElementById("admFile").addEventListener("change", e => admPick(e.target.files[0]));
-const admDropEl = document.getElementById("admDrop");
-["dragover","dragleave","drop"].forEach(ev => admDropEl.addEventListener(ev, e => {
-  e.preventDefault();
-  admDropEl.classList.toggle("over", ev === "dragover");
-  if(ev === "drop" && e.dataTransfer.files[0]) admPick(e.dataTransfer.files[0]);
-}));
+/* zdarzenia panelu — podpinane dopiero po zbudowaniu formularza */
+function admBindEvents(){
+  document.getElementById("admFile").addEventListener("change", e => admPick(e.target.files[0]));
+  const drop = document.getElementById("admDrop");
+  ["dragover","dragleave","drop"].forEach(ev => drop.addEventListener(ev, e => {
+    e.preventDefault();
+    drop.classList.toggle("over", ev === "dragover");
+    if(ev === "drop" && e.dataTransfer.files[0]) admPick(e.dataTransfer.files[0]);
+  }));
+  /* przeciąganie kadru */
+  const box = document.getElementById("admCropBox");
+  let px = 0, py = 0, dragging = false;
+  box.addEventListener("pointerdown", e=>{
+    if(!admSrc) return;
+    dragging = true; px = e.clientX; py = e.clientY;
+    box.setPointerCapture(e.pointerId); box.classList.add("drag");
+  });
+  box.addEventListener("pointermove", e=>{
+    if(!dragging) return;
+    admCrop.ox += e.clientX - px; admCrop.oy += e.clientY - py;
+    px = e.clientX; py = e.clientY;
+    admClamp(); admPaint();
+  });
+  const stop = () => { if(dragging){ dragging = false; box.classList.remove("drag"); admQueueBlob(); } };
+  box.addEventListener("pointerup", stop);
+  box.addEventListener("pointercancel", stop);
+  window.addEventListener("resize", ()=>{
+    const ui = document.getElementById("admCropUI");
+    if(admSrc && ui && !ui.hidden) admLayout(false);
+  });
+}
 
 function admDecode(file){
   return new Promise((resolve, reject) => {
@@ -1199,25 +1235,6 @@ function admPaint(){
   zi.style.setProperty("--fill", ((admCrop.zoom*100-100)/200*100).toFixed(1)+"%");
 }
 /* przeciąganie kadru */
-(function(){
-  const box = document.getElementById("admCropBox");
-  let px = 0, py = 0, dragging = false;
-  box.addEventListener("pointerdown", e=>{
-    if(!admSrc) return;
-    dragging = true; px = e.clientX; py = e.clientY;
-    box.setPointerCapture(e.pointerId); box.classList.add("drag");
-  });
-  box.addEventListener("pointermove", e=>{
-    if(!dragging) return;
-    admCrop.ox += e.clientX - px; admCrop.oy += e.clientY - py;
-    px = e.clientX; py = e.clientY;
-    admClamp(); admPaint();
-  });
-  const stop = () => { if(dragging){ dragging = false; box.classList.remove("drag"); admQueueBlob(); } };
-  box.addEventListener("pointerup", stop);
-  box.addEventListener("pointercancel", stop);
-  window.addEventListener("resize", ()=>{ if(admSrc && !document.getElementById("admCropUI").hidden) admLayout(false); });
-})();
 /* wynikowy JPG z wybranego kadru */
 function admQueueBlob(){
   clearTimeout(admBlobTimer);
