@@ -348,18 +348,83 @@ section{margin-top:52px}
 .when{margin-top:40px;background:var(--accent-soft);border-radius:26px;padding:44px 40px;text-align:center}
 .when h2{font-family:var(--font-d);font-weight:600;font-size:clamp(22px,3vw,30px);letter-spacing:-.02em;color:var(--accent-ink)}
 .when p{color:var(--muted);margin-top:8px;font-size:15px}
-.when-input{margin-top:24px;display:inline-flex;align-items:center;gap:10px;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:10px 12px 10px 16px;cursor:pointer;transition:border-color .2s var(--ease),box-shadow .2s var(--ease)}
+.when-wrap{position:relative;display:inline-block;margin-top:24px}
+.when-input{display:inline-flex;align-items:center;gap:10px;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:12px 14px 12px 16px;cursor:pointer;font-family:var(--font-b);transition:border-color .2s var(--ease),box-shadow .2s var(--ease)}
 .when-input:hover{border-color:#CFCDC4;box-shadow:var(--shadow-sm)}
-.when-input:focus-within{border-color:var(--accent)}
+.when-input[aria-expanded="true"]{border-color:var(--accent);box-shadow:var(--shadow-sm)}
 .wi-ic{display:inline-flex;color:var(--accent);flex:0 0 auto}
 .wi-ic svg{width:19px;height:19px}
-.wi-lbl{font-size:13px;color:var(--muted);white-space:nowrap}
-.when-input input{border:none;background:transparent;font-family:var(--font-b);font-size:16px;color:var(--ink);padding:6px 2px;cursor:pointer}
-.when-input input:focus{outline:none}
-.when-input input::-webkit-calendar-picker-indicator{opacity:0;position:absolute;width:100%;height:100%;left:0;cursor:pointer}
-.wi-open{border:none;background:var(--sand);color:var(--muted);width:28px;height:28px;border-radius:50%;display:grid;place-items:center;cursor:pointer;flex:0 0 auto;transition:background .2s var(--ease),color .2s var(--ease)}
-.wi-open:hover{background:var(--accent-soft);color:var(--accent)}
+.wi-val{font-size:15.5px;color:var(--ink);white-space:nowrap;font-variant-numeric:tabular-nums}
+.wi-open{display:inline-flex;color:var(--faint);flex:0 0 auto;transition:transform .2s var(--ease)}
 .wi-open svg{width:15px;height:15px}
+.when-input[aria-expanded="true"] .wi-open{transform:rotate(180deg)}
+
+/* najwcześniejszy możliwy termin — zielona podpowiedź */
+.early-hint{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:10px;padding:8px 14px;background:var(--accent-soft);border:1px solid #D8E3D8;border-radius:99px;font-size:12.5px;color:var(--accent-ink)}
+.early-hint[hidden]{display:none!important}
+.eh-dot{width:7px;height:7px;border-radius:50%;background:var(--accent);flex:0 0 auto;box-shadow:0 0 0 3px rgba(55,80,61,.14)}
+.eh-txt{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.eh-go{border:none;background:var(--accent);color:#fff;border-radius:99px;padding:4px 12px;font-family:var(--font-b);font-size:12px;font-weight:500;cursor:pointer;flex:0 0 auto;transition:background .2s var(--ease)}
+.eh-go:hover{background:var(--accent-ink)}
+.eh-ok{font-weight:500;color:var(--accent);flex:0 0 auto}
+.dtp-early{display:flex;align-items:center;gap:8px;margin-top:12px;padding:9px 12px;background:var(--accent-soft);border-radius:12px;font-size:12.5px;color:var(--accent-ink)}
+.dtp-early[hidden]{display:none!important}
+.dtp-early span{flex:1;min-width:0}
+/* dzień: najwcześniejszy możliwy (zielona obwódka) i za wczesny (przygaszony) */
+.dtp-day.early{box-shadow:inset 0 0 0 1.5px var(--accent);color:var(--accent-ink);font-weight:600}
+.dtp-day.early::after{content:"";position:absolute;bottom:4px;left:50%;transform:translateX(-50%);width:4px;height:4px;border-radius:50%;background:var(--accent)}
+.dtp-day{position:relative}
+.dtp-day.sel.early{box-shadow:inset 0 0 0 1.5px var(--accent)}
+.dtp-day.sel.early::after{background:#fff}
+.dtp-day.soon{color:#C9C7C0}
+.dtp-day.soon:hover:not(:disabled){background:#FBF0E9}
+.dtp-chip.early{background:var(--accent-soft);border-color:#CBDACB;color:var(--accent-ink);font-weight:600}
+.dtp-chip.early[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:#fff}
+@media(max-width:560px){.early-hint{font-size:12px;padding:8px 12px}}
+
+/* kalendarz — własny, bo natywny datetime-local zachowuje się różnie w każdej przeglądarce */
+.dtp{position:absolute;top:calc(100% + 10px);left:50%;transform:translateX(-50%);z-index:70;width:320px;background:var(--card);border:1px solid var(--line);border-radius:20px;box-shadow:var(--shadow-lg);padding:16px;text-align:left;animation:dtpIn .22s var(--ease) both}
+.dtp[hidden]{display:none!important}
+@keyframes dtpIn{from{opacity:0;transform:translateX(-50%) translateY(-6px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
+.dtp-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.dtp-title{font-family:var(--font-d);font-weight:600;font-size:15px;letter-spacing:-.01em}
+.dtp-nav{width:30px;height:30px;border-radius:50%;border:1px solid var(--line);background:var(--card);color:var(--muted);font-size:15px;cursor:pointer;display:grid;place-items:center;transition:all .2s var(--ease)}
+.dtp-nav:hover{background:var(--sand);color:var(--ink)}
+.dtp-dow{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;margin-bottom:4px}
+.dtp-dow span{text-align:center;font-size:10.5px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;color:var(--faint);padding:4px 0}
+.dtp-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:2px}
+.dtp-day{aspect-ratio:1;border:none;background:transparent;border-radius:10px;font-family:var(--font-b);font-size:13.5px;color:var(--ink);cursor:pointer;display:grid;place-items:center;font-variant-numeric:tabular-nums;transition:background .15s var(--ease)}
+.dtp-day:hover:not(:disabled){background:var(--sand)}
+.dtp-day[disabled]{color:var(--line);cursor:default}
+.dtp-day.today{font-weight:600;color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent-soft)}
+.dtp-day.sel{background:var(--accent)!important;color:#fff;font-weight:500}
+.dtp-day.empty{visibility:hidden}
+.dtp-time{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:14px;padding-top:14px;border-top:1px solid var(--line)}
+.dtp-tl{font-size:11px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:var(--faint)}
+.dtp-clock{display:flex;align-items:center;gap:8px}
+.dtp-step{width:28px;height:28px;border-radius:50%;border:1px solid var(--line);background:var(--card);color:var(--ink);font-size:15px;line-height:1;cursor:pointer;display:grid;place-items:center;transition:background .2s var(--ease)}
+.dtp-step:hover{background:var(--sand)}
+.dtp-hm{font-family:var(--font-d);font-weight:600;font-size:19px;min-width:58px;text-align:center;font-variant-numeric:tabular-nums;letter-spacing:-.01em}
+.dtp-chips{display:flex;flex-wrap:wrap;gap:5px;margin-top:10px}
+.dtp-chip{border:1px solid var(--line);background:var(--bg);border-radius:99px;padding:5px 11px;font-family:var(--font-b);font-size:12px;font-weight:500;color:var(--muted);cursor:pointer;font-variant-numeric:tabular-nums;transition:all .2s var(--ease)}
+.dtp-chip:hover{border-color:#CFCDC4;color:var(--ink)}
+.dtp-chip[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:#fff}
+.dtp-foot{display:flex;gap:8px;margin-top:14px}
+.dtp-btn{flex:1;border:none;border-radius:99px;background:var(--accent);color:#fff;padding:10px;font-family:var(--font-b);font-size:14px;font-weight:500;cursor:pointer;transition:background .2s var(--ease)}
+.dtp-btn:hover{background:var(--accent-ink)}
+.dtp-btn.ghost{background:var(--sand);color:var(--muted)}
+.dtp-btn.ghost:hover{background:var(--line);color:var(--ink)}
+/* telefon: kalendarz jako panel na dole ekranu */
+@media(max-width:560px){
+  .when-wrap{display:block;width:100%}
+  .when-input{display:flex;width:100%;justify-content:space-between}
+  .wi-val{font-size:15px}
+  .dtp{position:fixed;top:auto;bottom:0;left:0;right:0;transform:none;width:100%;max-width:100%;border-radius:24px 24px 0 0;padding:20px 18px calc(20px + env(safe-area-inset-bottom));animation:dtpUp .28s var(--ease) both}
+  @keyframes dtpUp{from{transform:translateY(100%)}to{transform:none}}
+  .dtp-day{font-size:15px}
+  .dtp-backdrop{position:fixed;inset:0;z-index:69;background:rgba(20,20,18,.35);backdrop-filter:blur(2px)}
+  .dtp-backdrop[hidden]{display:none!important}
+}
 .plan-badge{margin-top:22px;display:inline-block;font-size:13px;font-weight:500;padding:7px 16px;border-radius:99px;background:var(--card);border:1px solid var(--line);color:var(--muted)}
 .plan-badge.warn{background:#FBF0E9;border-color:#EED8C8;color:#8A5A33}
 /* fermentation time slider */
@@ -649,16 +714,43 @@ code{font-family:var(--font-b);font-size:.88em;background:var(--sand);padding:2p
   <section class="when">
     <h2>Kiedy pieczesz?</h2>
     <p>Wybierz dzień i godzinę, o której pierwsza pizza ma trafić do pieca, oraz źródło ciepła.</p>
-    <label class="when-input" for="bakeAt">
-      <span class="wi-ic" aria-hidden="true">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2.5"/><path d="M3 10h18M8 3v4M16 3v4"/><circle cx="8.5" cy="14.5" r="1" fill="currentColor" stroke="none"/><circle cx="12" cy="14.5" r="1" fill="currentColor" stroke="none"/><circle cx="15.5" cy="14.5" r="1" fill="currentColor" stroke="none"/></svg>
-      </span>
-      <span class="wi-lbl">Data i godzina</span>
-      <input type="datetime-local" id="bakeAt" onchange="renderSchedule();saveCfg()">
-      <button class="wi-open" type="button" aria-label="Otwórz kalendarz" onclick="openPicker(event)">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+    <div class="when-wrap">
+      <button type="button" class="when-input" id="whenBtn" aria-haspopup="dialog" aria-expanded="false" onclick="toggleDtp()">
+        <span class="wi-ic" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2.5"/><path d="M3 10h18M8 3v4M16 3v4"/><circle cx="8.5" cy="14.5" r="1" fill="currentColor" stroke="none"/><circle cx="12" cy="14.5" r="1" fill="currentColor" stroke="none"/><circle cx="15.5" cy="14.5" r="1" fill="currentColor" stroke="none"/></svg>
+        </span>
+        <span class="wi-val" id="whenVal">—</span>
+        <span class="wi-open" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+        </span>
       </button>
-    </label>
+      <input type="hidden" id="bakeAt">
+      <div class="early-hint" id="earlyHint" hidden></div>
+
+      <div class="dtp" id="dtp" role="dialog" aria-modal="false" aria-label="Wybór daty i godziny" hidden>
+        <div class="dtp-head">
+          <button type="button" class="dtp-nav" onclick="dtpMove(-1)" aria-label="Poprzedni miesiąc">‹</button>
+          <span class="dtp-title" id="dtpTitle"></span>
+          <button type="button" class="dtp-nav" onclick="dtpMove(1)" aria-label="Następny miesiąc">›</button>
+        </div>
+        <div class="dtp-dow"><span>Pn</span><span>Wt</span><span>Śr</span><span>Cz</span><span>Pt</span><span>So</span><span>Nd</span></div>
+        <div class="dtp-grid" id="dtpGrid"></div>
+        <div class="dtp-time">
+          <span class="dtp-tl">Godzina</span>
+          <div class="dtp-clock">
+            <button type="button" class="dtp-step" onclick="dtpNudge(-60)" aria-label="Godzina wcześniej">−</button>
+            <span class="dtp-hm" id="dtpHM">15:00</span>
+            <button type="button" class="dtp-step" onclick="dtpNudge(60)" aria-label="Godzina później">+</button>
+          </div>
+        </div>
+        <div class="dtp-chips" id="dtpChips"></div>
+        <div class="dtp-early" id="dtpEarly" hidden></div>
+        <div class="dtp-foot">
+          <button type="button" class="dtp-btn ghost" onclick="closeDtp()">Anuluj</button>
+          <button type="button" class="dtp-btn" onclick="dtpConfirm()">Gotowe</button>
+        </div>
+      </div>
+    </div>
     <div class="styles" id="heatRow" role="group" aria-label="Źródło ciepła" style="margin-top:20px"></div>
     <div class="ferm-row">
       <span class="ferm-lbl">Zimna fermentacja</span>
@@ -936,6 +1028,12 @@ const TAB_HASH = {pizze:"pizza", przepisy:"przepis", galeria:"galeria"};
 const HASH_TAB = {pizza:"pizze", przepis:"przepisy", galeria:"galeria"};
 let activeTab = "pizze", restoring = false;
 
+/* History API bywa zablokowane w piaskownicy (iframe, about:srcdoc) — nie wywracamy strony */
+function setHash(hash){
+  try{ history.replaceState(null, "", hash); }
+  catch(e){ try{ location.hash = hash; }catch(_){} }
+}
+
 function switchTab(name, opts){
   opts = opts || {};
   for(const t of ["pizze","przepisy","galeria"]){
@@ -946,7 +1044,7 @@ function switchTab(name, opts){
   activeTab = name;
   if(name==="galeria" && !galleryLoaded){ galleryLoaded = true; loadGallery(); }
   if(!opts.silent && location.hash !== "#admin"){
-    history.replaceState(null, "", "#" + TAB_HASH[name]);
+    setHash("#" + TAB_HASH[name]);
   }
   if(!opts.keepScroll){ window.scrollTo({top:0, behavior:"smooth"}); saveView(); }
   if(typeof observeReveals === "function") requestAnimationFrame(observeReveals);
@@ -978,7 +1076,7 @@ function gotoStep(id){
 }
 
 function restoreView(){
-  if("scrollRestoration" in history) history.scrollRestoration = "manual";
+  try{ if("scrollRestoration" in history) history.scrollRestoration = "manual"; }catch(e){}
   const h = (location.hash||"").replace("#","");
   /* wejście z wyszukiwarki prosto w krok przepisu */
   if(/^krok-\d+$/.test(h)){
@@ -1199,7 +1297,7 @@ function closeAdmin(){
   if(!el.classList.contains("open")) return;
   el.classList.remove("open");
   document.body.style.overflow = "";
-  if(location.hash === "#admin") history.replaceState(null, "", "#" + TAB_HASH[activeTab]);
+  if(location.hash === "#admin") setHash("#" + TAB_HASH[activeTab]);
 }
 function admHash(){ if(location.hash === "#admin") openAdmin(); }
 window.addEventListener("hashchange", admHash);
@@ -1814,13 +1912,216 @@ function loadCfg(){
   else inp.value = toLocalInput(nextSaturday15());
   return true;
 }
-/* otwiera natywny kalendarz kliknięciem w ikonę */
-function openPicker(e){
-  e.preventDefault();
-  const inp = document.getElementById("bakeAt");
-  if(typeof inp.showPicker === "function"){ try{ inp.showPicker(); return; }catch(err){} }
-  inp.focus(); inp.click();
+/* ================= najwcześniejszy możliwy termin ================= */
+/* Szuka pierwszej godziny, dla której pełny plan klasyczny wybranego stylu
+   mieści się w całości: start nie wypada w przeszłości, żadna czynność nie
+   ląduje między 22:00 a 7:00. To realna odpowiedź na „kiedy najwcześniej
+   mogę upiec tę pizzę”, a nie samo now + czas fermentacji. */
+function earliestBake(){
+  const step = 15*MIN;
+  const now = Date.now();
+  let t = Math.ceil((now + (fermHours() + 5.25)*H) / step) * step;
+  const limit = now + 10*24*H;
+  let guard = 0;
+  while(t <= limit && guard++ < 1500){
+    const d = new Date(t);
+    const hour = d.getHours();
+    /* pieczenie w nocy odpada z definicji — skacz na 9:00 */
+    if(hour >= 22 || hour < 9){
+      const m = new Date(t);
+      if(hour >= 22){ m.setDate(m.getDate()+1); }
+      m.setHours(9,0,0,0);
+      t = +m;
+      continue;
+    }
+    const plan = planClassic(t);
+    if(plan.steps[0][0] >= now && !plan.nightIssue && !anyQuiet(finishSteps(t))){
+      return {when:new Date(t), cold:plan.actualCold};
+    }
+    t += step;
+  }
+  return null;
 }
+/* podpowiedź pod polem daty — widoczna także wtedy, gdy wybrano inny termin */
+function renderEarliest(){
+  const box = document.getElementById("earlyHint");
+  if(!box) return;
+  const e = earliestBake();
+  if(!e){ box.hidden = true; return; }
+  const s = styleOf();
+  const txt = cap(e.when.toLocaleDateString("pl-PL",{weekday:"long", day:"numeric", month:"long"}))
+            + ", " + pad2(e.when.getHours()) + ":" + pad2(e.when.getMinutes());
+  const sel = new Date(document.getElementById("bakeAt").value);
+  const isSel = !isNaN(sel) && Math.abs(+sel - +e.when) < 60000;
+  box.innerHTML =
+    `<span class="eh-dot" aria-hidden="true"></span>
+     <span class="eh-txt">Najwcześniej dla stylu <b>${s.name}</b>: <b>${txt}</b></span>
+     ${isSel ? `<span class="eh-ok">wybrano</span>`
+             : `<button type="button" class="eh-go" onclick="useEarliest()">Ustaw</button>`}`;
+  box.hidden = false;
+}
+function useEarliest(){
+  const e = earliestBake();
+  if(!e) return;
+  document.getElementById("bakeAt").value = toLocalInput(e.when);
+  paintWhen(); renderSchedule(); renderEarliest(); saveCfg();
+}
+const MONTHS = ["styczeń","luty","marzec","kwiecień","maj","czerwiec","lipiec","sierpień","wrzesień","październik","listopad","grudzień"];
+const QUICK = [12*60, 15*60, 17*60, 18*60, 20*60];   // popularne godziny pieczenia
+let dtpView = null;    // pierwszy dzień oglądanego miesiąca
+let dtpDate = null;    // wybrany dzień (Date, bez godziny)
+let dtpMin  = 15*60;   // wybrana godzina w minutach od północy
+
+const pad2 = n => String(n).padStart(2,"0");
+const sameDay = (a,b) => a && b && a.getFullYear()===b.getFullYear() && a.getMonth()===b.getMonth() && a.getDate()===b.getDate();
+
+/* wpisuje bieżącą wartość #bakeAt na widoczny przycisk */
+function paintWhen(){
+  const v = document.getElementById("bakeAt").value;
+  const el = document.getElementById("whenVal");
+  if(!el) return;
+  const d = new Date(v);
+  el.textContent = isNaN(d) ? "Wybierz termin"
+    : cap(d.toLocaleDateString("pl-PL",{weekday:"long", day:"numeric", month:"long"})) + ", " + pad2(d.getHours()) + ":" + pad2(d.getMinutes());
+}
+function toggleDtp(){
+  document.getElementById("dtp").hidden ? openDtp() : closeDtp();
+}
+function openDtp(){
+  const cur = new Date(document.getElementById("bakeAt").value);
+  const base = isNaN(cur) ? nextSaturday15() : cur;
+  dtpDate = new Date(base.getFullYear(), base.getMonth(), base.getDate());
+  dtpMin  = base.getHours()*60 + base.getMinutes();
+  dtpView = new Date(base.getFullYear(), base.getMonth(), 1);
+  renderDtp();
+  document.getElementById("dtp").hidden = false;
+  document.getElementById("whenBtn").setAttribute("aria-expanded","true");
+  if(window.matchMedia("(max-width:560px)").matches){
+    let bd = document.getElementById("dtpBackdrop");
+    if(!bd){
+      bd = document.createElement("div");
+      bd.id = "dtpBackdrop"; bd.className = "dtp-backdrop";
+      bd.onclick = closeDtp;
+      document.body.appendChild(bd);
+    }
+    bd.hidden = false;
+  }
+}
+function closeDtp(){
+  document.getElementById("dtp").hidden = true;
+  document.getElementById("whenBtn").setAttribute("aria-expanded","false");
+  const bd = document.getElementById("dtpBackdrop");
+  if(bd) bd.hidden = true;
+}
+function dtpMove(d){
+  dtpView = new Date(dtpView.getFullYear(), dtpView.getMonth()+d, 1);
+  renderDtp();
+}
+function dtpPick(y,m,d){
+  dtpDate = new Date(y,m,d);
+  renderDtp();
+}
+function dtpNudge(mins){
+  dtpMin = ((dtpMin + mins) % 1440 + 1440) % 1440;
+  renderDtp();
+}
+function dtpSetTime(mins){
+  dtpMin = mins;
+  renderDtp();
+}
+function dtpConfirm(){
+  const d = new Date(dtpDate.getFullYear(), dtpDate.getMonth(), dtpDate.getDate(), Math.floor(dtpMin/60), dtpMin%60);
+  document.getElementById("bakeAt").value = toLocalInput(d);
+  closeDtp();
+  paintWhen();
+  renderSchedule();
+  renderEarliest();
+  saveCfg();
+}
+function renderDtp(){
+  const y = dtpView.getFullYear(), m = dtpView.getMonth();
+  document.getElementById("dtpTitle").textContent = cap(MONTHS[m]) + " " + y;
+
+  const first = new Date(y, m, 1);
+  const lead  = (first.getDay() + 6) % 7;            // poniedziałek = 0
+  const days  = new Date(y, m+1, 0).getDate();
+  const today = new Date(); today.setHours(0,0,0,0);
+
+  const e = earliestBake();                          // najwcześniejszy realny termin
+  const eDay = e ? e.when : null;
+  const eMin = e ? e.when.getHours()*60 + e.when.getMinutes() : null;
+  /* dni przed najwcześniejszym terminem nie mają sensu — ciasto nie zdąży */
+  const eStart = eDay ? new Date(eDay.getFullYear(), eDay.getMonth(), eDay.getDate()) : null;
+
+  let html = "";
+  for(let i=0;i<lead;i++) html += `<button class="dtp-day empty" tabindex="-1" disabled></button>`;
+  for(let d=1; d<=days; d++){
+    const cur = new Date(y, m, d);
+    const past = cur < today;
+    const early = sameDay(cur, eDay);
+    const tooSoon = eStart && cur < eStart && !past;   // za wcześnie na ten styl
+    const cls = [
+      "dtp-day",
+      sameDay(cur, today) ? "today" : "",
+      early ? "early" : "",
+      tooSoon ? "soon" : "",
+      sameDay(cur, dtpDate) ? "sel" : "",
+    ].filter(Boolean).join(" ");
+    const title = early ? `${d} ${MONTHS[m]} — najwcześniejszy możliwy termin`
+                : tooSoon ? `${d} ${MONTHS[m]} — za mało czasu na pełną fermentację`
+                : `${d} ${MONTHS[m]} ${y}`;
+    html += `<button type="button" class="${cls}" ${past?"disabled":""} onclick="dtpPick(${y},${m},${d})"
+      aria-label="${title}" title="${title}">${d}</button>`;
+  }
+  document.getElementById("dtpGrid").innerHTML = html;
+  document.getElementById("dtpHM").textContent = pad2(Math.floor(dtpMin/60)) + ":" + pad2(dtpMin%60);
+
+  /* skróty godzin + zielony skrót „najwcześniej”, gdy dotyczy wybranego dnia */
+  let chips = QUICK.map(q=>
+    `<button type="button" class="dtp-chip" aria-pressed="${q===dtpMin}" onclick="dtpSetTime(${q})">${pad2(Math.floor(q/60))}:${pad2(q%60)}</button>`).join("");
+  if(e && sameDay(dtpDate, eDay)){
+    chips = `<button type="button" class="dtp-chip early" aria-pressed="${eMin===dtpMin}" onclick="dtpSetTime(${eMin})"
+      title="Najwcześniejsza możliwa godzina tego dnia">★ ${pad2(Math.floor(eMin/60))}:${pad2(eMin%60)}</button>` + chips;
+  }
+  document.getElementById("dtpChips").innerHTML = chips;
+
+  /* stopka kalendarza: propozycja najwcześniejszego terminu */
+  const foot = document.getElementById("dtpEarly");
+  if(foot){
+    if(!e){ foot.hidden = true; }
+    else {
+      const txt = cap(eDay.toLocaleDateString("pl-PL",{weekday:"short", day:"numeric", month:"long"}))
+                + ", " + pad2(eDay.getHours()) + ":" + pad2(eDay.getMinutes());
+      foot.innerHTML = `<span class="eh-dot" aria-hidden="true"></span>
+        <span>Najwcześniej: <b>${txt}</b></span>
+        <button type="button" class="eh-go" onclick="dtpJumpEarly()">Wybierz</button>`;
+      foot.hidden = false;
+    }
+  }
+}
+/* przeskok kalendarza na najwcześniejszy termin (bez zamykania — użytkownik może jeszcze zmienić) */
+function dtpJumpEarly(){
+  const e = earliestBake();
+  if(!e) return;
+  dtpDate = new Date(e.when.getFullYear(), e.when.getMonth(), e.when.getDate());
+  dtpMin  = e.when.getHours()*60 + e.when.getMinutes();
+  dtpView = new Date(e.when.getFullYear(), e.when.getMonth(), 1);
+  renderDtp();
+}
+/* zamykanie: klik poza kalendarzem i Escape.
+   UWAGA: kliknięcia wewnątrz kalendarza zatrzymujemy tutaj, bo renderDtp() przerysowuje
+   siatkę i chipy — kliknięty węzeł znika z DOM, więc e.target.closest("#dtp") zwróciłby null
+   i kalendarz zamykałby się sam po wyborze dnia albo godziny. */
+document.getElementById("dtp").addEventListener("click", e => e.stopPropagation());
+document.addEventListener("click", e=>{
+  const dtp = document.getElementById("dtp");
+  if(!dtp || dtp.hidden) return;
+  if(!e.target.closest("#whenBtn")) closeDtp();
+});
+document.addEventListener("keydown", e=>{
+  const dtp = document.getElementById("dtp");
+  if(e.key === "Escape" && dtp && !dtp.hidden) closeDtp();
+});
 
 /* ================= style selector ================= */
 function styleBtns(){
@@ -1889,7 +2190,7 @@ function setStyle(id){
   fermOverride = null;
   if(id==="chleb" && !counts["_chleb"]) counts["_chleb"] = 1;
   renderStyles(); renderCards(); renderDough(); renderShop();
-  renderFerm(); renderRecipe(); renderSchedule();
+  renderFerm(); renderRecipe(); renderSchedule(); renderEarliest();
   saveCfg();
 }
 
@@ -1897,13 +2198,13 @@ function setStyle(id){
 function setFerm(v){
   fermOverride = Number(v);
   renderFerm();
-  renderRecipe(); renderSchedule();
+  renderRecipe(); renderSchedule(); renderEarliest();
   renderDough(); renderShop(); saveCfg();   // ilość drożdży zależy od czasu fermentacji
 }
 function resetFerm(){
   fermOverride = null;
   renderFerm();
-  renderRecipe(); renderSchedule();
+  renderRecipe(); renderSchedule(); renderEarliest();
   renderDough(); renderShop(); saveCfg();
 }
 function renderFerm(){
@@ -2404,7 +2705,9 @@ renderFerm();
 renderDough();
 renderShop();
 renderRecipe();
+paintWhen();
 renderSchedule();
+renderEarliest();
 cfgReady = true;         // od tej chwili zmiany są zapamiętywane
 if(!hadCfg) saveCfg();
 observeReveals();
