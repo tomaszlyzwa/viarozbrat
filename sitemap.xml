@@ -7,7 +7,11 @@
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
     <image:image>
-      <image:loc>https://viarozbrat.pl/gallery/kuchnia-baner.jpg</image:loc>
+      <image:loc>https://viarozbrat.pl/gallery/p-20260712-211243.jpg</image:loc>
+      <image:title>Pizza neapolitańska z pieca opalanego drewnem Alfa Forni</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://viarozbrat.pl/gallery/taras-kuchnia-ogrodowa.jpg</image:loc>
       <image:title>Kuchnia ogrodowa z piecem Alfa Forni</image:title>
     </image:image>
   </url>
