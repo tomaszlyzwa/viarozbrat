@@ -1,8 +1,9 @@
 {
+  "id": "/",
   "name": "Via Rozbrat — kalkulator i przepisy",
   "short_name": "Via Rozbrat",
   "description": "Kalkulator ciasta, przepisy i harmonogram pieczenia liczony od pieca wstecz.",
-  "start_url": "/?src=pwa",
+  "start_url": "/",
   "scope": "/",
   "display": "standalone",
   "orientation": "portrait",
