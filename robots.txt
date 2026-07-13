@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+
+# panel redakcyjny — nie ma tam treści dla wyszukiwarek
+Disallow: /#admin
+
+Sitemap: https://viarozbrat.pl/sitemap.xml
