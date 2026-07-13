@@ -43,26 +43,39 @@
   --font-b:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
 }
 *{margin:0;padding:0;box-sizing:border-box}
-html{scroll-behavior:smooth}
-body{background:var(--bg);color:var(--ink);font-family:var(--font-b);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
+html{scroll-behavior:smooth;overflow-x:clip}   /* clip, nie hidden — nie psuje position:sticky */
+body{background:var(--bg);color:var(--ink);font-family:var(--font-b);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:clip;min-width:0}
+img,svg,video{max-width:100%}
 button{font-family:inherit;cursor:pointer}
 :focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:6px}
 
 /* ---------- nav ---------- */
 nav{position:sticky;top:0;z-index:50;background:rgba(251,251,248,.82);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border-bottom:1px solid var(--line);transition:box-shadow .4s var(--ease),border-color .4s var(--ease)}
 nav.scrolled{box-shadow:0 4px 20px rgba(28,28,26,.05);border-color:transparent}
-.nav-in{max-width:1060px;margin:0 auto;padding:0 24px;height:56px;display:flex;align-items:center;justify-content:space-between}
-.brand{display:flex;align-items:center;text-decoration:none;transition:opacity .2s var(--ease)}
+.nav-in{max-width:1060px;margin:0 auto;padding:0 24px;height:56px;display:flex;align-items:center;justify-content:space-between;gap:10px}
+.brand{display:flex;align-items:center;text-decoration:none;transition:opacity .2s var(--ease);flex:0 1 auto;min-width:0}
 .brand:hover{opacity:.75}
-.brand-logo{display:block;height:42px;width:auto}
-@media(max-width:520px){.brand-logo{height:36px}}
-.tabs{display:flex;gap:4px;background:var(--sand);padding:4px;border-radius:99px}
-.tab{border:none;background:transparent;padding:7px 20px;border-radius:99px;font-size:14px;font-weight:500;color:var(--muted);transition:color .3s var(--ease),background .3s var(--ease);position:relative}
+.brand-logo{display:block;height:42px;width:auto;max-width:100%}
+.tabs{display:flex;gap:4px;background:var(--sand);padding:4px;border-radius:99px;flex:0 0 auto}
+.tab{border:none;background:transparent;padding:7px 20px;border-radius:99px;font-size:14px;font-weight:500;color:var(--muted);transition:color .3s var(--ease),background .3s var(--ease);position:relative;white-space:nowrap}
+/* telefon: menu i logo muszą zmieścić się w jednym rzędzie bez przewijania w bok */
+@media(max-width:560px){
+  .nav-in{padding:0 14px;height:52px;gap:8px}
+  .brand-logo{height:32px}
+  .tabs{gap:2px;padding:3px}
+  .tab{padding:10px 13px;font-size:13px}
+}
+@media(max-width:380px){
+  .nav-in{padding:0 10px;gap:6px}
+  .brand-logo{height:27px}
+  .tab{padding:10px 10px;font-size:12.5px}
+}
 .tab[aria-selected="true"]{background:var(--ink);color:#fff}
 .tab:not([aria-selected="true"]):hover{color:var(--ink)}
 .tab:active{transform:scale(.96)}
 
 main{max-width:1060px;margin:0 auto;padding:0 24px 120px}
+@media(max-width:560px){main{padding:0 16px 90px}}
 .panel{display:none}
 .panel.active{display:block;animation:fadeUp .5s cubic-bezier(.2,.7,.2,1)}
 @keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
@@ -133,6 +146,7 @@ section{margin-top:52px}
 @keyframes jumpBob{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(3px)}}
 .grid-bread{grid-template-columns:minmax(260px,340px);justify-content:center}
 .bread-card{border-color:var(--accent)}
+@media(max-width:400px){.dm-hyd{flex-wrap:wrap;gap:8px}.dm-hyd input[type=range]{flex:1 1 100%;order:3}.dm-hyd-lbl{flex:1}.dm-hyd-val{flex:0 0 auto}}
 @media(max-width:680px){.dough-mini{padding:14px 16px}.dm-top{flex-wrap:wrap;justify-content:center}.dm-title{flex-basis:100%;width:100%;border-right:none;border-bottom:1px solid #3a3a37;padding-bottom:8px;align-items:center;padding-right:0}.dm-values{flex-basis:100%;order:2}.dm-cta{order:3}.dm-item .dm-v{font-size:16px}}
 .style-spec b{color:var(--muted);font-weight:500}
 
@@ -197,6 +211,19 @@ section{margin-top:52px}
 .ferm-val b{font-family:var(--font-d);font-weight:600;font-size:15px;color:var(--accent-ink);font-variant-numeric:tabular-nums;min-width:42px;text-align:right}
 .ferm-reset{border:none;background:var(--sand);color:var(--muted);width:22px;height:22px;border-radius:50%;font-size:12px;cursor:pointer;display:grid;place-items:center;transition:background .2s}
 .ferm-reset:hover{background:var(--line)}
+/* telefon: pole daty i suwak dopasowują się do szerokości ekranu */
+@media(max-width:560px){
+  .when{padding:32px 18px}
+  .when-input{display:flex;width:100%;max-width:100%;gap:8px;padding:10px 10px 10px 14px}
+  .when-input input{flex:1 1 auto;min-width:0;font-size:15px}
+  .ferm-row{max-width:100%;padding:12px 14px;gap:10px}
+  .ferm-row input[type=range]{min-width:0}
+  .ferm-val b{min-width:38px;font-size:14px}
+}
+@media(max-width:400px){
+  .wi-lbl{display:none}          /* ikona kalendarza mówi to samo, a oszczędza 90 px */
+  .ferm-lbl{font-size:10px;letter-spacing:.04em}
+}
 
 .timeline{margin-top:44px;max-width:640px;margin-left:auto;margin-right:auto}
 .day-h{font-family:var(--font-d);font-weight:600;font-size:18px;letter-spacing:-.01em;margin:34px 0 6px;padding-left:2px}
