@@ -3,13 +3,24 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Via Rozbrat — kalkulator i przepisy</title>
-<meta name="description" content="Domowa pizzeria Via Rozbrat: kalkulator składników na ciasto, przepisy i dynamiczny harmonogram pieczenia w piecu Alfa Forni.">
+<title>Kalkulator ciasta na pizzę — hydratacja, drożdże, harmonogram | Via Rozbrat</title>
+<meta name="description" content="Policz składniki na ciasto do pizzy neapolitańskiej co do grama: mąka, woda, sól, drożdże. Ustaw hydratację i czas zimnej fermentacji — harmonogram pieczenia ułoży się sam.">
+<link rel="canonical" href="https://viarozbrat.pl/">
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
+<meta name="author" content="Tomazzo — Via Rozbrat">
 <meta name="theme-color" content="#37503D">
-<meta property="og:title" content="Via Rozbrat">
-<meta property="og:description" content="Kalkulator ciasta, przepisy i harmonogram pieczenia — domowa pizzeria neapolitańska.">
+<meta property="og:title" content="Kalkulator ciasta na pizzę neapolitańską — Via Rozbrat">
+<meta property="og:description" content="Mąka, woda, sól i drożdże co do grama. Hydratacja, zimna fermentacja i harmonogram liczony od pieca wstecz.">
 <meta property="og:type" content="website">
-<meta property="og:image" content="gallery/kuchnia-baner.jpg">
+<meta property="og:url" content="https://viarozbrat.pl/">
+<meta property="og:site_name" content="Via Rozbrat">
+<meta property="og:locale" content="pl_PL">
+<meta property="og:image" content="https://viarozbrat.pl/gallery/kuchnia-baner.jpg">
+<meta property="og:image:alt" content="Kuchnia ogrodowa z piecem opalanym drewnem Alfa Forni">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Kalkulator ciasta na pizzę neapolitańską">
+<meta name="twitter:description" content="Składniki co do grama, hydratacja, zimna fermentacja i harmonogram pieczenia.">
+<meta name="twitter:image" content="https://viarozbrat.pl/gallery/kuchnia-baner.jpg">
 <link rel="icon" type="image/svg+xml" href="mark.svg">
 <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
 <link rel="apple-touch-icon" href="favicon-180.png">
@@ -22,6 +33,91 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+
+<!-- dane strukturalne: przepis + kalkulator + autor (Google czyta to i buduje kartę przepisu) -->
+<script type="application/ld+json" id="ldRecipe">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": "https://viarozbrat.pl/#website",
+      "url": "https://viarozbrat.pl/",
+      "name": "Via Rozbrat",
+      "description": "Kalkulator ciasta na pizzę, przepisy i harmonogram pieczenia.",
+      "inLanguage": "pl-PL",
+      "publisher": { "@id": "https://viarozbrat.pl/#autor" }
+    },
+    {
+      "@type": "Person",
+      "@id": "https://viarozbrat.pl/#autor",
+      "name": "Tomazzo",
+      "description": "Autor i szef kuchni Via Rozbrat. Piecze pizzę neapolitańską w piecu opalanym drewnem Alfa Forni.",
+      "knowsAbout": ["pizza neapolitańska", "ciasto na pizzę", "zimna fermentacja", "piec opalany drewnem"],
+      "url": "https://viarozbrat.pl/"
+    },
+    {
+      "@type": "WebApplication",
+      "@id": "https://viarozbrat.pl/#kalkulator",
+      "name": "Kalkulator ciasta na pizzę",
+      "url": "https://viarozbrat.pl/",
+      "applicationCategory": "LifestyleApplication",
+      "operatingSystem": "Dowolna przeglądarka",
+      "inLanguage": "pl-PL",
+      "description": "Przelicza mąkę, wodę, sól i drożdże na dowolną liczbę pizz. Obsługuje pięć stylów ciasta, regulowaną hydratację i czas zimnej fermentacji, a harmonogram pieczenia układa wstecz od godziny wypieku.",
+      "featureList": [
+        "Kalkulator składników w procentach piekarskich",
+        "Pięć stylów ciasta: neapolitańskie, nowojorskie, Detroit, rzymskie al taglio, pinsa",
+        "Regulowana hydratacja i czas zimnej fermentacji",
+        "Harmonogram pieczenia liczony od godziny wypieku wstecz",
+        "Eksport harmonogramu do kalendarza (.ics)",
+        "Lista zakupów"
+      ],
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "PLN" },
+      "author": { "@id": "https://viarozbrat.pl/#autor" }
+    },
+    {
+      "@type": "Recipe",
+      "@id": "https://viarozbrat.pl/#przepis",
+      "name": "Ciasto na pizzę neapolitańską (hydratacja 65%, zimna fermentacja 24 h)",
+      "description": "Klasyczne ciasto neapolitańskie na 4 placki ~30 cm. Hydratacja 65%, sól 3%, świeże drożdże 0,25% i 24 godziny zimnej fermentacji w lodówce. Miękki, wypuszczony rant i chrupiący spód.",
+      "image": ["https://viarozbrat.pl/gallery/kuchnia-baner.jpg"],
+      "author": { "@id": "https://viarozbrat.pl/#autor" },
+      "datePublished": "2026-01-15",
+      "inLanguage": "pl-PL",
+      "recipeCategory": "Danie główne",
+      "recipeCuisine": "włoska",
+      "keywords": "ciasto na pizzę, pizza neapolitańska, hydratacja, zimna fermentacja, procenty piekarskie, mąka typu 00",
+      "recipeYield": "4 pizze (placki ok. 30 cm)",
+      "prepTime": "PT30M",
+      "cookTime": "PT2M",
+      "totalTime": "PT27H",
+      "recipeIngredient": [
+        "620 g mąki typu 00 (min. 12% białka)",
+        "402 ml zimnej wody (hydratacja 65%)",
+        "18,5 g soli morskiej (3%)",
+        "1,5 g świeżych drożdży (0,25%)",
+        "120 g semoli do podsypki",
+        "320 g sosu z pomidorów San Marzano",
+        "320 g mozzarelli fior di latte",
+        "16 listków świeżej bazylii",
+        "20 ml oliwy extra vergine"
+      ],
+      "recipeInstructions": [
+        { "@type": "HowToStep", "name": "Rozpuszczenie soli i drożdży", "text": "Do dużej miski wlej zimną wodę i rozpuść w niej sól. Dodaj około 10% mąki i wymieszaj. Dopiero teraz rozkrusz i rozpuść drożdże — sól w bezpośrednim kontakcie je osłabia." },
+        { "@type": "HowToStep", "name": "Wyrabianie ciasta", "text": "Stopniowo dodawaj resztę mąki. Wyrabiaj ręcznie 15–20 minut (mikser z hakiem: 8–10 minut), aż ciasto będzie gładkie i elastyczne. Ma pozostać miękkie — nie dosypuj mąki na siłę." },
+        { "@type": "HowToStep", "name": "Odpoczynek wstępny", "text": "Uformuj kulę, przykryj wilgotną ściereczką i zostaw na blacie na 2 godziny." },
+        { "@type": "HowToStep", "name": "Formowanie kulek (staglio)", "text": "Podziel ciasto na kulki po około 260 g i uformuj napięte, gładkie kule. Przełóż do pojemnika z przykrywką." },
+        { "@type": "HowToStep", "name": "Zimna fermentacja", "text": "Wstaw pojemnik do lodówki na 24 godziny. Dłuższa fermentacja oznacza mniej drożdży i lepiej strawne ciasto." },
+        { "@type": "HowToStep", "name": "Dojście do temperatury", "text": "Wyjmij kulki z lodówki na 2,5–3 godziny przed pieczeniem. Zimne ciasto rwie się przy rozciąganiu." },
+        { "@type": "HowToStep", "name": "Rozciąganie placka", "text": "Na semoli dociskaj palcami od środka na zewnątrz, wypychając powietrze w stronę brzegu. Rantu nie dotykaj — to w nim powstaje charakterystyczny cornicione. Nie używaj wałka." },
+        { "@type": "HowToStep", "name": "Pieczenie", "text": "Rozgrzej piec do 430–450°C. Piecz 60–90 sekund, obracając placek co 20–30 sekund. Bazylię i oliwę dodaj po wyjęciu z pieca." }
+      ],
+      "isPartOf": { "@id": "https://viarozbrat.pl/#website" }
+    }
+  ]
+}
+</script>
 <style>
 :root{
   --bg:#FBFBF8;
@@ -92,8 +188,8 @@ main{max-width:1060px;margin:0 auto;padding:0 24px 120px}
 .hero>*:nth-child(3){animation-delay:.16s}
 .hero>*:nth-child(4){animation-delay:.24s}
 @keyframes heroIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
-.hero h1{font-family:var(--font-d);font-weight:600;font-size:clamp(34px,5.4vw,58px);letter-spacing:-.03em;line-height:1.06}
-.hero h1 em{font-style:italic;font-weight:400;color:var(--accent)}
+.hero h1,.hero .hero-t{font-family:var(--font-d);font-weight:600;font-size:clamp(34px,5.4vw,58px);letter-spacing:-.03em;line-height:1.06}
+.hero h1 em,.hero .hero-t em{font-style:italic;font-weight:400;color:var(--accent)}
 .hero p{margin:14px auto 0;max-width:520px;color:var(--muted);font-size:16px}
 .hero-logo{display:block;margin:0 auto;width:min(340px,80vw);height:auto}
 
@@ -478,7 +574,7 @@ code{font-family:var(--font-b);font-size:.88em;background:var(--sand);padding:2p
 <div class="panel" id="panel-przepisy" role="tabpanel" aria-labelledby="tab-przepisy">
 
   <div class="hero">
-    <h1>Plan liczony <em>od pieca wstecz.</em></h1>
+    <h2 class="hero-t">Plan liczony <em>od pieca wstecz.</em></h2>
     <p>Wybierz styl ciasta, datę i źródło ciepła — przepis i harmonogram fermentacji ułożą się same.</p>
     <div class="styles" id="recStyleRow" role="group" aria-label="Styl ciasta"></div>
     <p class="style-spec" id="recStyleSpec"></p>
@@ -537,7 +633,7 @@ code{font-family:var(--font-b);font-size:.88em;background:var(--sand);padding:2p
 <div class="panel" id="panel-galeria" role="tabpanel" aria-labelledby="tab-galeria">
 
   <div class="hero gallery-hero">
-    <h1>Z pieca <em>prosto tutaj.</em></h1>
+    <h2 class="hero-t">Z pieca <em>prosto tutaj.</em></h2>
   </div>
 
   <figure class="kitchen-banner reveal">
