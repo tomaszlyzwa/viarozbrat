@@ -469,6 +469,19 @@ section{margin-top:52px}
 .trow .tt{font-weight:500;font-size:15.5px}
 .trow .td{font-size:13.5px;color:var(--muted);margin-top:3px;line-height:1.55}
 
+/* ---------- składniki ciasta w zakładce Przepis ---------- */
+.rec-ing{max-width:640px;margin:34px auto 0;background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:24px 28px}
+.rec-ing .ri-head{display:flex;justify-content:space-between;align-items:baseline;gap:8px 14px;flex-wrap:wrap}
+.rec-ing .ri-t{font-family:var(--font-d);font-weight:600;font-size:16px;letter-spacing:-.01em}
+.rec-ing .ri-meta{font-size:12.5px;color:var(--faint)}
+.rec-ing .ri-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:0 32px;margin-top:8px}
+.rec-ing .ri-row{display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding:10px 0;border-bottom:1px solid var(--line);font-size:14px}
+.rec-ing .ri-row .n{color:var(--ink)}
+.rec-ing .ri-row .a{font-weight:500;font-variant-numeric:tabular-nums;white-space:nowrap;color:var(--accent-ink)}
+.rec-ing .ri-empty{font-size:13.5px;color:var(--muted);margin-top:10px;line-height:1.55}
+.rec-ing .ri-link{color:var(--accent-ink);font-weight:500;text-decoration:underline;cursor:pointer;background:none;border:none;font:inherit;padding:0}
+@media(max-width:560px){.rec-ing{padding:20px 18px}}
+
 /* ---------- recipe steps ---------- */
 .rec{margin-top:80px}
 .steps{margin-top:30px;counter-reset:st}
@@ -557,7 +570,7 @@ code{font-family:var(--font-b);font-size:.88em;background:var(--sand);padding:2p
   @page{margin:14mm}
   *{-webkit-print-color-adjust:exact;print-color-adjust:exact;box-shadow:none!important}
   html,body{background:#fff!important;color:#000;font-size:11pt}
-  nav,.hero,.print-btn,.print-row,.print-hint,.install-wrap,.a2hs,.when-input,.styles,.ferm-row,.dm-jump,.dm-cta,.lightbox,.admin,.gallery-grid,.kitchen-banner,footer{display:none!important}
+  nav,.hero,.print-btn,.print-row,.print-hint,.install-wrap,.a2hs,.when-input,.styles,.ferm-row,.dm-jump,.dm-cta,.lightbox,.admin,.gallery-grid,.kitchen-banner,.rec-ing,footer{display:none!important}
   .panel{display:none!important}
   .panel#panel-przepisy{display:block!important}
   main{max-width:none;padding:0}
@@ -773,6 +786,8 @@ code{font-family:var(--font-b);font-size:.88em;background:var(--sand);padding:2p
 
   <div class="print-only print-head" id="printHead"></div>
   <div class="print-only print-ing" id="printIng"></div>
+
+  <section class="rec-ing" id="recIng" aria-live="polite" hidden></section>
 
   <div class="timeline" id="timeline" aria-live="polite"></div>
 
@@ -1652,6 +1667,11 @@ function exportIcs(){
     `X-WR-CALNAME:Via Rozbrat — ${s.name}`,
   ];
 
+  /* gramatury ciasta w każdym wydarzeniu — kalendarz wystarcza bez otwierania aplikacji */
+  const ingTxt = n > 0
+    ? "\n\nSkładniki ciasta:\n" + doughRows(n).map(([k,v,un])=>"• "+k+": "+v+" "+un).join("\n")
+    : "";
+
   steps.forEach(([ts, tt, td], i)=>{
     const last = i === steps.length - 1;
     const dur = last ? 60 : 15;                    // pieczenie: godzina, reszta: kwadrans
@@ -1662,7 +1682,7 @@ function exportIcs(){
       `DTSTART:${icsTime(ts)}`,
       `DTEND:${icsTime(ts + dur*MIN)}`,
       icsFold(`SUMMARY:${icsEsc((last ? "🔥 " : "🍕 ") + tt)}`),
-      icsFold(`DESCRIPTION:${icsEsc(td + "\n\n" + s.name + " · " + n + " " + unitWord(n) + "\nviarozbrat.pl")}`),
+      icsFold(`DESCRIPTION:${icsEsc(td + ingTxt + "\n\n" + s.name + " · " + n + " " + unitWord(n) + "\nviarozbrat.pl")}`),
       "BEGIN:VALARM",
       "TRIGGER:-PT15M",
       "ACTION:DISPLAY",
@@ -1748,15 +1768,7 @@ async function printRecipe(){
   const ing = document.getElementById("printIng");
   const n0 = n || 0;
   if(n0 > 0){
-    const u = doughPerUnit();
-    const rows = [
-      ["Mąka", fmt(Math.round(n0*u.flour/5)*5), "g"],
-      ["Woda", fmt(Math.round(n0*u.water)), "ml"],
-      ["Sól",  fmt(Math.round(n0*u.salt*10)/10), "g"],
-      ["Drożdże świeże", fmt(Math.round(n0*u.yeast*10)/10), "g"],
-    ];
-    if(u.oil > 0)   rows.push(["Oliwa", fmt(Math.round(n0*u.oil)), "ml"]);
-    if(u.sugar > 0) rows.push(["Cukier", fmt(Math.round(n0*u.sugar*10)/10), "g"]);
+    const rows = doughRows(n0);
     ing.innerHTML =
       `<div class="t">Ciasto · ${n0} ${unitWord(n0)} (${s.unit.split(" (")[0]})</div>
        <div class="row">${rows.map(([k,v,un])=>`<span>${k}: <b>${v} ${un}</b></span>`).join("")}</div>`;
@@ -2157,6 +2169,7 @@ function setHyd(v){
   updateSpec();
   updateDoughValues();
   renderShop();
+  renderRecIng();
   saveCfg();
 }
 function updateDoughValues(){
@@ -2182,7 +2195,7 @@ function scrollToMenu(){
 }
 function resetHyd(){
   hydOverride = null;
-  renderDough(); renderShop(); updateSpec(); saveCfg();
+  renderDough(); renderShop(); renderRecIng(); updateSpec(); saveCfg();
 }
 function setStyle(id){
   styleId = id;
@@ -2220,6 +2233,42 @@ function renderFerm(){
 }
 
 /* ================= recipe (per style) ================= */
+/* wspólne wiersze składników ciasta — używane na ekranie, w wydruku i w kalendarzu */
+function doughRows(n){
+  const u = doughPerUnit();
+  const rows = [
+    ["Mąka", fmt(Math.round(n*u.flour/5)*5), "g"],
+    ["Woda", fmt(Math.round(n*u.water)), "ml"],
+    ["Sól",  fmt(Math.round(n*u.salt*10)/10), "g"],
+    ["Drożdże świeże", fmt(Math.round(n*u.yeast*10)/10), "g"],
+  ];
+  if(u.oil > 0)   rows.push(["Oliwa", fmt(Math.round(n*u.oil)), "ml"]);
+  if(u.sugar > 0) rows.push(["Cukier", fmt(Math.round(n*u.sugar*10)/10), "g"]);
+  return rows;
+}
+
+/* składniki widoczne w zakładce Przepis — bez wracania do zakładki Pizza */
+function renderRecIng(){
+  const box = document.getElementById("recIng");
+  if(!box) return;
+  const s = styleOf(), n = totalBalls();
+  box.hidden = false;
+  if(n === 0){
+    box.innerHTML =
+      `<div class="ri-head"><span class="ri-t">Składniki ciasta</span></div>
+       <p class="ri-empty">Wybierz ${styleId==="chleb"?"liczbę bochenków":"pizze"} w zakładce
+       <button class="ri-link" onclick="switchTab('pizze')">Pizza</button>, a gramatury pojawią się tutaj.</p>`;
+    return;
+  }
+  box.innerHTML =
+    `<div class="ri-head">
+       <span class="ri-t">Składniki ciasta · ${n} ${unitWord(n)}</span>
+       <span class="ri-meta">${s.name} · ${s.unit.split(" (")[0]} · hydratacja ${Math.round(currentHyd()*100)}%</span>
+     </div>
+     <div class="ri-grid">${doughRows(n).map(([k,v,un])=>
+       `<div class="ri-row"><span class="n">${k}</span><span class="a">${v} ${un}</span></div>`).join("")}</div>`;
+}
+
 function renderRecipe(){
   const s = styleOf(), r = recipeOf();
   document.getElementById("recTitle").textContent = `Ciasto ${s.name}, krok po kroku`;
@@ -2241,6 +2290,7 @@ function renderRecipe(){
     `<div class="step" id="krok-${i+1}" style="scroll-margin-top:76px"><div class="no" aria-hidden="true"></div><div><h3>${t}</h3><p>${d}</p></div></div>`).join("");
   document.getElementById("recExtras").innerHTML = r.extras.map(([t,items])=>
     `<div class="mini"><h3>${t}</h3><ul>${items.map(i=>`<li>${i}</li>`).join("")}</ul></div>`).join("");
+  renderRecIng();
 }
 
 /* ================= pizza cards ================= */
@@ -2307,7 +2357,7 @@ function change(id,d){
   counts[id] = Math.max(0, Math.min(12, (counts[id]||0)+d));
   document.getElementById("cnt-"+id).textContent = counts[id];
   document.getElementById("card-"+id).classList.toggle("sel", counts[id]>0);
-  renderDough(); renderShop(); saveCfg();
+  renderDough(); renderShop(); renderRecIng(); saveCfg();
 }
 
 /* ================= dough summary (compact bar) ================= */
