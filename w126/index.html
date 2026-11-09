@@ -5,115 +5,157 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>W126 · 280 SE z 1982 roku</title>
 <meta name="description" content="Prywatny blog o Mercedesie W126 280 SE z 1982 roku.">
-<meta name="theme-color" content="#56342a">
+<meta name="theme-color" content="#16100e">
+<link rel="preload" as="image" href="img/title.webp">
 <style>
 :root{
-  --ink:#f2f4f7;
-  --ink-2:rgba(242,244,247,.72);
-  --ease:cubic-bezier(.2,.7,.2,1);
   --sans:-apple-system,BlinkMacSystemFont,'SF Pro Display','SF Pro Text','Helvetica Neue',Inter,'Segoe UI',Roboto,Arial,sans-serif;
+  --ease:cubic-bezier(.2,.7,.2,1);
+  --brown:#56342a;
+  --dark:#0e0b0a;          /* ciepła czerń */
+  --dark-2:#1b1513;        /* kafelki na ciemnym */
+  --light:#f5f5f7;
+  --ink:#f5f5f7; --ink-2:rgba(245,245,247,.68);
+  --ink-d:#1d1d1f; --ink-d2:#6e6e73;
+  --link:#f3b892;          /* akcent na ciemnym */
+  --link-d:#8a4b33;        /* akcent na jasnym */
 }
 *{box-sizing:border-box}
-html{scroll-behavior:smooth}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
 html,body{margin:0}
-body{
-  background:#4e2e25;
-  background:
-    radial-gradient(ellipse 70% 45% at 50% 18%,rgba(255,215,190,.10),rgba(255,215,190,0) 70%),
-    linear-gradient(180deg,#6a3f31 0%,#56342a 40%,#482a22 75%,#3d241d 100%);
-  background-attachment:fixed;
-  color:var(--ink);font-family:Georgia,'Times New Roman',serif;overflow-x:hidden}
-body::before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.22;mix-blend-mode:overlay;z-index:0;
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.4' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1  0 0 0 0 .9  0 0 0 0 .8  0 0 0 1.6 -.55'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
-body>*{position:relative;z-index:1}
+body{background:var(--dark);color:var(--ink);font-family:var(--sans);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+img{display:block;max-width:100%;height:auto}
+a{color:inherit}
+.vh{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+/* ---------- PASEK NAWIGACJI (wspólny dla wszystkich stron) ---------- */
+.gnav{position:fixed;top:0;left:0;right:0;z-index:50;height:44px;
+  background:rgba(22,16,14,.72);-webkit-backdrop-filter:saturate(180%) blur(20px);backdrop-filter:saturate(180%) blur(20px);
+  border-bottom:1px solid rgba(255,255,255,.08);transition:background-color .4s}
+.gnav .in{max-width:1024px;height:100%;margin:0 auto;padding:0 max(22px,env(safe-area-inset-left));display:flex;align-items:center;justify-content:space-between}
+.gnav a{text-decoration:none;color:rgba(245,245,247,.85);font-size:12px;letter-spacing:-.01em;transition:color .25s}
+.gnav a:hover,.gnav a:focus-visible{color:#fff;outline:none}
+.gnav .brand{font-size:15px;font-weight:600;color:#f5f5f7;letter-spacing:-.02em}
+.gnav .brand small{font-weight:400;color:rgba(245,245,247,.6);font-size:12px;margin-left:6px}
+.gnav ul{list-style:none;margin:0;padding:0;display:flex;gap:clamp(16px,3.4vw,36px)}
+.gnav a[aria-current="page"]{color:#fff}
+@media (max-width:420px){.gnav .brand small{display:none}}
 
 /* ---------- HERO ---------- */
-.hero{height:100vh;height:100dvh;min-height:560px;display:flex;flex-direction:column;align-items:center}
-header{width:min(78vw,760px,60vh);margin-top:clamp(40px,9vh,120px);text-align:center}
-header img{width:100%;height:auto;display:block}
-h1{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
-.sub{margin:clamp(20px,4vh,48px) 16px 0;font-size:clamp(16px,1.7vw,20px);font-style:italic;opacity:.92;letter-spacing:.02em;text-align:center}
-.car{flex:1 1 0;min-height:0;width:min(96vw,1250px);display:flex;align-items:flex-end;justify-content:center;padding-top:20px}
-.car img{max-width:100%;max-height:100%;width:auto;height:auto;display:block;filter:drop-shadow(0 1px 1px rgba(0,0,0,.3))}
-
-/* ---------- MENU (Apple-style) ---------- */
-.intro{align-self:flex-end;width:min(21rem,calc(100vw - 32px));margin:clamp(14px,2.5vh,28px) clamp(16px,4vw,64px) 0 16px}
-.menu{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:2px;font-family:var(--sans)}
-.menu a{
-  --x:50%;--y:50%;
-  position:relative;display:grid;grid-template-columns:1fr auto;align-items:center;column-gap:16px;
-  padding:10px 16px;margin-left:-16px;border-radius:14px;
-  color:var(--ink);text-decoration:none;overflow:hidden;isolation:isolate;
-  transition:background-color .35s var(--ease),transform .35s var(--ease)}
-.menu a::before{ /* glass + light following the cursor */
-  content:"";position:absolute;inset:0;z-index:-1;border-radius:inherit;opacity:0;
-  background:radial-gradient(180px circle at var(--x) var(--y),rgba(255,236,222,.16),rgba(255,236,222,.04) 60%,transparent 100%);
-  border:1px solid rgba(255,255,255,.10);
-  -webkit-backdrop-filter:blur(14px) saturate(140%);backdrop-filter:blur(14px) saturate(140%);
-  transition:opacity .35s var(--ease)}
-.menu a:hover::before,.menu a:focus-visible::before{opacity:1}
-.menu a:active{transform:scale(.985)}
-.menu a:focus-visible{outline:none}
-.menu .t{font-size:clamp(17px,1.45vw,21px);font-weight:600;letter-spacing:-.01em;line-height:1.2}
-.menu .d{grid-column:1;font-size:13px;color:var(--ink-2);margin-top:3px;letter-spacing:.005em}
-.menu .t span{background:linear-gradient(currentColor,currentColor) 0 100%/0 1px no-repeat;transition:background-size .45s var(--ease);padding-bottom:2px}
-.menu a:hover .t span,.menu a:focus-visible .t span{background-size:100% 1px}
-.menu .c{grid-column:2;grid-row:1 / span 2;width:30px;height:30px;border-radius:50%;display:grid;place-items:center;
-  background:rgba(255,255,255,.10);transition:transform .45s var(--ease),background-color .35s var(--ease)}
-.menu .c svg{width:12px;height:12px;transition:transform .45s var(--ease)}
-.menu a:hover .c,.menu a:focus-visible .c{background:var(--ink);transform:translateX(4px)}
-.menu a:hover .c svg,.menu a:focus-visible .c svg{color:#4e2e25}
-
-/* entrance animation */
-.rise{opacity:0;transform:translateY(18px);filter:blur(6px);
-  transition:opacity .9s var(--ease),transform .9s var(--ease),filter .9s var(--ease);transition-delay:calc(var(--i,0)*110ms + 250ms)}
-.ready .rise{opacity:1;transform:none;filter:none}
-
-/* scroll cue */
-.cue{flex:none;margin:14px 0 calc(14px + env(safe-area-inset-bottom));
-  font:500 12px var(--sans);letter-spacing:.12em;text-transform:uppercase;color:var(--ink-2);text-decoration:none;
-  display:flex;flex-direction:column;align-items:center;gap:6px;transition:opacity .4s}
+.hero{position:relative;min-height:100vh;min-height:100svh;display:flex;flex-direction:column;align-items:center;padding-top:44px;overflow:hidden;
+  background:
+    radial-gradient(ellipse 70% 45% at 50% 18%,rgba(255,215,190,.10),rgba(255,215,190,0) 70%),
+    linear-gradient(180deg,#6a3f31 0%,#56342a 45%,#3d241d 82%,var(--dark) 100%)}
+.hero::before{content:"";position:absolute;inset:0;pointer-events:none;opacity:.2;mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.4' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1  0 0 0 0 .9  0 0 0 0 .8  0 0 0 1.6 -.55'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+.hero>*{position:relative}
+.hero header{width:min(74vw,640px,52vh);margin-top:clamp(36px,8vh,96px)}
+.hero .sub{margin:clamp(18px,3.5vh,36px) 16px 0;font-size:clamp(19px,2vw,24px);font-weight:600;letter-spacing:-.015em;text-align:center}
+.hero .tag{margin:6px 16px 0;font-size:clamp(15px,1.4vw,19px);color:var(--ink-2);text-align:center}
+.ctas{display:flex;gap:clamp(20px,3vw,36px);justify-content:center;flex-wrap:wrap;margin:clamp(14px,2.4vh,22px) 16px 0}
+.more{display:inline-flex;align-items:center;gap:4px;color:var(--link);text-decoration:none;font-size:clamp(16px,1.4vw,19px);letter-spacing:-.01em}
+.more svg{width:9px;height:9px;transition:transform .3s var(--ease)}
+.more:hover{text-decoration:underline;text-underline-offset:3px}
+.more:hover svg{transform:translateX(3px)}
+.light .more{color:var(--link-d)}
+.car{flex:1 1 0;min-height:0;width:min(94vw,1180px);display:flex;align-items:flex-end;justify-content:center;padding-top:18px}
+.car img{max-height:100%;width:auto}
+.cue{flex:none;margin:12px 0 calc(16px + env(safe-area-inset-bottom));display:grid;place-items:center;width:36px;height:36px;border-radius:50%;color:var(--ink-2);transition:opacity .4s,background-color .3s}
+.cue:hover{background:rgba(255,255,255,.08)}
 .cue svg{width:16px;height:16px;animation:bob 2s var(--ease) infinite}
-@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(5px)}}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(4px)}}
 .scrolled .cue{opacity:0;pointer-events:none}
 
-/* ---------- SCROLL STORY ---------- */
-.story{font-family:var(--sans)}
-.scene{position:relative;height:220vh}
-.stage{position:sticky;top:0;height:100vh;height:100dvh;display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden}
-.kicker{font-size:clamp(13px,1.2vw,15px);font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-2);margin:0 0 10px;text-align:center}
-.head{font-size:clamp(34px,6vw,84px);font-weight:700;letter-spacing:-.025em;line-height:1.02;margin:0 16px;text-align:center}
-.lede{font-size:clamp(16px,1.6vw,21px);color:var(--ink-2);margin:14px 16px 0;text-align:center;font-weight:400}
+.rise{opacity:0;transform:translateY(18px);filter:blur(6px);
+  transition:opacity .9s var(--ease),transform .9s var(--ease),filter .9s var(--ease);transition-delay:calc(var(--i,0)*110ms + 200ms)}
+.ready .rise{opacity:1;transform:none;filter:none}
+
+/* ---------- TYPOGRAFIA SEKCJI ---------- */
+.kicker{font-size:clamp(14px,1.3vw,17px);font-weight:600;letter-spacing:-.005em;color:var(--link);margin:0 0 8px;text-align:center}
+.light .kicker{color:var(--link-d)}
+.head{font-size:clamp(36px,6vw,80px);font-weight:700;letter-spacing:-.03em;line-height:1.04;margin:0 16px;text-align:center}
+.lede{font-size:clamp(17px,1.7vw,21px);line-height:1.45;color:var(--ink-2);margin:16px auto 0;padding:0 16px;max-width:680px;text-align:center}
+.light{background:var(--light);color:var(--ink-d)}
+.light .lede{color:var(--ink-d2)}
+.sec{padding:clamp(80px,14vh,150px) 0}
+
+/* ---------- SCENY PRZEWIJANIA ---------- */
+.scene{position:relative;height:160vh;background:var(--dark)}
+.stage{position:sticky;top:0;height:100vh;height:100svh;display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden;padding-top:44px}
 .txt{will-change:opacity,transform}
-.frame{margin-top:clamp(22px,4vh,44px);width:min(92vw,1200px);aspect-ratio:4/3;max-height:62vh;overflow:hidden;
-  will-change:transform,clip-path;box-shadow:0 30px 80px rgba(0,0,0,.45)}
-.frame img{width:100%;height:100%;object-fit:cover;display:block;will-change:transform}
-/* scene 2: text over image */
-.scene.two .stage{justify-content:flex-end}
-.scene.two .frame{position:absolute;inset:0;width:100%;max-height:none;aspect-ratio:auto;margin:0;box-shadow:none}
-.scene.two .frame::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(30,16,12,0) 35%,rgba(30,16,12,.75) 100%)}
+.frame{margin-top:clamp(22px,4vh,40px);width:min(92vw,1180px);aspect-ratio:4/3;max-height:62vh;overflow:hidden;border-radius:6px;will-change:transform,clip-path}
+.frame img{width:100%;height:100%;object-fit:cover;will-change:transform}
+.scene.two .stage{justify-content:flex-end;padding-top:0}
+.scene.two .frame{position:absolute;inset:0;width:100%;max-height:none;aspect-ratio:auto;margin:0;border-radius:0}
+.scene.two .frame::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(14,11,10,0) 40%,rgba(14,11,10,.8) 100%)}
 .scene.two .txt{position:relative;z-index:2;padding-bottom:clamp(56px,10vh,110px)}
 
-.outro{min-height:60vh;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;padding:80px 16px;font-family:var(--sans);text-align:center}
-.outro .head{font-size:clamp(28px,4vw,52px)}
-.pill{display:inline-flex;align-items:center;gap:10px;padding:12px 22px;border-radius:999px;background:var(--ink);color:#4e2e25;
-  font:600 16px var(--sans);text-decoration:none;transition:transform .35s var(--ease),box-shadow .35s var(--ease)}
-.pill:hover{transform:translateY(-2px);box-shadow:0 10px 30px rgba(0,0,0,.35)}
-.pill.ghost{background:transparent;color:var(--ink);box-shadow:inset 0 0 0 1px rgba(242,244,247,.45)}
-.pills{display:flex;gap:12px;flex-wrap:wrap;justify-content:center}
+/* ---------- DANE TECHNICZNE ---------- */
+.stats{max-width:980px;margin:clamp(48px,8vh,80px) auto 0;padding:0 22px;display:grid;grid-template-columns:repeat(3,1fr);gap:0}
+.stat{padding:28px 8px 30px;border-top:1px solid #d2d2d7;text-align:center}
+.stat b{display:block;font-size:clamp(40px,5.2vw,64px);font-weight:700;letter-spacing:-.035em;line-height:1}
+.stat b small{font-size:.42em;font-weight:600;letter-spacing:-.01em;margin-left:4px}
+.stat span{display:block;margin-top:10px;font-size:15px;color:var(--ink-d2);line-height:1.35}
+.center{text-align:center;margin-top:36px}
+@media (max-width:700px){.stats{grid-template-columns:repeat(2,1fr)}}
 
-footer{width:100%;text-align:center;font:12px/1.5 var(--sans);color:rgba(242,244,247,.7);padding:14px 16px calc(16px + env(safe-area-inset-bottom))}
-@media (max-width:600px){.sub{font-size:15px}.scene{height:190vh}}
-/* telefon w pionie: całe zdjęcie od krawędzi do krawędzi, tekst nad zdjęciem */
+/* ---------- KAFELKI (bento) ---------- */
+.bento{max-width:1180px;margin:clamp(40px,7vh,70px) auto 0;padding:0 22px;display:grid;grid-template-columns:repeat(6,1fr);gap:18px}
+.tile{position:relative;background:var(--dark-2);border-radius:28px;overflow:hidden;min-height:360px;display:flex;flex-direction:column;
+  opacity:0;transform:translateY(40px) scale(.98);transition:opacity .9s var(--ease),transform .9s var(--ease)}
+.tile.in{opacity:1;transform:none}
+.tile .tt{position:relative;z-index:2;padding:32px 34px 0}
+.tile h3{margin:0;font-size:clamp(24px,2.4vw,32px);font-weight:700;letter-spacing:-.025em;line-height:1.1}
+.tile p{margin:10px 0 0;font-size:16px;line-height:1.45;color:var(--ink-2);max-width:34ch}
+.tile .eyebrow{font-size:13px;font-weight:600;color:var(--link);margin:0 0 8px;max-width:none}
+.tile.photo{justify-content:flex-end}
+.tile.photo img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.tile.photo::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0) 45%,rgba(0,0,0,.65))}
+.tile.photo .tt{padding:0 34px 32px}
+.tile.photo p{color:rgba(255,255,255,.8)}
+.tile.drawing{background:linear-gradient(180deg,#6a3f31,#3d241d)}
+.tile.drawing img{margin:auto 0 0;padding:20px 24px 30px;width:100%}
+@media (min-width:861px){.tile.drawing{flex-direction:row;align-items:center;min-height:0}.tile.drawing .tt{flex:0 0 38%;padding:40px 0 40px 40px}.tile.drawing img{flex:1;min-width:0;margin:0;padding:40px 40px 40px 10px}}
+.tile .big-num{max-width:none;font-size:clamp(64px,8vw,110px);font-weight:800;letter-spacing:-.05em;line-height:.95;margin:auto 34px 34px;
+  background:linear-gradient(180deg,#f7d3bd,#a8644a);-webkit-background-clip:text;background-clip:text;color:transparent}
+.s4{grid-column:span 4}.s3{grid-column:span 3}.s2{grid-column:span 2}.s6{grid-column:span 6}
+.tall{min-height:500px}
+@media (max-width:860px){.bento{grid-template-columns:1fr;gap:14px}.s4,.s3,.s2,.s6{grid-column:auto}.tile{min-height:320px}.tall{min-height:420px}}
+
+/* ---------- PASEK GALERII ---------- */
+.strip{display:flex;gap:18px;overflow-x:auto;scroll-snap-type:x mandatory;padding:clamp(40px,6vh,60px) max(22px,calc((100vw - 1180px)/2)) 10px;scrollbar-width:none}
+.strip::-webkit-scrollbar{display:none}
+.strip a{flex:none;width:min(78vw,560px);aspect-ratio:4/3;border-radius:22px;overflow:hidden;scroll-snap-align:center;background:var(--dark-2)}
+.strip img{width:100%;height:100%;object-fit:cover;transition:transform .6s var(--ease)}
+.strip a:hover img{transform:scale(1.03)}
+
+/* ---------- ZAKOŃCZENIE ---------- */
+.outro .head{font-size:clamp(32px,4.4vw,56px)}
+.pills{display:flex;gap:14px;flex-wrap:wrap;justify-content:center;margin-top:30px}
+.pill{display:inline-flex;align-items:center;padding:12px 24px;border-radius:980px;background:var(--ink-d);color:#fff;font-size:17px;text-decoration:none;transition:background-color .3s,transform .3s var(--ease)}
+.pill:hover{background:#3a2a24;transform:translateY(-1px)}
+.pill.ghost{background:transparent;color:var(--ink-d);box-shadow:inset 0 0 0 1px #86868b}
+.pill.ghost:hover{background:rgba(0,0,0,.04)}
+
+/* ---------- STOPKA ---------- */
+.foot{background:var(--light);color:var(--ink-d2);font-size:12px;line-height:1.5}
+.foot .in{max-width:980px;margin:0 auto;padding:18px 22px calc(22px + env(safe-area-inset-bottom));border-top:1px solid #d2d2d7}
+.foot nav{display:flex;flex-wrap:wrap;gap:6px 22px;margin-bottom:10px}
+.foot nav a{color:var(--ink-d);text-decoration:none}
+.foot nav a:hover{text-decoration:underline}
+.foot p{margin:0}
+
+@media (max-width:600px){.scene{height:150vh}}
 @media (orientation:portrait) and (max-width:900px){
-  .frame{width:100vw;max-height:none;aspect-ratio:4/3}
-  .scene.two .stage{justify-content:center}
-  .scene.two .frame{position:relative;inset:auto;width:100vw;aspect-ratio:4/3;margin-top:clamp(22px,4vh,44px);box-shadow:0 30px 80px rgba(0,0,0,.45)}
+  .frame{width:100vw;max-height:none;border-radius:0}
+  .scene.two .stage{justify-content:center;padding-top:44px}
+  .scene.two .frame{position:relative;inset:auto;width:100vw;aspect-ratio:4/3;margin-top:clamp(22px,4vh,40px)}
   .scene.two .frame::after{display:none}
   .scene.two .txt{order:-1;padding-bottom:0}
 }
 @media (prefers-reduced-motion:reduce){
-  .rise{opacity:1;transform:none;filter:none;transition:none}
+  html{scroll-behavior:auto}
+  .rise,.tile{opacity:1;transform:none;filter:none;transition:none}
   .cue svg{animation:none}
   .scene{height:auto}.stage{position:relative;height:auto;padding:12vh 0}
   .scene.two .frame{position:relative;height:70vh}
@@ -121,44 +163,47 @@ footer{width:100%;text-align:center;font:12px/1.5 var(--sans);color:rgba(242,244
 </style>
 </head>
 <body>
+
+<nav class="gnav" aria-label="Nawigacja">
+  <div class="in">
+    <a class="brand" href="./" aria-current="page">W126<small>280 SE · 1982</small></a>
+    <ul>
+      <li><a href="specyfikacja/">Specyfikacja</a></li>
+      <li><a href="prospekt/">Prospekt</a></li>
+      <li><a href="galeria/">Galeria</a></li>
+    </ul>
+  </div>
+</nav>
+
 <section class="hero" id="top">
   <header class="rise" style="--i:0">
-    <h1>Mercedes-Benz 280 S, 280 SE, 280 SEL</h1>
-    <img src="img/title.png" alt="Mercedes-Benz 280 S, 280 SE, 280 SEL." width="1570" height="800">
+    <h1 class="vh">Mercedes-Benz W126 280 SE, rocznik 1982</h1>
+    <img src="img/title.webp" alt="Mercedes-Benz 280 S, 280 SE, 280 SEL." width="1570" height="800">
   </header>
-  <p class="sub rise" style="--i:1">Mercedes-Benz W126 280SE - rocznik 1982</p>
-  <nav class="intro" aria-label="Menu">
-    <ul class="menu">
-      <li class="rise" style="--i:2"><a href="prospekt/">
-        <span class="t"><span>Prospekt</span></span>
-        <span class="d">Katalog 280 S / SE / SEL · wersja polska</span>
-        <span class="c" aria-hidden="true"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 2.5 8 6l-3.5 3.5"/></svg></span>
-      </a></li>
-      <li class="rise" style="--i:3"><a href="galeria/">
-        <span class="t"><span>Galeria</span></span>
-        <span class="d">Zdjęcia mojego W126</span>
-        <span class="c" aria-hidden="true"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 2.5 8 6l-3.5 3.5"/></svg></span>
-      </a></li>
-    </ul>
-  </nav>
-  <div class="car rise" style="--i:4"><img src="img/car_white.png" alt="Rysunek W126 z prospektu" width="2270" height="740"></div>
-  <a class="cue rise" style="--i:6" href="#s1">Przewiń<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 6 8 10.5 12.5 6"/></svg></a>
+  <p class="sub rise" style="--i:1">280 SE · 1982</p>
+  <p class="tag rise" style="--i:2">Nowa Klasa S w oryginalnym kolorze.</p>
+  <div class="ctas rise" style="--i:3">
+    <a class="more" href="prospekt/">Zobacz prospekt<svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 1.5 7 5l-3.5 3.5"/></svg></a>
+    <a class="more" href="galeria/">Galeria<svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 1.5 7 5l-3.5 3.5"/></svg></a>
+  </div>
+  <div class="car rise" style="--i:4"><img src="img/car_white.webp" alt="Rysunek W126 z okładki prospektu" width="2310" height="780"></div>
+  <a class="cue rise" style="--i:6" href="#s1" aria-label="Przewiń w dół"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 6 8 10.5 12.5 6"/></svg></a>
 </section>
 
-<main class="story">
+<main>
   <section class="scene one" id="s1" data-scene="grow">
     <div class="stage">
       <div class="txt">
-        <p class="kicker">280 SE · 1982</p>
+        <p class="kicker">Sylwetka</p>
         <h2 class="head">Linia, która<br>się nie starzeje.</h2>
       </div>
-      <div class="frame"><img src="img/w126_bok.jpg" alt="Mercedes W126 280 SE z boku" width="1024" height="768" loading="lazy"></div>
+      <div class="frame"><img src="img/w126_bok.webp" alt="Mercedes W126 280 SE z boku" width="1024" height="768" loading="lazy" decoding="async"></div>
     </div>
   </section>
 
   <section class="scene two" data-scene="open">
     <div class="stage">
-      <div class="frame"><img src="img/w126_przod.jpg" alt="Mercedes W126 280 SE z przodu" width="2048" height="1536" loading="lazy"></div>
+      <div class="frame"><img src="img/w126_przod.webp" srcset="img/w126_przod-1200.webp 1200w, img/w126_przod.webp 2048w" sizes="100vw" alt="Mercedes W126 280 SE z przodu" width="2048" height="1536" loading="lazy" decoding="async"></div>
       <div class="txt">
         <p class="kicker">Manganese Brown Metallic · 480</p>
         <h2 class="head">Oryginalny kolor.</h2>
@@ -167,7 +212,57 @@ footer{width:100%;text-align:center;font:12px/1.5 var(--sans);color:rgba(242,244
     </div>
   </section>
 
-  <section class="outro">
+  <section class="sec light" id="dane">
+    <p class="kicker">Dane techniczne</p>
+    <h2 class="head">Sześć cylindrów.<br>185 koni.</h2>
+    <p class="lede">Wtryskowy silnik 2,8 litra, który łączy dobre przyspieszenie z wytrzymałością na długie trasy.</p>
+    <div class="stats">
+      <div class="stat"><b>185<small>KM</small></b><span>136 kW przy 5800 obr./min</span></div>
+      <div class="stat"><b>2746<small>cm³</small></b><span>6 cylindrów, średnica / skok 86 / 78,8 mm</span></div>
+      <div class="stat"><b>240<small>Nm</small></b><span>maks. moment przy 4500 obr./min</span></div>
+      <div class="stat"><b>210<small>km/h</small></b><span>prędkość maksymalna (ok.)</span></div>
+      <div class="stat"><b>4995<small>mm</small></b><span>długość · rozstaw osi 2935 mm</span></div>
+      <div class="stat"><b>1560<small>kg</small></b><span>masa własna gotowego do jazdy</span></div>
+    </div>
+    <p class="center"><a class="more" href="specyfikacja/">Specyfikacja mojego egzemplarza<svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 1.5 7 5l-3.5 3.5"/></svg></a>&nbsp;&nbsp;&nbsp;&nbsp;<a class="more" href="prospekt/">Pełne dane w prospekcie<svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 1.5 7 5l-3.5 3.5"/></svg></a></p>
+  </section>
+
+  <section class="sec" id="nowa-klasa-s">
+    <p class="kicker">Z prospektu z epoki</p>
+    <h2 class="head">Nowa Klasa S.<br>Przemyślana w detalach.</h2>
+    <div class="bento">
+      <article class="tile photo s4 tall">
+        <img src="img/w126_przod-1200.webp" alt="Przód W126 280 SE" width="1200" height="900" loading="lazy" decoding="async">
+        <div class="tt"><p class="eyebrow">Kolor 480</p><h3>Manganese Brown Metallic.</h3><p>Lakier, w którym auto opuściło fabrykę w 1982 roku.</p></div>
+      </article>
+      <article class="tile s2 tall">
+        <div class="tt"><p class="eyebrow">Bagażnik</p><h3>Miejsce na długą podróż.</h3></div>
+        <p class="big-num">505 l</p>
+      </article>
+      <article class="tile s3">
+        <div class="tt"><p class="eyebrow">Bezpieczeństwo</p><h3>Trzy strefy zgniotu.</h3><p>Podatny przód, coraz sztywniejsza komora silnika i bardzo sztywna kabina pasażerska.</p></div>
+        <p class="big-num">3</p>
+      </article>
+      <article class="tile s3">
+        <div class="tt"><p class="eyebrow">Heizmatic</p><h3>Osobna temperatura dla kierowcy i pasażera.</h3><p>Każdy ustawia własne pokrętło z dokładnością do stopnia. Czujnik utrzymuje wybraną wartość.</p></div>
+        <p class="big-num">16–32°</p>
+      </article>
+      <article class="tile drawing s6">
+        <div class="tt"><p class="eyebrow">Okładka prospektu</p><h3>280 S, 280 SE, 280 SEL.</h3><p>Rysunek z oryginalnego katalogu. Cały prospekt przeczytasz po polsku.</p>
+          <p><a class="more" href="prospekt/">Otwórz prospekt<svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 1.5 7 5l-3.5 3.5"/></svg></a></p></div>
+        <img src="img/car_white.webp" alt="" width="2310" height="780" loading="lazy" decoding="async">
+      </article>
+    </div>
+  </section>
+
+  <section class="sec" id="galeria-zapowiedz" hidden style="padding-top:0">
+    <p class="kicker">Galeria</p>
+    <h2 class="head">Mój W126.</h2>
+    <div class="strip" id="strip"></div>
+    <p class="center"><a class="more" href="galeria/">Wszystkie zdjęcia<svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 1.5 7 5l-3.5 3.5"/></svg></a></p>
+  </section>
+
+  <section class="sec light outro">
     <h2 class="head">Zajrzyj dalej.</h2>
     <div class="pills">
       <a class="pill" href="galeria/">Galeria</a>
@@ -176,19 +271,32 @@ footer{width:100%;text-align:center;font:12px/1.5 var(--sans);color:rgba(242,244
   </section>
 </main>
 
-<footer>Prywatny blog właściciela auta. Nie jest powiązany z Mercedes-Benz AG. Grafika pochodzi z okładki prospektu 280 S / SE / SEL.</footer>
+<footer class="foot">
+  <div class="in">
+    <nav aria-label="Stopka"><a href="./">Strona główna</a><a href="specyfikacja/">Specyfikacja</a><a href="prospekt/">Prospekt</a><a href="galeria/">Galeria</a></nav>
+    <p>Prywatny blog właściciela auta. Nie jest powiązany z Mercedes-Benz AG. Grafika i dane techniczne pochodzą z prospektu 280 S / SE / SEL.</p>
+  </div>
+</footer>
 
 <script>
 (function(){
-  const root=document.documentElement;
-  // entrance
   requestAnimationFrame(()=>requestAnimationFrame(()=>document.body.classList.add('ready')));
 
-  // light that follows the cursor on menu items
-  document.querySelectorAll('.menu a').forEach(a=>{
-    a.addEventListener('pointermove',e=>{const r=a.getBoundingClientRect();
-      a.style.setProperty('--x',(e.clientX-r.left)+'px');a.style.setProperty('--y',(e.clientY-r.top)+'px')});
-  });
+  // kafelki wjeżdżają przy przewijaniu
+  const tiles=document.querySelectorAll('.tile');
+  if('IntersectionObserver' in window){
+    const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{threshold:.15});
+    tiles.forEach((t,i)=>{t.style.transitionDelay=(i%2)*90+'ms';io.observe(t)});
+  }else tiles.forEach(t=>t.classList.add('in'));
+
+  // zapowiedź galerii: lista zdjęć z galeria/zdjecia.json (bez zewnętrznych usług)
+  fetch('galeria/zdjecia.json',{cache:'no-cache'}).then(r=>r.ok?r.json():[]).then(list=>{
+    list=(Array.isArray(list)?list:[]).slice(0,8);if(!list.length)return;
+    const strip=document.getElementById('strip');
+    list.forEach(n=>{const a=document.createElement('a');a.href='galeria/#'+encodeURIComponent(n);
+      const im=new Image();im.loading='lazy';im.decoding='async';im.src='galeria/zdjecia/'+encodeURIComponent(n);im.alt='';a.appendChild(im);strip.appendChild(a)});
+    document.getElementById('galeria-zapowiedz').hidden=false;
+  }).catch(()=>{});
 
   if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;
 
@@ -198,33 +306,29 @@ footer{width:100%;text-align:center;font:12px/1.5 var(--sans);color:rgba(242,244
   const scenes=[...document.querySelectorAll('[data-scene]')].map(el=>({
     el,type:el.dataset.scene,txt:el.querySelector('.txt'),frame:el.querySelector('.frame'),img:el.querySelector('.frame img')}));
   let ticking=false;
-
   function update(){
     ticking=false;
     const vh=innerHeight;
     document.body.classList.toggle('scrolled',scrollY>40);
     for(const s of scenes){
       const r=s.el.getBoundingClientRect();
-      // 0 when scene top hits viewport bottom … 1 when scene is fully scrolled through
-      const total=r.height-vh;
-      const p=clamp(-r.top/total);            // progress while sticky
-      const pin=clamp((vh-r.top)/vh);          // entering
+      if(r.bottom<-vh||r.top>vh*2)continue;
+      const p=clamp(-r.top/(r.height-vh));
+      const pin=clamp((vh-r.top)/vh);
       if(s.type==='grow'){
-        const t=ease(clamp(p/0.6));
-        s.frame.style.transform=`scale(${lerp(.72,1,t)})`;
-        s.frame.style.borderRadius=`${lerp(36,6,t)}px`;
-        s.img.style.transform=`scale(${lerp(1.18,1,t)})`;
-        const ti=ease(clamp(pin*1.4-.2));
-        const to=clamp((p-.75)/.25);
+        const t=ease(clamp(p/0.7));
+        s.frame.style.transform=`scale(${lerp(.74,1,t)})`;
+        s.frame.style.borderRadius=`${lerp(32,6,t)}px`;
+        s.img.style.transform=`scale(${lerp(1.16,1,t)})`;
+        const ti=ease(clamp(pin*1.4-.2)), to=clamp((p-.8)/.2);
         s.txt.style.opacity=ti*(1-to);
         s.txt.style.transform=`translateY(${lerp(40,0,ti)-to*30}px)`;
         s.frame.style.opacity=clamp(pin*1.5);
       }else{
-        const t=ease(clamp(p/0.55));
-        const ix=lerp(18,0,t), iy=lerp(22,0,t), rad=lerp(40,0,t);
-        s.frame.style.clipPath=`inset(${iy}% ${ix}% round ${rad}px)`;
-        s.img.style.transform=`scale(${lerp(1.25,1.02,t)}) translateY(${lerp(-3,2,p)}%)`;
-        const ti=ease(clamp((p-.35)/.3));
+        const t=ease(clamp(p/0.6));
+        s.frame.style.clipPath=`inset(${lerp(22,0,t)}% ${lerp(18,0,t)}% round ${lerp(36,0,t)}px)`;
+        s.img.style.transform=`scale(${lerp(1.22,1.02,t)}) translateY(${lerp(-3,2,p)}%)`;
+        const ti=ease(clamp((p-.3)/.3));
         s.txt.style.opacity=ti;
         s.txt.style.transform=`translateY(${lerp(50,0,ti)}px)`;
       }

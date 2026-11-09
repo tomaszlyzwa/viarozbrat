@@ -4,92 +4,167 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Galeria · W126 280 SE</title>
-<meta name="theme-color" content="#56342a">
+<meta name="description" content="Zdjęcia Mercedesa W126 280 SE z 1982 roku.">
+<meta name="theme-color" content="#16100e">
 <style>
+:root{
+  --sans:-apple-system,BlinkMacSystemFont,'SF Pro Display','SF Pro Text','Helvetica Neue',Inter,'Segoe UI',Roboto,Arial,sans-serif;
+  --ease:cubic-bezier(.2,.7,.2,1);
+  --dark:#0e0b0a;--dark-2:#1b1513;--light:#f5f5f7;
+  --ink:#f5f5f7;--ink-2:rgba(245,245,247,.68);--link:#f3b892;
+}
 *{box-sizing:border-box}
-html,body{margin:0;min-height:100%}
-body{min-height:100vh;min-height:100dvh;background:#4e2e25;
-  background:
-    radial-gradient(ellipse 70% 45% at 50% 18%,rgba(255,215,190,.10),rgba(255,215,190,0) 70%),
-    linear-gradient(180deg,#6a3f31 0%,#56342a 40%,#482a22 75%,#3d241d 100%);
-  background-attachment:fixed;
-  color:#f2f4f7;font-family:Georgia,'Times New Roman',serif;display:flex;flex-direction:column}
-#home{height:46px;display:flex;align-items:center;padding:0 16px;padding-left:max(16px,env(safe-area-inset-left))}
-#home a{color:#f2f4f7;text-decoration:none;font:15px/1 system-ui,-apple-system,'Segoe UI',sans-serif;letter-spacing:.02em;padding:6px 10px;margin-left:-10px;border-radius:18px}
-#home a:hover,#home a:focus-visible{background:rgba(255,255,255,.14);outline:none}
-main{width:min(94vw,1300px);margin:0 auto;flex:1}
-h1{font-weight:400;font-size:clamp(28px,4vw,44px);letter-spacing:.01em;margin:clamp(16px,4vh,40px) 0 6px}
-.lead{margin:0 0 clamp(20px,3vh,32px);opacity:.85;font-size:clamp(15px,1.5vw,18px)}
-#grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px}
-#grid button{all:unset;cursor:zoom-in;display:block;aspect-ratio:4/3;overflow:hidden;background:rgba(0,0,0,.12);border-radius:2px}
-#grid button:focus-visible{outline:2px solid #f2f4f7;outline-offset:3px}
-#grid img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .4s}
-#grid button:hover img{transform:scale(1.03)}
-.empty{padding:48px 0;opacity:.8;font-size:17px}
-#lb{position:fixed;inset:0;background:rgba(10,14,24,.94);display:none;align-items:center;justify-content:center;z-index:20;touch-action:pan-y}
-#lb.on{display:flex}
-#lb img{max-width:96vw;max-height:86vh;object-fit:contain;box-shadow:0 10px 40px rgba(0,0,0,.5)}
-#lb .cap{position:fixed;bottom:calc(14px + env(safe-area-inset-bottom));left:0;right:0;text-align:center;font:13px system-ui,sans-serif;color:#ccd}
-#lb button{position:fixed;background:rgba(255,255,255,.1);color:#eee;border:1px solid rgba(255,255,255,.2);border-radius:22px;width:44px;height:44px;font-size:22px;cursor:pointer}
-#lb button:hover{background:rgba(255,255,255,.22)}
-#lbX{top:12px;right:12px}#lbP{left:12px;top:50%;transform:translateY(-50%)}#lbN{right:12px;top:50%;transform:translateY(-50%)}
-footer{text-align:center;font:12px/1.5 system-ui,-apple-system,'Segoe UI',sans-serif;color:rgba(242,244,247,.7);padding:24px 16px calc(16px + env(safe-area-inset-bottom))}
-body::before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.22;mix-blend-mode:overlay;z-index:0;
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.4' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1  0 0 0 0 .9  0 0 0 0 .8  0 0 0 1.6 -.55'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
-body>*{position:relative;z-index:1}
+html,body{margin:0}
+body{min-height:100vh;min-height:100svh;background:var(--dark);color:var(--ink);font-family:var(--sans);-webkit-font-smoothing:antialiased;display:flex;flex-direction:column}
+a{color:inherit}
+
+/* pasek nawigacji (wspólny) */
+.gnav{position:fixed;top:0;left:0;right:0;z-index:50;height:44px;
+  background:rgba(22,16,14,.72);-webkit-backdrop-filter:saturate(180%) blur(20px);backdrop-filter:saturate(180%) blur(20px);
+  border-bottom:1px solid rgba(255,255,255,.08)}
+.gnav .in{max-width:1024px;height:100%;margin:0 auto;padding:0 max(22px,env(safe-area-inset-left));display:flex;align-items:center;justify-content:space-between}
+.gnav a{text-decoration:none;color:rgba(245,245,247,.85);font-size:12px;letter-spacing:-.01em;transition:color .25s}
+.gnav a:hover,.gnav a:focus-visible{color:#fff;outline:none}
+.gnav .brand{font-size:15px;font-weight:600;color:#f5f5f7;letter-spacing:-.02em}
+.gnav .brand small{font-weight:400;color:rgba(245,245,247,.6);font-size:12px;margin-left:6px}
+.gnav ul{list-style:none;margin:0;padding:0;display:flex;gap:clamp(16px,3.4vw,36px)}
+.gnav a[aria-current="page"]{color:#fff;font-weight:600}
+@media (max-width:420px){.gnav .brand small{display:none}}
+
+main{flex:1;width:100%;max-width:1240px;margin:0 auto;padding:calc(44px + clamp(48px,9vh,96px)) 22px 0}
+h1{font-size:clamp(44px,7vw,88px);font-weight:700;letter-spacing:-.035em;line-height:1;margin:0;text-align:center}
+.lead{margin:14px auto clamp(40px,7vh,64px);color:var(--ink-2);font-size:clamp(17px,1.7vw,21px);text-align:center}
+
+/* siatka: pierwsze zdjęcie duże, reszta równa */
+#grid{display:grid;grid-template-columns:repeat(4,1fr);grid-auto-rows:clamp(150px,17vw,230px);gap:12px}
+#grid button{all:unset;position:relative;cursor:zoom-in;display:block;overflow:hidden;border-radius:18px;background:var(--dark-2);
+  opacity:0;transform:translateY(24px);transition:opacity .7s var(--ease),transform .7s var(--ease)}
+#grid button.in{opacity:1;transform:none}
+#grid button:first-child{grid-column:span 2;grid-row:span 2}
+#grid button:focus-visible{outline:2px solid var(--link);outline-offset:3px}
+#grid img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .7s var(--ease)}
+#grid button:hover img{transform:scale(1.04)}
+#grid.few{grid-auto-rows:auto;grid-template-columns:repeat(2,1fr)}#grid.few button{aspect-ratio:4/3}#grid.few button:first-child{grid-column:auto;grid-row:auto}
+@media (max-width:560px){#grid.few{grid-template-columns:1fr}}
+@media (max-width:820px){#grid{grid-template-columns:repeat(2,1fr);grid-auto-rows:clamp(130px,36vw,220px);gap:8px}#grid button{border-radius:14px}}
+
+/* pusty stan */
+.empty{max-width:760px;margin:0 auto;background:linear-gradient(180deg,#6a3f31,#3d241d);border-radius:28px;padding:40px 34px 34px;text-align:center}
+.empty h2{margin:0;font-size:clamp(24px,2.6vw,32px);letter-spacing:-.025em}
+.empty p{margin:10px 0 0;color:rgba(245,245,247,.78);font-size:16px}
+.empty img{width:100%;height:auto;margin-top:26px}
+
+/* podgląd */
+#lb{position:fixed;inset:0;z-index:60;display:flex;align-items:center;justify-content:center;
+  background:rgba(8,6,5,.78);-webkit-backdrop-filter:blur(28px) saturate(140%);backdrop-filter:blur(28px) saturate(140%);
+  opacity:0;visibility:hidden;transition:opacity .35s var(--ease),visibility 0s .35s;touch-action:pan-y}
+#lb.on{opacity:1;visibility:visible;transition:opacity .35s var(--ease)}
+#lbImg{max-width:min(94vw,1600px);max-height:84vh;object-fit:contain;border-radius:10px;box-shadow:0 30px 80px rgba(0,0,0,.5);
+  transform:scale(.96);transition:transform .45s var(--ease),opacity .25s}
+#lb.on #lbImg{transform:none}
+#lb .bar{position:fixed;bottom:calc(18px + env(safe-area-inset-bottom));left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:6px;
+  padding:6px;border-radius:999px;background:rgba(40,32,29,.7);-webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,.08)}
+#lb button{width:40px;height:40px;border-radius:50%;border:0;background:transparent;color:#f5f5f7;display:grid;place-items:center;cursor:pointer;transition:background-color .2s}
+#lb button:hover,#lb button:focus-visible{background:rgba(255,255,255,.14);outline:none}
+#lb button svg{width:16px;height:16px}
+#lbCap{font-size:13px;color:rgba(245,245,247,.8);min-width:64px;text-align:center;font-variant-numeric:tabular-nums}
+#lbX{position:fixed!important;top:calc(12px + env(safe-area-inset-top));right:12px;background:rgba(40,32,29,.7)!important}
+
+/* stopka */
+.foot{margin-top:clamp(70px,12vh,120px);color:rgba(245,245,247,.55);font-size:12px;line-height:1.5}
+.foot .in{max-width:980px;margin:0 auto;padding:18px 22px calc(22px + env(safe-area-inset-bottom));border-top:1px solid rgba(255,255,255,.1)}
+.foot nav{display:flex;flex-wrap:wrap;gap:6px 22px;margin-bottom:10px}
+.foot nav a{color:rgba(245,245,247,.85);text-decoration:none}
+.foot nav a:hover{text-decoration:underline}
+.foot p{margin:0}
+@media (prefers-reduced-motion:reduce){#grid button{opacity:1;transform:none;transition:none}#lb,#lbImg{transition:none}}
 </style>
 </head>
 <body>
-<div id="home"><a href="../" title="Wróć do strony głównej bloga">← Strona główna</a></div>
+<nav class="gnav" aria-label="Nawigacja">
+  <div class="in">
+    <a class="brand" href="../">W126<small>280 SE · 1982</small></a>
+    <ul>
+      <li><a href="../specyfikacja/">Specyfikacja</a></li>
+      <li><a href="../prospekt/">Prospekt</a></li>
+      <li><a href="./" aria-current="page">Galeria</a></li>
+    </ul>
+  </div>
+</nav>
+
 <main>
   <h1>Galeria</h1>
-  <p class="lead">Zdjęcia mojego W126 · 280 SE · rocznik 1982</p>
+  <p class="lead">Mój W126 · 280 SE · rocznik 1982</p>
   <div id="grid" aria-live="polite"></div>
 </main>
+
 <div id="lb" role="dialog" aria-modal="true" aria-label="Podgląd zdjęcia">
   <img id="lbImg" alt="">
-  <button id="lbP" title="Poprzednie (←)">‹</button>
-  <button id="lbN" title="Następne (→)">›</button>
-  <button id="lbX" title="Zamknij (Esc)">×</button>
-  <div class="cap" id="lbCap"></div>
+  <button id="lbX" title="Zamknij (Esc)" aria-label="Zamknij"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M3.5 3.5l9 9M12.5 3.5l-9 9"/></svg></button>
+  <div class="bar">
+    <button id="lbP" title="Poprzednie (←)" aria-label="Poprzednie"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M10 3 5 8l5 5"/></svg></button>
+    <span id="lbCap"></span>
+    <button id="lbN" title="Następne (→)" aria-label="Następne"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3l5 5-5 5"/></svg></button>
+  </div>
 </div>
-<footer>Prywatny blog właściciela auta. Nie jest powiązany z Mercedes-Benz AG.</footer>
+
+<footer class="foot">
+  <div class="in">
+    <nav aria-label="Stopka"><a href="../">Strona główna</a><a href="../specyfikacja/">Specyfikacja</a><a href="../prospekt/">Prospekt</a><a href="./">Galeria</a></nav>
+    <p>Prywatny blog właściciela auta. Nie jest powiązany z Mercedes-Benz AG.</p>
+  </div>
+</footer>
+
 <script>
-// Zdjęcia wrzucane do folderu galeria/zdjecia/ pojawiają się tu automatycznie.
-// Lista plików pobierana jest z publicznego API GitHuba (repozytorium tomaszlyzwa/W126).
-// Awaryjnie można też wpisać nazwy plików ręcznie do tablicy MANUAL.
-// Strona działa w dwóch miejscach: viarozbrat.pl/w126/ (repo viarozbrat) i tomaszlyzwa.github.io/W126/ (repo W126)
+// Lista zdjęć: plik zdjecia.json w tym folderze, np. ["01_przod.jpg","02_bok.jpg"].
+// Plik aktualizuje się sam przez GitHub Actions (galeria-workflow.yml przeniesiony do .github/workflows/) po wrzuceniu zdjęć do galeria/zdjecia/.
+// Gdy pliku brak lub jest pusty, strona awaryjnie pyta publiczne API GitHuba (jak w poprzedniej wersji).
 const ON_VR=/viarozbrat\.pl$/.test(location.hostname);
 const REPO=ON_VR?'tomaszlyzwa/viarozbrat':'tomaszlyzwa/W126', DIR=ON_VR?'w126/galeria/zdjecia':'galeria/zdjecia', BRANCH='main';
-const MANUAL=[];
 const IMG=/\.(jpe?g|png|webp|gif|avif)$/i;
 const grid=document.getElementById('grid');
-let list=[], cur=0;
+let list=[],cur=0;
 
-async function getList(){
-  const key='w126-gal', ttl=10*60*1000;
-  try{const c=JSON.parse(sessionStorage.getItem(key)||'null');if(c&&Date.now()-c.t<ttl)return c.f}catch(e){}
-  const r=await fetch(`https://api.github.com/repos/${REPO}/contents/${DIR}?ref=${BRANCH}`,{headers:{Accept:'application/vnd.github+json'}});
-  if(r.status===404)return [];
-  if(!r.ok)throw new Error('HTTP '+r.status);
-  const f=(await r.json()).filter(x=>x.type==='file'&&IMG.test(x.name)).map(x=>x.name);
-  try{sessionStorage.setItem(key,JSON.stringify({t:Date.now(),f}))}catch(e){}
-  return f;
+async function fromManifest(){
+  try{const r=await fetch('zdjecia.json',{cache:'no-cache'});if(!r.ok)return [];const j=await r.json();return Array.isArray(j)?j.filter(n=>IMG.test(n)):[]}catch(e){return []}
 }
-function label(n){return n.replace(IMG,'').replace(/[_-]+/g,' ').trim()}
+async function fromGitHub(){
+  const key='w126-gal',ttl=10*60*1000;
+  try{const c=JSON.parse(sessionStorage.getItem(key)||'null');if(c&&Date.now()-c.t<ttl)return c.f}catch(e){}
+  try{
+    const r=await fetch(`https://api.github.com/repos/${REPO}/contents/${DIR}?ref=${BRANCH}`,{headers:{Accept:'application/vnd.github+json'}});
+    if(!r.ok)return [];
+    const f=(await r.json()).filter(x=>x.type==='file'&&IMG.test(x.name)).map(x=>x.name);
+    try{sessionStorage.setItem(key,JSON.stringify({t:Date.now(),f}))}catch(e){}
+    return f;
+  }catch(e){return []}
+}
+const label=n=>n.replace(IMG,'').replace(/^\d+[_-]?/,'').replace(/[_-]+/g,' ').trim()||n;
+const url=n=>'zdjecia/'+encodeURIComponent(n);
+
 function render(){
   grid.innerHTML='';
-  if(!list.length){grid.innerHTML='<p class="empty">Zdjęcia pojawią się tu wkrótce.</p>';return}
+  if(!list.length){
+    grid.style.display='block';
+    grid.innerHTML='<div class="empty"><h2>Pierwsze zdjęcia już wkrótce.</h2><p>W międzyczasie zajrzyj do prospektu z epoki.</p><img src="../img/car_white.webp" alt="" width="2310" height="780"></div>';
+    return;
+  }
+  grid.classList.toggle('few',list.length<3);
+  const io='IntersectionObserver' in window?new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{threshold:.1}):null;
   list.forEach((n,i)=>{
-    const b=document.createElement('button');b.title=label(n);
-    const im=new Image();im.loading='lazy';im.decoding='async';im.src='zdjecia/'+encodeURIComponent(n);im.alt=label(n);
-    b.appendChild(im);b.onclick=()=>open(i);grid.appendChild(b);
+    const b=document.createElement('button');b.title=label(n);b.setAttribute('aria-label','Powiększ: '+label(n));
+    const im=new Image();im.loading=i<3?'eager':'lazy';im.decoding='async';im.src=url(n);im.alt=label(n);
+    b.appendChild(im);b.onclick=()=>open(i);b.style.transitionDelay=(i%4)*60+'ms';grid.appendChild(b);
+    io?io.observe(b):b.classList.add('in');
   });
 }
 const lb=document.getElementById('lb'),lbImg=document.getElementById('lbImg'),lbCap=document.getElementById('lbCap');
-function show(){const n=list[cur];lbImg.src='zdjecia/'+encodeURIComponent(n);lbImg.alt=label(n);lbCap.textContent=`${label(n)} · ${cur+1} / ${list.length}`}
-function open(i){cur=i;show();lb.classList.add('on');document.getElementById('lbX').focus()}
-function close(){lb.classList.remove('on');lbImg.removeAttribute('src')}
+let lastFocus=null;
+function show(){const n=list[cur];lbImg.src=url(n);lbImg.alt=label(n);lbCap.textContent=`${cur+1} / ${list.length}`;
+  history.replaceState(null,'','#'+encodeURIComponent(n));
+  [cur-1,cur+1].forEach(k=>{const m=list[(k+list.length)%list.length];if(m){const p=new Image();p.src=url(m)}})}
+function open(i){lastFocus=document.activeElement;cur=i;show();lb.classList.add('on');document.body.style.overflow='hidden';document.getElementById('lbX').focus()}
+function close(){lb.classList.remove('on');document.body.style.overflow='';history.replaceState(null,'',location.pathname);lastFocus&&lastFocus.focus()}
 function step(d){cur=(cur+d+list.length)%list.length;show()}
 document.getElementById('lbX').onclick=close;
 document.getElementById('lbP').onclick=e=>{e.stopPropagation();step(-1)};
@@ -100,10 +175,12 @@ let sx=null;lb.addEventListener('touchstart',e=>{sx=e.touches[0].clientX},{passi
 lb.addEventListener('touchend',e=>{if(sx===null)return;const dx=e.changedTouches[0].clientX-sx;if(Math.abs(dx)>50)step(dx<0?1:-1);sx=null});
 
 (async()=>{
-  try{list=await getList()}catch(e){list=[]}
-  if(!list.length&&MANUAL.length)list=MANUAL.slice();
+  list=await fromManifest();
+  if(!list.length)list=await fromGitHub();
   list.sort((a,b)=>a.localeCompare(b,'pl',{numeric:true}));
   render();
+  // link z zapowiedzi na stronie głównej: galeria/#nazwa.jpg otwiera od razu zdjęcie
+  const h=decodeURIComponent(location.hash.slice(1));const i=list.indexOf(h);if(i>=0)open(i);
 })();
 </script>
 </body>

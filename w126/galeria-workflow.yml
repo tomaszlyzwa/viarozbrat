@@ -1,0 +1,30 @@
+# Po każdym wrzuceniu zdjęć do galeria/zdjecia/ odświeża listę galeria/zdjecia.json.
+# Dzięki temu galeria nie musi pytać API GitHuba przy każdym wejściu na stronę.
+name: Lista zdjęć galerii
+on:
+  push:
+    paths: ['galeria/zdjecia/**']
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  manifest:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Zbuduj zdjecia.json
+        run: |
+          cd galeria/zdjecia
+          python3 - <<'PY'
+          import json, os, re
+          pat = re.compile(r'\.(jpe?g|png|webp|gif|avif)$', re.I)
+          files = sorted(f for f in os.listdir('.') if pat.search(f))
+          json.dump(files, open('../zdjecia.json', 'w'), ensure_ascii=False, indent=1)
+          print(len(files), 'zdjęć')
+          PY
+      - name: Zapisz zmiany
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@users.noreply.github.com"
+          git add galeria/zdjecia.json
+          git diff --cached --quiet || (git commit -m "Galeria: aktualizacja listy zdjęć" && git push)
