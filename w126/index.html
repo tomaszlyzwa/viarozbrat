@@ -103,7 +103,15 @@ h1{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
 .pills{display:flex;gap:12px;flex-wrap:wrap;justify-content:center}
 
 footer{width:100%;text-align:center;font:12px/1.5 var(--sans);color:rgba(242,244,247,.7);padding:14px 16px calc(16px + env(safe-area-inset-bottom))}
-@media (max-width:600px){.sub{font-size:15px}.scene{height:190vh}.frame{max-height:56vh}}
+@media (max-width:600px){.sub{font-size:15px}.scene{height:190vh}}
+/* telefon w pionie: całe zdjęcie od krawędzi do krawędzi, tekst nad zdjęciem */
+@media (orientation:portrait) and (max-width:900px){
+  .frame{width:100vw;max-height:none;aspect-ratio:4/3}
+  .scene.two .stage{justify-content:center}
+  .scene.two .frame{position:relative;inset:auto;width:100vw;aspect-ratio:4/3;margin-top:clamp(22px,4vh,44px);box-shadow:0 30px 80px rgba(0,0,0,.45)}
+  .scene.two .frame::after{display:none}
+  .scene.two .txt{order:-1;padding-bottom:0}
+}
 @media (prefers-reduced-motion:reduce){
   .rise{opacity:1;transform:none;filter:none;transition:none}
   .cue svg{animation:none}
