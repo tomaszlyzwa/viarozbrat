@@ -8,7 +8,7 @@
      → inaczej nowe zdjęcia z panelu admina nie pojawiałyby się przez wiele dni
 */
 
-const VERSION = "vr-2026-07-13-2";
+const VERSION = "vr-2026-11-09-1";
 const SHELL   = "shell-" + VERSION;
 const ASSETS  = "assets-" + VERSION;
 
@@ -69,6 +69,10 @@ self.addEventListener("fetch", e => {
     );
     return;
   }
+
+  /* 2b. Podstrona /w126/ (blog o Mercedesie) — poza service workerem:
+         nie cache'ujemy jej (prospekt ma ~17 MB) i nie podmieniamy na index pizzerii offline */
+  if (sameOrigin && url.pathname.startsWith("/w126")) return;
 
   /* 3. Wywołania API GitHuba (panel admina) — nigdy nie cache'ujemy */
   if (url.hostname === "api.github.com") return;

@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Galeria · W126 280 SE</title>
+<meta name="theme-color" content="#56342a">
+<style>
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%}
+body{min-height:100vh;min-height:100dvh;background:#4e2e25;
+  background:
+    radial-gradient(ellipse 70% 45% at 50% 18%,rgba(255,215,190,.10),rgba(255,215,190,0) 70%),
+    linear-gradient(180deg,#6a3f31 0%,#56342a 40%,#482a22 75%,#3d241d 100%);
+  background-attachment:fixed;
+  color:#f2f4f7;font-family:Georgia,'Times New Roman',serif;display:flex;flex-direction:column}
+#home{height:46px;display:flex;align-items:center;padding:0 16px;padding-left:max(16px,env(safe-area-inset-left))}
+#home a{color:#f2f4f7;text-decoration:none;font:15px/1 system-ui,-apple-system,'Segoe UI',sans-serif;letter-spacing:.02em;padding:6px 10px;margin-left:-10px;border-radius:18px}
+#home a:hover,#home a:focus-visible{background:rgba(255,255,255,.14);outline:none}
+main{width:min(94vw,1300px);margin:0 auto;flex:1}
+h1{font-weight:400;font-size:clamp(28px,4vw,44px);letter-spacing:.01em;margin:clamp(16px,4vh,40px) 0 6px}
+.lead{margin:0 0 clamp(20px,3vh,32px);opacity:.85;font-size:clamp(15px,1.5vw,18px)}
+#grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px}
+#grid button{all:unset;cursor:zoom-in;display:block;aspect-ratio:4/3;overflow:hidden;background:rgba(0,0,0,.12);border-radius:2px}
+#grid button:focus-visible{outline:2px solid #f2f4f7;outline-offset:3px}
+#grid img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .4s}
+#grid button:hover img{transform:scale(1.03)}
+.empty{padding:48px 0;opacity:.8;font-size:17px}
+#lb{position:fixed;inset:0;background:rgba(10,14,24,.94);display:none;align-items:center;justify-content:center;z-index:20;touch-action:pan-y}
+#lb.on{display:flex}
+#lb img{max-width:96vw;max-height:86vh;object-fit:contain;box-shadow:0 10px 40px rgba(0,0,0,.5)}
+#lb .cap{position:fixed;bottom:calc(14px + env(safe-area-inset-bottom));left:0;right:0;text-align:center;font:13px system-ui,sans-serif;color:#ccd}
+#lb button{position:fixed;background:rgba(255,255,255,.1);color:#eee;border:1px solid rgba(255,255,255,.2);border-radius:22px;width:44px;height:44px;font-size:22px;cursor:pointer}
+#lb button:hover{background:rgba(255,255,255,.22)}
+#lbX{top:12px;right:12px}#lbP{left:12px;top:50%;transform:translateY(-50%)}#lbN{right:12px;top:50%;transform:translateY(-50%)}
+footer{text-align:center;font:12px/1.5 system-ui,-apple-system,'Segoe UI',sans-serif;color:rgba(242,244,247,.7);padding:24px 16px calc(16px + env(safe-area-inset-bottom))}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.22;mix-blend-mode:overlay;z-index:0;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.4' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1  0 0 0 0 .9  0 0 0 0 .8  0 0 0 1.6 -.55'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+body>*{position:relative;z-index:1}
+</style>
+</head>
+<body>
+<div id="home"><a href="../" title="Wróć do strony głównej bloga">← Strona główna</a></div>
+<main>
+  <h1>Galeria</h1>
+  <p class="lead">Zdjęcia mojego W126 · 280 SE · rocznik 1982</p>
+  <div id="grid" aria-live="polite"></div>
+</main>
+<div id="lb" role="dialog" aria-modal="true" aria-label="Podgląd zdjęcia">
+  <img id="lbImg" alt="">
+  <button id="lbP" title="Poprzednie (←)">‹</button>
+  <button id="lbN" title="Następne (→)">›</button>
+  <button id="lbX" title="Zamknij (Esc)">×</button>
+  <div class="cap" id="lbCap"></div>
+</div>
+<footer>Prywatny blog właściciela auta. Nie jest powiązany z Mercedes-Benz AG.</footer>
+<script>
+// Zdjęcia wrzucane do folderu galeria/zdjecia/ pojawiają się tu automatycznie.
+// Lista plików pobierana jest z publicznego API GitHuba (repozytorium tomaszlyzwa/W126).
+// Awaryjnie można też wpisać nazwy plików ręcznie do tablicy MANUAL.
+// Strona działa w dwóch miejscach: viarozbrat.pl/w126/ (repo viarozbrat) i tomaszlyzwa.github.io/W126/ (repo W126)
+const ON_VR=/viarozbrat\.pl$/.test(location.hostname);
+const REPO=ON_VR?'tomaszlyzwa/viarozbrat':'tomaszlyzwa/W126', DIR=ON_VR?'w126/galeria/zdjecia':'galeria/zdjecia', BRANCH='main';
+const MANUAL=[];
+const IMG=/\.(jpe?g|png|webp|gif|avif)$/i;
+const grid=document.getElementById('grid');
+let list=[], cur=0;
+
+async function getList(){
+  const key='w126-gal', ttl=10*60*1000;
+  try{const c=JSON.parse(sessionStorage.getItem(key)||'null');if(c&&Date.now()-c.t<ttl)return c.f}catch(e){}
+  const r=await fetch(`https://api.github.com/repos/${REPO}/contents/${DIR}?ref=${BRANCH}`,{headers:{Accept:'application/vnd.github+json'}});
+  if(r.status===404)return [];
+  if(!r.ok)throw new Error('HTTP '+r.status);
+  const f=(await r.json()).filter(x=>x.type==='file'&&IMG.test(x.name)).map(x=>x.name);
+  try{sessionStorage.setItem(key,JSON.stringify({t:Date.now(),f}))}catch(e){}
+  return f;
+}
+function label(n){return n.replace(IMG,'').replace(/[_-]+/g,' ').trim()}
+function render(){
+  grid.innerHTML='';
+  if(!list.length){grid.innerHTML='<p class="empty">Zdjęcia pojawią się tu wkrótce.</p>';return}
+  list.forEach((n,i)=>{
+    const b=document.createElement('button');b.title=label(n);
+    const im=new Image();im.loading='lazy';im.decoding='async';im.src='zdjecia/'+encodeURIComponent(n);im.alt=label(n);
+    b.appendChild(im);b.onclick=()=>open(i);grid.appendChild(b);
+  });
+}
+const lb=document.getElementById('lb'),lbImg=document.getElementById('lbImg'),lbCap=document.getElementById('lbCap');
+function show(){const n=list[cur];lbImg.src='zdjecia/'+encodeURIComponent(n);lbImg.alt=label(n);lbCap.textContent=`${label(n)} · ${cur+1} / ${list.length}`}
+function open(i){cur=i;show();lb.classList.add('on');document.getElementById('lbX').focus()}
+function close(){lb.classList.remove('on');lbImg.removeAttribute('src')}
+function step(d){cur=(cur+d+list.length)%list.length;show()}
+document.getElementById('lbX').onclick=close;
+document.getElementById('lbP').onclick=e=>{e.stopPropagation();step(-1)};
+document.getElementById('lbN').onclick=e=>{e.stopPropagation();step(1)};
+lb.onclick=e=>{if(e.target===lb)close()};
+addEventListener('keydown',e=>{if(!lb.classList.contains('on'))return;if(e.key==='Escape')close();else if(e.key==='ArrowLeft')step(-1);else if(e.key==='ArrowRight')step(1)});
+let sx=null;lb.addEventListener('touchstart',e=>{sx=e.touches[0].clientX},{passive:true});
+lb.addEventListener('touchend',e=>{if(sx===null)return;const dx=e.changedTouches[0].clientX-sx;if(Math.abs(dx)>50)step(dx<0?1:-1);sx=null});
+
+(async()=>{
+  try{list=await getList()}catch(e){list=[]}
+  if(!list.length&&MANUAL.length)list=MANUAL.slice();
+  list.sort((a,b)=>a.localeCompare(b,'pl',{numeric:true}));
+  render();
+})();
+</script>
+</body>
+</html>
